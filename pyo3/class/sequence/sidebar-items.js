@@ -1,1 +1,0 @@
-initSidebarItems({"trait":[["PySequenceConcatProtocol",""],["PySequenceContainsProtocol",""],["PySequenceDelItemProtocol",""],["PySequenceGetItemProtocol",""],["PySequenceInplaceConcatProtocol",""],["PySequenceInplaceRepeatProtocol",""],["PySequenceLenProtocol",""],["PySequenceProtocol","Sequece interface"],["PySequenceRepeatProtocol",""],["PySequenceSetItemProtocol",""]]});

@@ -1,1 +1,0 @@
-initSidebarItems({"enum":[["MethodProto",""]],"fn":[["impl_method_proto",""]]});
