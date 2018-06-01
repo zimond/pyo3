@@ -4,6 +4,8 @@ set -ex
 
 ### Setup latest mdbook version ################################################
 
+mkdir -p /home/travis/.cargo/bin
+
 INSTALLED=$(echo $(mdbook --version 2>/dev/null || echo "mdbook none") | cut -d' ' -f1)
 PINNED=0.1.5
 
