@@ -85,7 +85,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="overview.html"><strong aria-hidden="true">1.</strong> Get Started</a></li><li><a href="conversions.html"><strong aria-hidden="true">2.</strong> Type Conversions</a></li><li><a href="exception.html"><strong aria-hidden="true">3.</strong> Python Exception</a></li><li><a href="module.html"><strong aria-hidden="true">4.</strong> Python Module</a></li><li><a href="function.html"><strong aria-hidden="true">5.</strong> Python Function</a></li><li><a href="class.html" class="active"><strong aria-hidden="true">6.</strong> Python Class</a></li><li><a href="parallelism.html"><strong aria-hidden="true">7.</strong> Parallelism</a></li><li><a href="distribution.html"><strong aria-hidden="true">8.</strong> Distribution</a></li><li><a href="rust-cpython.html"><strong aria-hidden="true">9.</strong> Appendix: Pyo3 and rust-cpython</a></li></ol>
+            <ol class="chapter"><li><a href="overview.html"><strong aria-hidden="true">1.</strong> Get Started</a></li><li><a href="conversions.html"><strong aria-hidden="true">2.</strong> Type Conversions</a></li><li><a href="exception.html"><strong aria-hidden="true">3.</strong> Python Exception</a></li><li><a href="module.html"><strong aria-hidden="true">4.</strong> Python Module</a></li><li><a href="function.html"><strong aria-hidden="true">5.</strong> Python Function</a></li><li><a href="class.html" class="active"><strong aria-hidden="true">6.</strong> Python Class</a></li><li><a href="parallelism.html"><strong aria-hidden="true">7.</strong> Parallelism</a></li><li><a href="debugging.html"><strong aria-hidden="true">8.</strong> Debugging</a></li><li><a href="distribution.html"><strong aria-hidden="true">9.</strong> Distribution</a></li><li><a href="rust-cpython.html"><strong aria-hidden="true">10.</strong> Appendix: Pyo3 and rust-cpython</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -187,7 +187,7 @@ impl ToPyPointer for MyClass { ... }
 are generated only if struct contains <code>PyToken</code> attribute.</p>
 <p><code>PyToken</code> instance available only in <code>py.init</code> method.</p>
 <p>TODO - continue</p>
-<a class="header" href="class.html#class-macro" id="class-macro"><h2>class macro</h2></a>
+<a class="header" href="class.html#the-class-macro" id="the-class-macro"><h2>The <code>#[class]</code> macro</h2></a>
 <p>Python class generation is powered by <a href="https://doc.rust-lang.org/book/first-edition/procedural-macros.html">Procedural Macros</a>.
 To define python custom class, rust struct needs to be annotated with <code>#[class]</code> attribute.
 <code>class</code> macro accepts following parameters:</p>
@@ -204,7 +204,7 @@ python object that can be collector <code>PyGCProtocol</code> trait has to be im
 <li><code>base=BaseType</code> - use custom base class. BaseType is type which is
 implements <code>PyTypeInfo</code> trait.</li>
 <li><code>subclass</code> - adds subclass support so that Python classes can inherit from this class</li>
-<li><code>dict</code> - adds <code>__dict__</code> support, the instances of this type have a dictionary containing instance variables</li>
+<li><code>dict</code> - adds <code>__dict__</code> support, the instances of this type have a dictionary containing instance variables.</li>
 </ul>
 <a class="header" href="class.html#constructor" id="constructor"><h2>Constructor</h2></a>
 <p>By default it is not possible to create instance of custom class from python code.
@@ -606,7 +606,7 @@ of them. To provide specific python object behavior you need to implement specif
 for your struct. Important note, each protocol implementation block has to be annotated
 with <code>#[proto]</code> attribute.</p>
 <a class="header" href="class.html#basic-object-customization" id="basic-object-customization"><h3>Basic object customization</h3></a>
-<p><a href="https://pyo3.github.io/pyo3/pyo3/class/basic/trait.PyObjectProtocol.html"><code>PyObjectProtocol</code></a> trait provide several basic customizations.</p>
+<p><a href="https://docs.rs/pyo3/0.2.7/class/basic/trait.PyObjectProtocol.html"><code>PyObjectProtocol</code></a> trait provide several basic customizations.</p>
 <a class="header" href="class.html#attribute-access" id="attribute-access"><h4>Attribute access</h4></a>
 <p>To customize object attribute access define following methods:</p>
 <ul>
@@ -671,7 +671,7 @@ even on Python 2.7 where the Python spelling was <code>__nonzero__</code>.</p>
 <p>If your type owns references to other python objects, you will need to
 integrate with Python's garbage collector so that the GC is aware of
 those references.
-To do this, implement <a href="https://pyo3.github.io/pyo3/pyo3/class/gc/trait.PyGCProtocol.html"><code>PyGCProtocol</code></a> trait for your struct.
+To do this, implement <a href="https://docs.rs/pyo3/0.2.7/class/gc/trait.PyGCProtocol.html"><code>PyGCProtocol</code></a> trait for your struct.
 It includes two methods <code>__traverse__</code> and <code>__clear__</code>.
 These correspond to the slots <code>tp_traverse</code> and <code>tp_clear</code> in the Python C API.
 <code>__traverse__</code> must call <code>visit.call()</code> for each reference to another python object.
@@ -717,7 +717,7 @@ i.e. <code>#[class(gc)]</code>. In that case instances of custom class participa
 collector, and it is possible to track them with <code>gc</code> module methods.</p>
 <a class="header" href="class.html#iterator-types" id="iterator-types"><h3>Iterator Types</h3></a>
 <p>Iterators can be defined using the
-<a href="https://pyo3.github.io/pyo3/pyo3/class/iter/trait.PyIterProtocol.html"><code>PyIterProtocol</code></a> trait.
+<a href="https://docs.rs/pyo3/0.2.7/class/iter/trait.PyIterProtocol.html"><code>PyIterProtocol</code></a> trait.
 It includes two methods <code>__iter__</code> and <code>__next__</code>:</p>
 <ul>
 <li><code>fn __iter__(&amp;mut self) -&gt; PyResult&lt;impl IntoPyObject&gt;</code></li>
