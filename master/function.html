@@ -154,8 +154,8 @@ the function to a <a href="./module.md">module</a></p>
 <pre><pre class="playpen"><code class="language-rust">#![feature(proc_macro)]
 
 extern crate pyo3;
-use pyo3::{py, PyResult, Python, PyModule};
-use pyo3::py::modinit as pymodinit;
+use pyo3::prelude::*;
+use pyo3::pymodinit;
 
 #[pymodinit(rust2py)]
 fn init_mod(py: Python, m: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
@@ -180,10 +180,9 @@ as third.</p>
 
 #[macro_use]
 extern crate pyo3;
-use pyo3::{py, PyResult, Python, PyModule};
+use pyo3::prelude::*;
 
-use pyo3::py::function as pyfunction;
-use pyo3::py::modinit as pymodinit;
+use pyo3::{pyfunction, pymodinit};
 
 #[pyfunction]
 fn double(x: usize) -&gt; usize {

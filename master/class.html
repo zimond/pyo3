@@ -148,68 +148,43 @@
                 <div id="content" class="content">
                     <main>
                         <a class="header" href="class.html#python-class" id="python-class"><h1>Python Class</h1></a>
-<p>Python class generation is powered by unstable <a href="https://doc.rust-lang.org/book/first-edition/procedural-macros.html">Procedural Macros</a> and
-<a href="https://github.com/rust-lang/rfcs/blob/master/text/1210-impl-specialization.md">Specialization</a> and <a href="https://github.com/rust-lang/rfcs/blob/master/text/0911-const-fn.md">Const fn</a>
-features, so you need to turn on <code>proc_macro</code> and <code>specialization</code> features:</p>
-<pre><pre class="playpen"><code class="language-rust">
-# #![allow(unused_variables)]
-#![feature(proc_macro, specialization)]
-
-#fn main() {
-extern crate pyo3;
-#}</code></pre></pre>
 <a class="header" href="class.html#define-new-class" id="define-new-class"><h2>Define new class</h2></a>
-<p>To define python custom class, rust struct needs to be annotated with <code>#[class]</code> attribute.</p>
+<p>To define python custom class, rust struct needs to be annotated with <code>#[pyclass]</code> attribute.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
 # #![feature(proc_macro, specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
-use pyo3::py::class;
+use pyo3::pyclass;
 
-#[class]
+#[pyclass]
 struct MyClass {
    num: i32,
    debug: bool,
-   token: PyToken,
 }
 #}</code></pre></pre>
-<p>The above example generates the following implementations for <code>MyClass</code> struct</p>
-<pre><code class="language-rust ignore">impl PyTypeInfo for MyClass { ... }
-impl PyTypeObject for MyClass { ... }
-impl PyObjectWithToken for MyClass { ... }
-impl ToPyObject for MyClass { ... }
-impl IntoPyObject for MyClass { ... }
-impl ToPyPointer for MyClass { ... }
-</code></pre>
-<p>Following implementations <code>PyObjectWithToken</code>, <code>ToPyObject</code>, <code>IntoPyObject</code>, <code>ToPyPointer</code>
-are generated only if struct contains <code>PyToken</code> attribute.</p>
-<p><code>PyToken</code> instance available only in <code>py.init</code> method.</p>
-<p>TODO - continue</p>
-<a class="header" href="class.html#the-class-macro" id="the-class-macro"><h2>The <code>#[class]</code> macro</h2></a>
-<p>Python class generation is powered by <a href="https://doc.rust-lang.org/book/first-edition/procedural-macros.html">Procedural Macros</a>.
-To define python custom class, rust struct needs to be annotated with <code>#[class]</code> attribute.
-<code>class</code> macro accepts following parameters:</p>
+<p>The above example generates implementations for <code>PyTypeInfo</code> and <code>PyTypeObject</code> for <code>MyClass</code>.</p>
+<p>If the class has a <code>PyToken</code> attribute, implementations for <code>PyObjectWithToken</code>, <code>ToPyObject</code>, <code>IntoPyObject</code> and <code>ToPyPointer</code> are also generated. You can only get a <code>PyToken</code> instance through the  <code>__new__</code> method.</p>
+<a class="header" href="class.html#customizing-the-class" id="customizing-the-class"><h2>Customizing the class</h2></a>
+<p>The <code>#[pyclass]</code> macro accepts following parameters:</p>
 <ul>
-<li><code>name=XXX</code> - customize class name visible to python code. By default struct name is used as
-a class name.</li>
+<li><code>name=XXX</code> - Set the class name shown in python code. By default struct name is used as a class name.</li>
 <li><code>freelist=XXX</code> - <code>freelist</code> parameter add support of free allocation list to custom class.
 The performance improvement applies to types that are often created and deleted in a row,
 so that they can benefit from a freelist. <code>XXX</code> is a number of items for free list.</li>
-<li><code>gc</code> - adds support for python garbage collector. classes that build with <code>gc</code> parameter
-participate in python garbage collector. If custom class contains references to other
-python object that can be collector <code>PyGCProtocol</code> trait has to be implemented.</li>
+<li><code>gc</code> - Classes with the <code>gc</code> parameter
+participate in python garbage collector. If a custom class contains references to other
+python object that can be collected, the <code>PyGCProtocol</code> trait has to be implemented.</li>
 <li><code>weakref</code> - adds support for python weak references</li>
-<li><code>base=BaseType</code> - use custom base class. BaseType is type which is
-implements <code>PyTypeInfo</code> trait.</li>
-<li><code>subclass</code> - adds subclass support so that Python classes can inherit from this class</li>
-<li><code>dict</code> - adds <code>__dict__</code> support, the instances of this type have a dictionary containing instance variables.</li>
+<li><code>base=BaseType</code> - use a custom base class. The base BaseType must implement <code>PyTypeInfo</code>.</li>
+<li><code>subclass</code> - Allows Python classes to inherit from this class</li>
+<li><code>dict</code> - adds <code>__dict__</code> support, the instances of this type have a dictionary containing instance variables. (Incomplete, see <a href="https://github.com/PyO3/pyo3/issues/123">#123</a>)</li>
 </ul>
 <a class="header" href="class.html#constructor" id="constructor"><h2>Constructor</h2></a>
-<p>By default it is not possible to create instance of custom class from python code.
-To declare constructor, you need to define class method and annotate it with <code>#[new]</code>
-attribute. Only python <code>__new__</code> method can be specified, <code>__init__</code> is not available.</p>
+<p>By default it is not possible to create an instance of a custom class from python code.
+To declare a constructor, you need to define a class method and annotate it with <code>#[new]</code>
+attribute. Only the python <code>__new__</code> method can be specified, <code>__init__</code> is not available.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -217,43 +192,38 @@ attribute. Only python <code>__new__</code> method can be specified, <code>__ini
 #
 # extern crate pyo3;
 # use pyo3::prelude::*;
-# use pyo3::py::class;
-#
-# #[class]
-# struct MyClass {
-#    num: i32,
-#    debug: bool,
-#    token: PyToken,
-# }
-#
-use pyo3::py::methods;
+use pyo3::{pyclass, pymethods};
 
-#[methods]
+#[pyclass]
+struct MyClass {
+   num: i32,
+   token: PyToken,
+}
+
+#[pymethods]
 impl MyClass {
 
      #[new]
-     fn __new__(obj: &amp;PyRawObject, num: Option&lt;i32&gt;) -&gt; PyResult&lt;()&gt; {
+     fn __new__(obj: &amp;PyRawObject, num: i32) -&gt; PyResult&lt;()&gt; {
          obj.init(|token| {
              MyClass {
-                 num: num.unwrap_or(10),
-                 debug: false,
-                 token: token
+                 num,
+                 token
              }
          })
      }
 }
 #}</code></pre></pre>
-<p>Some rules of <code>new</code> method</p>
+<p>Rules for the <code>new</code> method:</p>
 <ul>
 <li>If no method marked with <code>#[new]</code> is declared, object instances can only be created
 from Rust, but not from Python.</li>
-<li>The first parameter is the raw object, custom <code>new</code> method must initialize object
-with value of struct using <code>init</code> method. Type of the object may be the type object of
+<li>The first parameter is the raw object and the custom <code>new</code> method must initialize the object
+with an instance of the struct using <code>init</code> method. The type of the object may be the type object of
 a derived class declared in Python.</li>
 <li>The first parameter implicitly has type <code>&amp;PyRawObject</code>.</li>
 <li>For details on <code>parameter-list</code>, see the documentation of <code>Method arguments</code> section.</li>
-<li>The return type must be <code>PyResult&lt;T&gt;</code> for some <code>T</code> that implements <code>IntoPyObject</code>.
-Usually, <code>T</code> will be <code>MyType</code>.</li>
+<li>The return type must be <code>PyResult&lt;T&gt;</code> for some <code>T</code> that implements <code>IntoPyObject</code>. Usually, <code>T</code> will be <code>MyType</code>.</li>
 </ul>
 <a class="header" href="class.html#inheritance" id="inheritance"><h2>Inheritance</h2></a>
 <p>By default <code>PyObject</code> is used as default base class. To override default base class
@@ -266,15 +236,15 @@ with value of custom class struct. Subclass must call parent's <code>__new__</co
 # #![feature(proc_macro, specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
-# use pyo3::py::*;
+# use pyo3::{pyclass, pymethods};
 #
-#[class]
+#[pyclass]
 struct BaseClass {
    val1: usize,
    token: PyToken,
 }
 
-#[methods]
+#[pymethods]
 impl BaseClass {
    #[new]
    fn __new__(obj: &amp;PyRawObject) -&gt; PyResult&lt;()&gt; {
@@ -286,13 +256,13 @@ impl BaseClass {
    }
 }
 
-#[class(base=BaseClass)]
+#[pyclass(base=BaseClass)]
 struct SubClass {
    val2: usize,
    token: PyToken,
 }
 
-#[methods]
+#[pymethods]
 impl SubClass {
    #[new]
    fn __new__(obj: &amp;PyRawObject) -&gt; PyResult&lt;()&gt; {
@@ -309,7 +279,7 @@ impl SubClass {
 base class.</p>
 <a class="header" href="class.html#object-properties" id="object-properties"><h2>Object properties</h2></a>
 <p>Descriptor methods can be defined in
-<code>#[methods]</code> <code>impl</code> block only and has to be annotated with <code>#[getter]</code> or <code>[setter]</code>
+<code>#[pymethods]</code> <code>impl</code> block only and has to be annotated with <code>#[getter]</code> or <code>[setter]</code>
 attributes. i.e.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -317,14 +287,14 @@ attributes. i.e.</p>
 # #![feature(proc_macro, specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
-# use pyo3::py::*;
-# #[class]
+# use pyo3::{pyclass, pymethods};
+# #[pyclass]
 # struct MyClass {
 #    num: i32,
 #    token: PyToken,
 # }
 #
-#[methods]
+#[pymethods]
 impl MyClass {
 
      #[getter]
@@ -344,14 +314,14 @@ rust's special keywords like <code>type</code>.</p>
 # #![feature(proc_macro, specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
-# use pyo3::py::*;
-# #[class]
+# use pyo3::{pyclass, pymethods};
+# #[pyclass]
 # struct MyClass {
 #    num: i32,
 #    token: PyToken,
 # }
 #
-#[methods]
+#[pymethods]
 impl MyClass {
 
      #[getter]
@@ -375,14 +345,14 @@ If parameter is specified, it is used and property name. i.e.</p>
 # #![feature(proc_macro, specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
-# use pyo3::py::*;
-# #[class]
+# use pyo3::{pyclass, pymethods};
+# #[pyclass]
 # struct MyClass {
 #    num: i32,
 #    token: PyToken,
 # }
 #
-#[methods]
+#[pymethods]
 impl MyClass {
 
      #[getter(number)]
@@ -405,8 +375,8 @@ impl MyClass {
 # #![feature(proc_macro, specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
-# use pyo3::py::*;
-#[class]
+# use pyo3::{pyclass, pymethods};
+#[pyclass]
 struct MyClass {
   #[prop(get, set)]
   num: i32
@@ -415,7 +385,7 @@ struct MyClass {
 <p>Then it is available from Python code as <code>self.num</code>.</p>
 <a class="header" href="class.html#instance-methods" id="instance-methods"><h2>Instance methods</h2></a>
 <p>To define python compatible method, <code>impl</code> block for struct has to be annotated
-with <code>#[methods]</code> attribute. <code>pyo3</code> library generates python compatible
+with <code>#[pymethods]</code> attribute. <code>pyo3</code> library generates python compatible
 wrappers for all functions in this block with some variations, like descriptors,
 class method static methods, etc.</p>
 <pre><pre class="playpen"><code class="language-rust">
@@ -424,14 +394,14 @@ class method static methods, etc.</p>
 # #![feature(proc_macro, specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
-# use pyo3::py::*;
-# #[class]
+# use pyo3::{pyclass, pymethods};
+# #[pyclass]
 # struct MyClass {
 #    num: i32,
 #    token: PyToken,
 # }
 #
-#[methods]
+#[pymethods]
 impl MyClass {
 
      fn method1(&amp;self) -&gt; PyResult&lt;i32&gt; {
@@ -454,15 +424,15 @@ get injected by method wrapper. i.e</p>
 # #![feature(proc_macro, specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
-# use pyo3::py::*;
-# #[class]
+# use pyo3::{pyclass, pymethods};
+# #[pyclass]
 # struct MyClass {
 #    num: i32,
 #    debug: bool,
 #    token: PyToken,
 # }
 
-#[methods]
+#[pymethods]
 impl MyClass {
      fn method2(&amp;self, py: Python) -&gt; PyResult&lt;i32&gt; {
         Ok(10)
@@ -479,15 +449,15 @@ with<code>#[classmethod]</code> attribute.</p>
 # #![feature(proc_macro, specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
-# use pyo3::py::*;
-# #[class]
+# use pyo3::{pyclass, pymethods};
+# #[pyclass]
 # struct MyClass {
 #    num: i32,
 #    debug: bool,
 #    token: PyToken,
 # }
 
-#[methods]
+#[pymethods]
 impl MyClass {
      #[classmethod]
      fn cls_method(cls: &amp;PyType) -&gt; PyResult&lt;i32&gt; {
@@ -513,15 +483,15 @@ for some <code>T</code> that implements <code>IntoPyObject</code>.</p>
 # #![feature(proc_macro, specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
-# use pyo3::py::*;
-# #[class]
+# use pyo3::{pyclass, pymethods};
+# #[pyclass]
 # struct MyClass {
 #    num: i32,
 #    debug: bool,
 #    token: PyToken,
 # }
 
-#[methods]
+#[pymethods]
 impl MyClass {
      #[staticmethod]
      fn static_method(param1: i32, param2: &amp;str) -&gt; PyResult&lt;i32&gt; {
@@ -538,15 +508,15 @@ with <code>#[call]</code> attribute. Arguments of the method are specified same 
 # #![feature(proc_macro, specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
-# use pyo3::py::*;
-# #[class]
+# use pyo3::{pyclass, pymethods};
+# #[pyclass]
 # struct MyClass {
 #    num: i32,
 #    debug: bool,
 #    token: PyToken,
 # }
 
-#[methods]
+#[pymethods]
 impl MyClass {
      #[call]
      #[args(args=&quot;*&quot;)]
@@ -583,15 +553,15 @@ code unmodified.</li>
 # #![feature(proc_macro, specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
-# use pyo3::py::*;
-# #[class]
+# use pyo3::{pyclass, pymethods};
+# #[pyclass]
 # struct MyClass {
 #    num: i32,
 #    debug: bool,
 #    token: PyToken,
 # }
 #
-#[methods]
+#[pymethods]
 impl MyClass {
     #[args(arg1=true, args=&quot;*&quot;, arg2=10, kwargs=&quot;**&quot;)]
     fn method(&amp;self, arg1: bool, args: &amp;PyTuple, arg2: i32, kwargs: Option&lt;&amp;PyDict&gt;) -&gt; PyResult&lt;i32&gt; {
@@ -604,7 +574,7 @@ impl MyClass {
 like sequence, mapping or number protocols. pyo3 library defines separate trait for each
 of them. To provide specific python object behavior you need to implement specific trait
 for your struct. Important note, each protocol implementation block has to be annotated
-with <code>#[proto]</code> attribute.</p>
+with <code>#[pyproto]</code> attribute.</p>
 <a class="header" href="class.html#basic-object-customization" id="basic-object-customization"><h3>Basic object customization</h3></a>
 <p><a href="https://docs.rs/pyo3/0.2.7/class/basic/trait.PyObjectProtocol.html"><code>PyObjectProtocol</code></a> trait provide several basic customizations.</p>
 <a class="header" href="class.html#attribute-access" id="attribute-access"><h4>Attribute access</h4></a>
@@ -686,15 +656,15 @@ Example:</p>
 extern crate pyo3;
 
 use pyo3::prelude::*;
-use pyo3::py::*;
+use pyo3::{pyclass, pyproto};
 
-#[class]
+#[pyclass]
 struct ClassWithGCSupport {
     obj: Option&lt;PyObject&gt;,
     token: PyToken,
 }
 
-#[proto]
+#[pyproto]
 impl PyGCProtocol for ClassWithGCSupport {
     fn __traverse__(&amp;self, visit: PyVisit) -&gt; Result&lt;(), PyTraverseError&gt; {
         if let Some(ref obj) = self.obj {
@@ -711,9 +681,9 @@ impl PyGCProtocol for ClassWithGCSupport {
     }
 }
 #}</code></pre></pre>
-<p>Special protocol trait implementation has to be annotated with <code>#[proto]</code> attribute.</p>
+<p>Special protocol trait implementation has to be annotated with <code>#[pyproto]</code> attribute.</p>
 <p>It is also possible to enable gc for custom class using <code>gc</code> parameter for <code>class</code> annotation.
-i.e. <code>#[class(gc)]</code>. In that case instances of custom class participate in python garbage
+i.e. <code>#[pyclass(gc)]</code>. In that case instances of custom class participate in python garbage
 collector, and it is possible to track them with <code>gc</code> module methods.</p>
 <a class="header" href="class.html#iterator-types" id="iterator-types"><h3>Iterator Types</h3></a>
 <p>Iterators can be defined using the
@@ -725,19 +695,22 @@ It includes two methods <code>__iter__</code> and <code>__next__</code>:</p>
 </ul>
 <p>Returning <code>Ok(None)</code> from <code>__next__</code> indicates that that there are no further items.</p>
 <p>Example:</p>
-<pre><pre class="playpen"><code class="language-rust">#![feature(proc_macro, specialization)]
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#![feature(proc_macro, specialization)]
+#fn main() {
 extern crate pyo3;
 
 use pyo3::prelude::*;
-use pyo3::py::*;
+use pyo3::{pyclass, pyproto};
 
-#[class]
+#[pyclass]
 struct MyIterator {
     iter: Box&lt;Iterator&lt;Item=PyObject&gt; + Send&gt;,
     token: PyToken,
 }
 
-#[proto]
+#[pyproto]
 impl PyIterProtocol for MyIterator {
 
     fn __iter__(&amp;mut self) -&gt; PyResult&lt;PyObject&gt; {
@@ -747,8 +720,7 @@ impl PyIterProtocol for MyIterator {
         Ok(self.iter.next())
     }
 }
-# fn main() {}
-</code></pre></pre>
+#}</code></pre></pre>
 
                     </main>
 

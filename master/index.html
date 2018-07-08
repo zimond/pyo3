@@ -196,7 +196,7 @@ features = [&quot;extension-module&quot;]
 extern crate pyo3;
 use pyo3::prelude::*;
 
-use pyo3::py::modinit as pymodinit;
+use pyo3::pymodinit;
 
 // Add bindings to the generated python module
 // N.B: names: &quot;librust2py&quot; must be the name of the `.so` or `.pyd` file

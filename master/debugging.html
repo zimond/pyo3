@@ -148,13 +148,14 @@
                 <div id="content" class="content">
                     <main>
                         <a class="header" href="debugging.html#debugging" id="debugging"><h1>Debugging</h1></a>
-<p>Pyo3's attributes, <code>#[class]</code>, <code>#[modinit]</code>, etc. are <a href="https://doc.rust-lang.org/unstable-book/language-features/proc-macro.html">procedural macros</a>, which means that rewrite the source of the annotated item. You can view the generated source with the following command, which also expands a few other things:</p>
-<pre><code class="language-bash">cargo rustc -- -Z unstable-options --pretty=expanded &gt; expanded.rs; rustfmt expanded.rs
+<p>Pyo3's attributes, <code>#[pyclass]</code>, <code>#[pymodinit]</code>, etc. are <a href="https://doc.rust-lang.org/unstable-book/language-features/proc-macro.html">procedural macros</a>, which means that rewrite the source of the annotated item. You can view the generated source with the following command, which also expands a few other things:</p>
+<pre><code class="language-bash">cargo rustc --profile=check -- -Z unstable-options --pretty=expanded &gt; expanded.rs; rustfmt expanded.rs
 </code></pre>
 <p>(You might need to install <a href="https://github.com/rust-lang-nursery/rustfmt">rustfmt</a> if you don't already have it.)</p>
 <p>You can also debug classic <code>!</code>-macros by adding -Z trace-macros`:</p>
-<pre><code class="language-bash">cargo rustc -- -Z unstable-options --pretty=expanded -Z trace-macros &gt; expanded.rs; rustfmt expanded.rs
+<pre><code class="language-bash">cargo rustc --profile=check -- -Z unstable-options --pretty=expanded -Z trace-macros &gt; expanded.rs; rustfmt expanded.rs
 </code></pre>
+<p>See <a href="https://github.com/dtolnay/cargo-expand">cargo expand</a> for a more elaborate version of those commands.</p>
 
                     </main>
 

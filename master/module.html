@@ -152,9 +152,9 @@
 <pre><pre class="playpen"><code class="language-rust">#![feature(proc_macro)]
 
 extern crate pyo3;
-use pyo3::{py, PyResult, Python, PyModule};
+use pyo3::{PyResult, Python, PyModule};
 
-use pyo3::py::modinit as pymodinit;
+use pyo3::pymodinit;
 
 // add bindings to the generated python module
 // N.B: names: &quot;librust2py&quot; must be the name of the `.so` or `.pyd` file
@@ -181,7 +181,7 @@ fn sum_as_string(a:i64, b:i64) -&gt; String {
 
 # fn main() {}
 </code></pre></pre>
-<p>The <code>modinit</code> procedural macro attribute takes care of exporting the initialization function of your module to Python. It takes one argument as the name of your module, it must be the name of the <code>.so</code> or <code>.pyd</code> file.</p>
+<p>The <code>#[pymodinit}</code> procedural macro attribute takes care of exporting the initialization function of your module to Python. It takes one argument as the name of your module, it must be the name of the <code>.so</code> or <code>.pyd</code> file.</p>
 <p>The <a href="https://doc.rust-lang.org/stable/book/first-edition/comments.html">Rust doc comments</a> of the module initialization function will be applied automatically as the Python doc string of your module.</p>
 <pre><code class="language-python">import rust2py
 
