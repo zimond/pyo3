@@ -190,13 +190,13 @@ features = [&quot;extension-module&quot;]
 <p><strong><code>src/lib.rs</code></strong></p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
-#![feature(proc_macro, specialization)]
+#![feature(use_extern_macros, specialization)]
 
 #fn main() {
 extern crate pyo3;
 use pyo3::prelude::*;
 
-use pyo3::pymodinit;
+
 
 // Add bindings to the generated python module
 // N.B: names: &quot;librust2py&quot; must be the name of the `.so` or `.pyd` file

@@ -153,10 +153,10 @@
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(proc_macro, specialization)]
+# #![feature(use_extern_macros, specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
-use pyo3::pyclass;
+
 
 #[pyclass]
 struct MyClass {
@@ -188,11 +188,11 @@ attribute. Only the python <code>__new__</code> method can be specified, <code>_
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(proc_macro, specialization)]
+# #![feature(use_extern_macros, specialization)]
 #
 # extern crate pyo3;
 # use pyo3::prelude::*;
-use pyo3::{pyclass, pymethods};
+
 
 #[pyclass]
 struct MyClass {
@@ -233,10 +233,9 @@ with value of custom class struct. Subclass must call parent's <code>__new__</co
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(proc_macro, specialization)]
+# #![feature(use_extern_macros, specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
-# use pyo3::{pyclass, pymethods};
 #
 #[pyclass]
 struct BaseClass {
@@ -284,10 +283,9 @@ attributes. i.e.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(proc_macro, specialization)]
+# #![feature(use_extern_macros, specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
-# use pyo3::{pyclass, pymethods};
 # #[pyclass]
 # struct MyClass {
 #    num: i32,
@@ -311,10 +309,9 @@ rust's special keywords like <code>type</code>.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(proc_macro, specialization)]
+# #![feature(use_extern_macros, specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
-# use pyo3::{pyclass, pymethods};
 # #[pyclass]
 # struct MyClass {
 #    num: i32,
@@ -342,10 +339,9 @@ If parameter is specified, it is used and property name. i.e.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(proc_macro, specialization)]
+# #![feature(use_extern_macros, specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
-# use pyo3::{pyclass, pymethods};
 # #[pyclass]
 # struct MyClass {
 #    num: i32,
@@ -372,10 +368,9 @@ impl MyClass {
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(proc_macro, specialization)]
+# #![feature(use_extern_macros, specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
-# use pyo3::{pyclass, pymethods};
 #[pyclass]
 struct MyClass {
   #[prop(get, set)]
@@ -391,10 +386,9 @@ class method static methods, etc.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(proc_macro, specialization)]
+# #![feature(use_extern_macros, specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
-# use pyo3::{pyclass, pymethods};
 # #[pyclass]
 # struct MyClass {
 #    num: i32,
@@ -421,10 +415,9 @@ get injected by method wrapper. i.e</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(proc_macro, specialization)]
+# #![feature(use_extern_macros, specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
-# use pyo3::{pyclass, pymethods};
 # #[pyclass]
 # struct MyClass {
 #    num: i32,
@@ -446,10 +439,9 @@ with<code>#[classmethod]</code> attribute.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(proc_macro, specialization)]
+# #![feature(use_extern_macros, specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
-# use pyo3::{pyclass, pymethods};
 # #[pyclass]
 # struct MyClass {
 #    num: i32,
@@ -480,10 +472,9 @@ for some <code>T</code> that implements <code>IntoPyObject</code>.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(proc_macro, specialization)]
+# #![feature(use_extern_macros, specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
-# use pyo3::{pyclass, pymethods};
 # #[pyclass]
 # struct MyClass {
 #    num: i32,
@@ -505,10 +496,9 @@ with <code>#[call]</code> attribute. Arguments of the method are specified same 
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(proc_macro, specialization)]
+# #![feature(use_extern_macros, specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
-# use pyo3::{pyclass, pymethods};
 # #[pyclass]
 # struct MyClass {
 #    num: i32,
@@ -550,10 +540,10 @@ code unmodified.</li>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(proc_macro, specialization)]
+# #![feature(use_extern_macros, specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
-# use pyo3::{pyclass, pymethods};
+#
 # #[pyclass]
 # struct MyClass {
 #    num: i32,
@@ -651,12 +641,12 @@ as every cycle must contain at least one mutable reference.
 Example:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
-#![feature(proc_macro, specialization)]
+#![feature(use_extern_macros, specialization)]
 #fn main() {
 extern crate pyo3;
 
 use pyo3::prelude::*;
-use pyo3::{pyclass, pyproto};
+
 
 #[pyclass]
 struct ClassWithGCSupport {
@@ -697,12 +687,12 @@ It includes two methods <code>__iter__</code> and <code>__next__</code>:</p>
 <p>Example:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
-#![feature(proc_macro, specialization)]
+#![feature(use_extern_macros, specialization)]
 #fn main() {
 extern crate pyo3;
 
 use pyo3::prelude::*;
-use pyo3::{pyclass, pyproto};
+
 
 #[pyclass]
 struct MyIterator {

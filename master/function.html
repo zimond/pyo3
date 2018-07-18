@@ -155,7 +155,7 @@ the function to a <a href="./module.md">module</a></p>
 
 extern crate pyo3;
 use pyo3::prelude::*;
-use pyo3::pymodinit;
+
 
 #[pymodinit]
 fn rust2py(py: Python, m: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
@@ -176,13 +176,13 @@ fn rust2py(py: Python, m: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
 to the module using the <code>add_function_to_module!</code> macro, which takes the module
 as first parameter, the function name as second and an instance of <code>Python</code>
 as third.</p>
-<pre><pre class="playpen"><code class="language-rust">#![feature(proc_macro, concat_idents)]
+<pre><pre class="playpen"><code class="language-rust">#![feature(use_extern_macros, concat_idents)]
 
 #[macro_use]
 extern crate pyo3;
 use pyo3::prelude::*;
 
-use pyo3::{pyfunction, pymodinit};
+
 
 #[pyfunction]
 fn double(x: usize) -&gt; usize {

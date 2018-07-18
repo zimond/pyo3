@@ -255,7 +255,7 @@ of <code>ToPyObject + 'static</code>. In case if <code>'static</code> constraint
 more complex arguments are required <a href="https://docs.rs/pyo3/0.2.7/trait.PyErrArguments.html"><code>PyErrArgument</code></a>
 trait can be implemented. In that case actual exception arguments creation get delayed
 until <code>Python</code> object is available.</p>
-<pre><code class="language-rust ignore">#![feature(proc_macro, specialization)]
+<pre><code class="language-rust ignore">#![feature(use_extern_macros, specialization)]
 extern crate pyo3;
 
 use std::net::TcpListener;
