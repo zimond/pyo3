@@ -153,7 +153,7 @@
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(use_extern_macros, specialization)]
+# #![feature(specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
 
@@ -188,7 +188,7 @@ attribute. Only the python <code>__new__</code> method can be specified, <code>_
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(use_extern_macros, specialization)]
+# #![feature(specialization)]
 #
 # extern crate pyo3;
 # use pyo3::prelude::*;
@@ -233,7 +233,7 @@ with value of custom class struct. Subclass must call parent's <code>__new__</co
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(use_extern_macros, specialization)]
+# #![feature(specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
 #
@@ -283,7 +283,7 @@ attributes. i.e.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(use_extern_macros, specialization)]
+# #![feature(specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
 # #[pyclass]
@@ -309,7 +309,7 @@ rust's special keywords like <code>type</code>.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(use_extern_macros, specialization)]
+# #![feature(specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
 # #[pyclass]
@@ -339,7 +339,7 @@ If parameter is specified, it is used and property name. i.e.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(use_extern_macros, specialization)]
+# #![feature(specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
 # #[pyclass]
@@ -368,7 +368,7 @@ impl MyClass {
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(use_extern_macros, specialization)]
+# #![feature(specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
 #[pyclass]
@@ -386,7 +386,7 @@ class method static methods, etc.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(use_extern_macros, specialization)]
+# #![feature(specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
 # #[pyclass]
@@ -415,7 +415,7 @@ get injected by method wrapper. i.e</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(use_extern_macros, specialization)]
+# #![feature(specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
 # #[pyclass]
@@ -439,7 +439,7 @@ with<code>#[classmethod]</code> attribute.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(use_extern_macros, specialization)]
+# #![feature(specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
 # #[pyclass]
@@ -472,7 +472,7 @@ for some <code>T</code> that implements <code>IntoPyObject</code>.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(use_extern_macros, specialization)]
+# #![feature(specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
 # #[pyclass]
@@ -496,7 +496,7 @@ with <code>#[call]</code> attribute. Arguments of the method are specified same 
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(use_extern_macros, specialization)]
+# #![feature(specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
 # #[pyclass]
@@ -540,7 +540,7 @@ code unmodified.</li>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(use_extern_macros, specialization)]
+# #![feature(specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
 #
@@ -641,7 +641,7 @@ as every cycle must contain at least one mutable reference.
 Example:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
-#![feature(use_extern_macros, specialization)]
+#![feature(specialization)]
 #fn main() {
 extern crate pyo3;
 
@@ -687,7 +687,7 @@ It includes two methods <code>__iter__</code> and <code>__next__</code>:</p>
 <p>Example:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
-#![feature(use_extern_macros, specialization)]
+#![feature(specialization)]
 #fn main() {
 extern crate pyo3;
 

@@ -176,7 +176,7 @@ fn rust2py(py: Python, m: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
 to the module using the <code>add_function_to_module!</code> macro, which takes the module
 as first parameter, the function name as second and an instance of <code>Python</code>
 as third.</p>
-<pre><pre class="playpen"><code class="language-rust">#![feature(specialization, use_extern_macros)]
+<pre><pre class="playpen"><code class="language-rust">#![feature(specialization)]
 
 #[macro_use]
 extern crate pyo3;
