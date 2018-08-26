@@ -209,11 +209,8 @@ fn main() {
     obj.call1(py, args);
 }
 </code></pre></pre>
-<p><code>kwargs</code> argument is generate over
-<a href="https://docs.rs/pyo3/0.2.7/trait.IntoPyDictPointer.html"><code>IntoPyDictPointer</code></a> trait. <code>HashMap</code> or <code>BTreeMap</code> could be used as
-keyword arguments. rust tuple with up to 10 elements where each element is tuple with size 2
-could be used as kwargs as well. Or <code>NoArgs</code> object can be used to indicate that
-no keywords arguments are provided.</p>
+<p><code>kwargs</code> can by <code>None</code> or <code>Some(PyDict)</code>. You can use the
+<a href="https://docs.rs/pyo3/0.2.7/trait.IntoPyDict.html"><code>IntoPyDict</code></a> trait to convert other dict-like containers, e.g. <code>HashMap</code>, <code>BTreeMap</code> as well as tuples with up to 10 elements and <code>Vec</code>s where each element is a two element tuple.</p>
 <pre><pre class="playpen"><code class="language-rust">extern crate pyo3;
 
 use std::collections::HashMap;
