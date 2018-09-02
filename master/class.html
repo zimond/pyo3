@@ -165,7 +165,6 @@ struct MyClass {
 }
 #}</code></pre></pre>
 <p>The above example generates implementations for <code>PyTypeInfo</code> and <code>PyTypeObject</code> for <code>MyClass</code>.</p>
-<p>If the class has a <code>PyToken</code> attribute, implementations for <code>PyObjectWithToken</code>, <code>ToPyObject</code>, <code>IntoPyObject</code> and <code>ToPyPointer</code> are also generated. You can only get a <code>PyToken</code> instance through the  <code>__new__</code> method.</p>
 <a class="header" href="class.html#customizing-the-class" id="customizing-the-class"><h2>Customizing the class</h2></a>
 <p>The <code>#[pyclass]</code> macro accepts following parameters:</p>
 <ul>
@@ -197,7 +196,6 @@ attribute. Only the python <code>__new__</code> method can be specified, <code>_
 #[pyclass]
 struct MyClass {
    num: i32,
-   token: PyToken,
 }
 
 #[pymethods]
@@ -205,10 +203,9 @@ impl MyClass {
 
      #[new]
      fn __new__(obj: &amp;PyRawObject, num: i32) -&gt; PyResult&lt;()&gt; {
-         obj.init(|token| {
+         obj.init(|_| {
              MyClass {
                  num,
-                 token
              }
          })
      }
@@ -289,7 +286,6 @@ attributes. i.e.</p>
 # #[pyclass]
 # struct MyClass {
 #    num: i32,
-#    token: PyToken,
 # }
 #
 #[pymethods]
@@ -315,7 +311,6 @@ rust's special keywords like <code>type</code>.</p>
 # #[pyclass]
 # struct MyClass {
 #    num: i32,
-#    token: PyToken,
 # }
 #
 #[pymethods]
@@ -345,7 +340,6 @@ If parameter is specified, it is used and property name. i.e.</p>
 # #[pyclass]
 # struct MyClass {
 #    num: i32,
-#    token: PyToken,
 # }
 #
 #[pymethods]
@@ -392,7 +386,6 @@ class method static methods, etc.</p>
 # #[pyclass]
 # struct MyClass {
 #    num: i32,
-#    token: PyToken,
 # }
 #
 #[pymethods]
@@ -422,7 +415,6 @@ get injected by method wrapper. i.e</p>
 # struct MyClass {
 #    num: i32,
 #    debug: bool,
-#    token: PyToken,
 # }
 
 #[pymethods]
@@ -446,7 +438,6 @@ with<code>#[classmethod]</code> attribute.</p>
 # struct MyClass {
 #    num: i32,
 #    debug: bool,
-#    token: PyToken,
 # }
 
 #[pymethods]
@@ -479,7 +470,6 @@ for some <code>T</code> that implements <code>IntoPyObject</code>.</p>
 # struct MyClass {
 #    num: i32,
 #    debug: bool,
-#    token: PyToken,
 # }
 
 #[pymethods]
@@ -503,7 +493,6 @@ with <code>#[call]</code> attribute. Arguments of the method are specified same 
 # struct MyClass {
 #    num: i32,
 #    debug: bool,
-#    token: PyToken,
 # }
 
 #[pymethods]
@@ -511,7 +500,7 @@ impl MyClass {
      #[call]
      #[args(args=&quot;*&quot;)]
      fn __call__(&amp;self, args: &amp;PyTuple) -&gt; PyResult&lt;i32&gt; {
-        println!(&quot;MyCLS has been called&quot;);
+        println!(&quot;MyClass has been called&quot;);
         Ok(self.num)
      }
 }
@@ -548,7 +537,6 @@ code unmodified.</li>
 # struct MyClass {
 #    num: i32,
 #    debug: bool,
-#    token: PyToken,
 # }
 #
 #[pymethods]
@@ -688,11 +676,11 @@ It includes two methods <code>__iter__</code> and <code>__next__</code>:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #![feature(specialization)]
+
 #fn main() {
 extern crate pyo3;
 
 use pyo3::prelude::*;
-
 
 #[pyclass]
 struct MyIterator {
