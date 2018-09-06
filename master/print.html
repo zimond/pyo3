@@ -1215,35 +1215,7 @@ then we can run <code>pytest tests</code> to benchmark them.</p>
 </code></pre>
 <p>See <a href="https://github.com/dtolnay/cargo-expand">cargo expand</a> for a more elaborate version of those commands.</p>
 <a class="header" href="print.html#distribution" id="distribution"><h1>Distribution</h1></a>
-<a class="header" href="print.html#setuptools-rust-integration" id="setuptools-rust-integration"><h2><code>setuptools-rust</code> integration</h2></a>
-<p><a href="https://github.com/PyO3/setuptools-rust"><code>setuptools-rust</code></a> is a setuptools helpers for Rust Python extensions. It supports <code>PyO3</code> by default.</p>
-<p>For detailed usage, please refer to its <a href="https://github.com/PyO3/setuptools-rust/blob/master/README.rst">README</a></p>
-<a class="header" href="print.html#source-distribution" id="source-distribution"><h2>Source distribution</h2></a>
-<p>To build a source code distribution, you need to add the following lines to your <code>MANIFEST.in</code> file to ensure it correctly packages Rust extension source code.</p>
-<pre><code class="language-text">include Cargo.toml
-recursive-include src *
-</code></pre>
-<p>Then you can build a source code distribution by (assuming you have already written a <code>setup.py</code>):</p>
-<pre><code class="language-bash">python setup.py sdist
-</code></pre>
-<a class="header" href="print.html#binary-wheel-distribution" id="binary-wheel-distribution"><h2>Binary wheel distribution</h2></a>
-<p>To build a binary wheel, <a href="https://github.com/pypa/manylinux">manylinux</a> would be a natural choice for Linux.</p>
-<p>Take the <a href="https://github.com/PyO3/setuptools-rust/tree/master/example">example</a> project in <a href="https://github.com/PyO3/setuptools-rust"><code>setuptools-rust</code></a> repository for example,
-we have a <a href="https://github.com/PyO3/setuptools-rust/blob/master/example/build-wheels.sh"><code>build-wheels.sh</code></a> to be used with Docker to build manylinux1 wheels.
-First you need to pull the <code>manylinux1</code> Docker image:</p>
-<pre><code class="language-bash">$ docker pull quay.io/pypa/manylinux1_x86_64
-</code></pre>
-<p>Then use the following command to build wheels for supported Python versions:</p>
-<pre><code class="language-bash">$ docker run --rm -v `pwd`:/io quay.io/pypa/manylinux1_x86_64 /io/build-wheels.sh
-</code></pre>
-<p>You will find all the wheels in <code>dist</code> directory:</p>
-<pre><code class="language-bash">$ ls dist
-hello_rust-1.0-cp27-cp27m-linux_x86_64.whl       hello_rust-1.0-cp35-cp35m-linux_x86_64.whl
-hello_rust-1.0-cp27-cp27m-manylinux1_x86_64.whl  hello_rust-1.0-cp35-cp35m-manylinux1_x86_64.whl
-hello_rust-1.0-cp27-cp27mu-linux_x86_64.whl      hello_rust-1.0-cp36-cp36m-linux_x86_64.whl
-hello_rust-1.0-cp27-cp27mu-manylinux1_x86_64.whl hello_rust-1.0-cp36-cp36m-manylinux1_x86_64.whl
-</code></pre>
-<p>The <code>*-manylinux1_x86_64.whl</code> files are the <code>manylinux1</code> wheels that you can upload to PyPI.</p>
+<p>There are two way to distribute your module as python package: The old <a href="https://github.com/PyO3/setuptools-rust">setuptools-rust</a> and the new <a href="https://github.com/pyo3/pyo3-pack">pyo3-pack</a>. setuptools-rust needs some configuration files (<code>setup.py</code>,  <code>MANIFEST.in</code>, <code>build-wheels.sh</code>, etc.) and external tools (docker, twine). pyo3-pack doesn't need any configuration files. It can not yet build sdist though (<a href="https://github.com/PyO3/pyo3-pack/issues/2">pyo3/pyo3-pack#2</a>).</p>
 <a class="header" href="print.html#appendix-pyo3-and-rust-cpython" id="appendix-pyo3-and-rust-cpython"><h1>Appendix: pyo3 and rust-cpython</h1></a>
 <p>Pyo3 began as fork of <a href="https://github.com/dgrunwald/rust-cpython">rust-cpython</a> when rust-cpython wasn't maintained. Over the time pyo3 has become fundamentally different from rust-cpython.</p>
 <p>This chapter is based on the discussion in <a href="https://github.com/PyO3/pyo3/issues/55">PyO3/pyo3#55</a>.</p>
