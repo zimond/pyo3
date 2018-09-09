@@ -148,6 +148,7 @@
                 <div id="content" class="content">
                     <main>
                         <a class="header" href="debugging.html#debugging" id="debugging"><h1>Debugging</h1></a>
+<a class="header" href="debugging.html#macros" id="macros"><h2>Macros</h2></a>
 <p>Pyo3's attributes, <code>#[pyclass]</code>, <code>#[pymodinit]</code>, etc. are <a href="https://doc.rust-lang.org/unstable-book/language-features/proc-macro.html">procedural macros</a>, which means that rewrite the source of the annotated item. You can view the generated source with the following command, which also expands a few other things:</p>
 <pre><code class="language-bash">cargo rustc --profile=check -- -Z unstable-options --pretty=expanded &gt; expanded.rs; rustfmt expanded.rs
 </code></pre>
@@ -156,6 +157,8 @@
 <pre><code class="language-bash">cargo rustc --profile=check -- -Z unstable-options --pretty=expanded -Z trace-macros &gt; expanded.rs; rustfmt expanded.rs
 </code></pre>
 <p>See <a href="https://github.com/dtolnay/cargo-expand">cargo expand</a> for a more elaborate version of those commands.</p>
+<a class="header" href="debugging.html#linking" id="linking"><h2>Linking</h2></a>
+<p>When building, you can set <code>PYTHON_SYS_EXECUTABLE</code> to the python interpreter that pyo3 should be linked to. You might need to set the <code>python2</code> or <code>python3</code> feature accordingly. On linux/mac you might have to change <code>LD_LIBRARY_PATH</code> to include libpython, while on windows you might need to set <code>LIB</code> to include <code>pythonxy.lib</code> (where x and y are major and minor version), which is normally either in the <code>libs</code> or <code>Lib</code> folder of a python installation. Also make sure that python is in <code>PATH</code> when you're not using  <code>PYTHON_SYS_EXECUTABLE</code>.</p>
 
                     </main>
 
