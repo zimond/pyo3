@@ -191,7 +191,7 @@ attribute. Only the python <code>__new__</code> method can be specified, <code>_
 #
 # extern crate pyo3;
 # use pyo3::prelude::*;
-
+# use pyo3::PyRawObject;
 
 #[pyclass]
 struct MyClass {
@@ -233,7 +233,7 @@ with value of custom class struct. Subclass must call parent's <code>__new__</co
 # #![feature(specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
-#
+# use pyo3::PyRawObject;
 #[pyclass]
 struct BaseClass {
    val1: usize,

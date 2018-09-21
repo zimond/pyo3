@@ -212,6 +212,7 @@ pyo3 = &quot;0.3&quot;
 extern crate pyo3;
 
 use pyo3::prelude::*;
+use pyo3::types::PyDict;
 
 fn main() -&gt; PyResult&lt;()&gt; {
     let gil = Python::acquire_gil();
@@ -345,7 +346,7 @@ fn main() {
 #fn main() {
 #[macro_use] extern crate pyo3;
 
-py_exception!(module, MyError, pyo3::exc::Exception);
+py_exception!(module, MyError, pyo3::exceptions::Exception);
 #}</code></pre></pre>
 <ul>
 <li><code>module</code> is the name of the containing module.</li>
@@ -354,9 +355,10 @@ py_exception!(module, MyError, pyo3::exc::Exception);
 <p>For example:</p>
 <pre><pre class="playpen"><code class="language-rust">#[macro_use] extern crate pyo3;
 
-use pyo3::{Python, PyDict};
+use pyo3::Python;
+use pyo3::types::PyDict;
 
-py_exception!(mymodule, CustomError, pyo3::exc::Exception);
+py_exception!(mymodule, CustomError, pyo3::exceptions::Exception);
 
 fn main() {
     let gil = Python::acquire_gil();
@@ -378,7 +380,7 @@ use pyo3::{Python, PyErr, exc};
 fn main() {
     let gil = Python::acquire_gil();
     let py = gil.python();
-    PyErr::new::&lt;exc::TypeError, _&gt;(&quot;Error&quot;).restore(py);
+    PyErr::new::&lt;exceptions::TypeError, _&gt;(&quot;Error&quot;).restore(py);
     assert!(PyErr::occurred(py));
     drop(PyErr::fetch(py));
 }
@@ -398,7 +400,7 @@ have rust type as well.</p>
 # fn check_for_error() -&gt; bool {false}
 fn my_func(arg: PyObject) -&gt; PyResult&lt;()&gt; {
     if check_for_error() {
-        Err(exc::ValueError::py_err(&quot;argument is wrong&quot;))
+        Err(exceptions::ValueError::py_err(&quot;argument is wrong&quot;))
     } else {
         Ok(())
     }
@@ -427,8 +429,8 @@ fn main() {
 # fn main() {
 # let gil = Python::acquire_gil();
 # let py = gil.python();
-# let err = exc::TypeError::py_err(NoArgs);
-err.is_instance::&lt;exc::TypeError&gt;(py);
+# let err = exceptions::TypeError::py_err(NoArgs);
+err.is_instance::&lt;exceptions::TypeError&gt;(py);
 # }
 </code></pre></pre>
 <a class="header" href="print.html#handle-rust-error" id="handle-rust-error"><h2>Handle Rust Error</h2></a>
@@ -453,7 +455,7 @@ use pyo3::{PyErr, PyResult, exc};
 
 impl std::convert::From&lt;std::io::Error&gt; for PyErr {
     fn from(err: std::io::Error) -&gt; PyErr {
-        exc::OSError.into()
+        exceptions::OSError.into()
     }
 }
 
@@ -489,7 +491,7 @@ use pyo3::prelude::*;
 import_exception!(io, UnsupportedOperation);
 
 fn tell(file: PyObject) -&gt; PyResult&lt;u64&gt; {
-    use pyo3::exc::*;
+    use pyo3::exceptions::*;
 
     let gil = Python::acquire_gil();
     let py = gil.python();
@@ -649,7 +651,7 @@ attribute. Only the python <code>__new__</code> method can be specified, <code>_
 #
 # extern crate pyo3;
 # use pyo3::prelude::*;
-
+# use pyo3::PyRawObject;
 
 #[pyclass]
 struct MyClass {
@@ -691,7 +693,7 @@ with value of custom class struct. Subclass must call parent's <code>__new__</co
 # #![feature(specialization)]
 # extern crate pyo3;
 # use pyo3::prelude::*;
-#
+# use pyo3::PyRawObject;
 #[pyclass]
 struct BaseClass {
    val1: usize,
@@ -1244,7 +1246,7 @@ then we can run <code>pytest tests</code> to benchmark them.</p>
 extern crate pyo3;
 
 use pyo3::prelude::*;
-
+use pyo3::PyRawObject;
 
 #[pyclass]
 struct MyClass {

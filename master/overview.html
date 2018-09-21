@@ -212,6 +212,7 @@ pyo3 = &quot;0.3&quot;
 extern crate pyo3;
 
 use pyo3::prelude::*;
+use pyo3::types::PyDict;
 
 fn main() -&gt; PyResult&lt;()&gt; {
     let gil = Python::acquire_gil();
