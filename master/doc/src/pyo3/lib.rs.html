@@ -214,6 +214,7 @@
 <span id="214">214</span>
 <span id="215">215</span>
 <span id="216">216</span>
+<span id="217">217</span>
 </pre><pre class="rust ">
 <span class="attribute">#![<span class="ident">feature</span>(<span class="ident">specialization</span>)]</span>
 
@@ -261,7 +262,8 @@
 <span class="doccomment">//!</span>
 <span class="doccomment">//!     let locals = PyDict::new(py);</span>
 <span class="doccomment">//!     locals.set_item(&quot;os&quot;, py.import(&quot;os&quot;)?)?;</span>
-<span class="doccomment">//!     let user: String = py.eval(&quot;os.getenv(&#39;USER&#39;) or os.getenv(&#39;USERNAME&#39;)&quot;, None, Some(&amp;locals))?.extract()?;</span>
+<span class="doccomment">//!     let code = &quot;os.getenv(&#39;USER&#39;) or os.getenv(&#39;USERNAME&#39;) or &#39;Unknown&#39;&quot;;</span>
+<span class="doccomment">//!     let user: String = py.eval(code, None, Some(&amp;locals))?.extract()?;</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//!     println!(&quot;Hello {}, I&#39;m Python {}&quot;, user, version);</span>
 <span class="doccomment">//!     Ok(())</span>
