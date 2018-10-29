@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `pyo3` crate."><meta name="keywords" content="rust, rustlang, rust-lang, pyo3"><title>pyo3 - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><p class='location'>Crate pyo3</p><a id='all-types' href='all.html'><p>See all pyo3's items</p></a><div class="sidebar-elems"><div class="block items"><ul><li><a href="#reexports">Re-exports</a></li><li><a href="#modules">Modules</a></li><li><a href="#macros">Macros</a></li><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li><li><a href="#traits">Traits</a></li><li><a href="#functions">Functions</a></li><li><a href="#types">Type Definitions</a></li></ul></div><p class='location'></p><script>window.sidebarCurrent = {name: 'pyo3', ty: 'mod', relpath: '../'};</script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/pyo3/lib.rs.html#1-217' title='goto source code'>[src]</a></span><span class='in-band'>Crate <a class="mod" href=''>pyo3</a></span></h1><div class='docblock'><p>Rust bindings to the Python interpreter.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `pyo3` crate."><meta name="keywords" content="rust, rustlang, rust-lang, pyo3"><title>pyo3 - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><p class='location'>Crate pyo3</p><div class="sidebar-elems"><a id='all-types' href='all.html'><p>See all pyo3's items</p></a><div class="block items"><ul><li><a href="#reexports">Re-exports</a></li><li><a href="#modules">Modules</a></li><li><a href="#macros">Macros</a></li><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li><li><a href="#traits">Traits</a></li><li><a href="#functions">Functions</a></li><li><a href="#types">Type Definitions</a></li></ul></div><p class='location'></p><script>window.sidebarCurrent = {name: 'pyo3', ty: 'mod', relpath: '../'};</script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/pyo3/lib.rs.html#1-217' title='goto source code'>[src]</a></span><span class='in-band'>Crate <a class="mod" href=''>pyo3</a></span></h1><div class='docblock'><p>Rust bindings to the Python interpreter.</p>
 <h1 id="ownership-and-lifetimes" class="section-header"><a href="#ownership-and-lifetimes">Ownership and Lifetimes</a></h1>
 <p>In Python, all objects are implicitly reference counted.
 In rust, we will use the <code>PyObject</code> type to represent a reference to a Python object.</p>
@@ -18,7 +18,7 @@ This is an alias for the type <code>Result&lt;..., PyErr&gt;</code>.</p>
 <p>A <code>PyErr</code> represents a Python exception. Errors within the <code>PyO3</code> library are
 also exposed as Python exceptions.</p>
 <h1 id="example" class="section-header"><a href="#example">Example</a></h1>
-<pre class="rust rust-example-rendered">
+<div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="attribute">#![<span class="ident">feature</span>(<span class="ident">specialization</span>)]</span>
 
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">pyo3</span>;
@@ -39,7 +39,7 @@ also exposed as Python exceptions.</p>
 
     <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;Hello {}, I&#39;m Python {}&quot;</span>, <span class="ident">user</span>, <span class="ident">version</span>);
     <span class="prelude-val">Ok</span>(())
-}</pre>
+}</pre></div>
 <h1 id="python-extension" class="section-header"><a href="#python-extension">Python extension</a></h1>
 <p>To allow Python to load the rust code as a Python extension
 module, you need an initialization function with <code>Fn(Python, &amp;PyModule) -&gt; PyResult&lt;()&gt;</code>
@@ -53,7 +53,7 @@ function and decorate it with <code>#[pyfn()]</code> attribute. <code>pyfn()</co
 <li>comma separated arguments, i.e. param=&quot;None&quot;, &quot;*&quot;, param3=&quot;55&quot;</li>
 </ol>
 <h1 id="example-1" class="section-header"><a href="#example-1">Example</a></h1>
-<pre class="rust rust-example-rendered">
+<div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="attribute">#![<span class="ident">feature</span>(<span class="ident">specialization</span>)]</span>
 
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">pyo3</span>;
@@ -80,7 +80,7 @@ function and decorate it with <code>#[pyfn()]</code> attribute. <code>pyfn()</co
 <span class="kw">fn</span> <span class="ident">sum_as_string</span>(<span class="ident">a</span>:<span class="ident">i64</span>, <span class="ident">b</span>:<span class="ident">i64</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
     <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">a</span> <span class="op">+</span> <span class="ident">b</span>).<span class="ident">to_string</span>()
 }
-</pre>
+</pre></div>
 <p>In your <code>Cargo.toml</code>, use the <code>extension-module</code> feature for the <code>pyo3</code> dependency:</p>
 <pre><code class="language-cargo">[dependencies.pyo3]
 version = &quot;*&quot;
