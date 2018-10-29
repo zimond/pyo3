@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Python","Marker type that indicates that the GIL is currently held."]],"trait":[["IntoPyPointer","This trait allows retrieving the underlying FFI pointer from Python objects."],["ToPyPointer","This trait allows retrieving the underlying FFI pointer from Python objects."]]});
