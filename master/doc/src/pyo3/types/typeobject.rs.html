@@ -78,12 +78,12 @@
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">borrow</span>::<span class="ident">Cow</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ffi</span>::<span class="ident">CStr</span>;
 
-<span class="kw">use</span> <span class="ident">err</span>::{<span class="ident">PyErr</span>, <span class="ident">PyResult</span>};
-<span class="kw">use</span> <span class="ident">ffi</span>;
-<span class="kw">use</span> <span class="ident">instance</span>::{<span class="ident">Py</span>, <span class="ident">PyObjectWithToken</span>};
-<span class="kw">use</span> <span class="ident">object</span>::<span class="ident">PyObject</span>;
-<span class="kw">use</span> <span class="ident">python</span>::{<span class="ident">Python</span>, <span class="ident">ToPyPointer</span>};
-<span class="kw">use</span> <span class="ident">typeob</span>::{<span class="ident">PyTypeInfo</span>, <span class="ident">PyTypeObject</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">err</span>::{<span class="ident">PyErr</span>, <span class="ident">PyResult</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">instance</span>::{<span class="ident">Py</span>, <span class="ident">PyObjectWithToken</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">object</span>::<span class="ident">PyObject</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::{<span class="ident">Python</span>, <span class="ident">ToPyPointer</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">typeob</span>::{<span class="ident">PyTypeInfo</span>, <span class="ident">PyTypeObject</span>};
 
 <span class="doccomment">/// Represents a reference to a Python `type object`.</span>
 <span class="attribute">#[<span class="ident">repr</span>(<span class="ident">transparent</span>)]</span>

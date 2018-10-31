@@ -336,22 +336,31 @@
 <span id="336">336</span>
 <span id="337">337</span>
 <span id="338">338</span>
+<span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
+<span id="342">342</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 
 <span class="kw">use</span> <span class="ident">std</span>;
 
-<span class="kw">use</span> <span class="ident">conversion</span>::{
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">conversion</span>::{
     <span class="ident">FromPyObject</span>, <span class="ident">IntoPyObject</span>, <span class="ident">IntoPyTuple</span>, <span class="ident">PyTryFrom</span>, <span class="ident">ToBorrowedObject</span>, <span class="ident">ToPyObject</span>,
 };
-<span class="kw">use</span> <span class="ident">err</span>::{<span class="ident">PyDowncastError</span>, <span class="ident">PyErr</span>, <span class="ident">PyResult</span>};
-<span class="kw">use</span> <span class="ident">ffi</span>;
-<span class="kw">use</span> <span class="ident">instance</span>::{<span class="ident">AsPyRef</span>, <span class="ident">PyObjectWithToken</span>};
-<span class="kw">use</span> <span class="ident">python</span>::{<span class="ident">IntoPyPointer</span>, <span class="ident">Python</span>, <span class="ident">ToPyPointer</span>};
-<span class="kw">use</span> <span class="ident">pythonrun</span>;
-<span class="kw">use</span> <span class="ident">types</span>::{<span class="ident">PyDict</span>, <span class="ident">PyObjectRef</span>, <span class="ident">PyTuple</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">err</span>::{<span class="ident">PyDowncastError</span>, <span class="ident">PyErr</span>, <span class="ident">PyResult</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">instance</span>::{<span class="ident">AsPyRef</span>, <span class="ident">PyObjectWithToken</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::{<span class="ident">IntoPyPointer</span>, <span class="ident">Python</span>, <span class="ident">ToPyPointer</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">pythonrun</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">PyDict</span>, <span class="ident">PyObjectRef</span>, <span class="ident">PyTuple</span>};
 
-<span class="doccomment">/// Safe wrapper around unsafe `*mut ffi::PyObject` pointer.</span>
+<span class="doccomment">/// A python object</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// The python object&#39;s lifetime is managed by python&#39;s garbage</span>
+<span class="doccomment">/// collector.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Technically, it is a safe wrapper around the unsafe `*mut ffi::PyObject` pointer.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="attribute">#[<span class="ident">repr</span>(<span class="ident">transparent</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PyObject</span>(<span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>);
@@ -379,7 +388,7 @@
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">from_owned_ptr_or_panic</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">ptr</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="ident">PyObject</span> {
         <span class="kw">if</span> <span class="ident">ptr</span>.<span class="ident">is_null</span>() {
-            ::<span class="ident">err</span>::<span class="ident">panic_after_error</span>();
+            <span class="kw">crate</span>::<span class="ident">err</span>::<span class="ident">panic_after_error</span>();
         } <span class="kw">else</span> {
             <span class="ident">PyObject</span>::<span class="ident">from_owned_ptr</span>(<span class="ident">py</span>, <span class="ident">ptr</span>)
         }
@@ -538,16 +547,13 @@
 
     <span class="doccomment">/// Calls a method on the object.</span>
     <span class="doccomment">/// This is equivalent to the Python expression: &#39;self.name(*args, **kwargs)&#39;</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">call_method</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span>(
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">call_method</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">py</span>: <span class="ident">Python</span>,
         <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-        <span class="ident">args</span>: <span class="ident">A</span>,
-        <span class="ident">kwargs</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PyDict</span><span class="op">&gt;</span>,
-    ) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">A</span>: <span class="ident">IntoPyTuple</span>,
-    {
+        <span class="ident">args</span>: <span class="kw">impl</span> <span class="ident">IntoPyTuple</span>,
+        <span class="ident">kwargs</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">PyDict</span><span class="op">&gt;</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span> {
         <span class="ident">name</span>.<span class="ident">with_borrowed_ptr</span>(<span class="ident">py</span>, <span class="op">|</span><span class="ident">name</span><span class="op">|</span> <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">args</span> <span class="op">=</span> <span class="ident">args</span>.<span class="ident">into_tuple</span>(<span class="ident">py</span>).<span class="ident">into_ptr</span>();
             <span class="kw">let</span> <span class="ident">kwargs</span> <span class="op">=</span> <span class="ident">kwargs</span>.<span class="ident">into_ptr</span>();
@@ -571,10 +577,12 @@
 
     <span class="doccomment">/// Calls a method on the object.</span>
     <span class="doccomment">/// This is equivalent to the Python expression: &#39;self.name(*args)&#39;</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">call_method1</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">args</span>: <span class="ident">A</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">A</span>: <span class="ident">IntoPyTuple</span>,
-    {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">call_method1</span>(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        <span class="ident">py</span>: <span class="ident">Python</span>,
+        <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
+        <span class="ident">args</span>: <span class="kw">impl</span> <span class="ident">IntoPyTuple</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">call_method</span>(<span class="ident">py</span>, <span class="ident">name</span>, <span class="ident">args</span>, <span class="prelude-val">None</span>)
     }
 }
@@ -625,6 +633,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">PartialEq</span> <span class="kw">for</span> <span class="ident">PyObject</span> {
+    <span class="doccomment">/// Checks for identity, not python&#39;s `__eq__`</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">eq</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">o</span>: <span class="kw-2">&amp;</span><span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="number">0</span> <span class="op">==</span> <span class="ident">o</span>.<span class="number">0</span>
@@ -658,8 +667,8 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">test</span> {
     <span class="kw">use</span> <span class="kw">super</span>::<span class="ident">PyObject</span>;
-    <span class="kw">use</span> <span class="ident">python</span>::<span class="ident">Python</span>;
-    <span class="kw">use</span> <span class="ident">types</span>::<span class="ident">PyDict</span>;
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::<span class="ident">Python</span>;
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">PyDict</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_call_for_non_existing_method</span>() {
@@ -667,10 +676,9 @@
         <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
         <span class="kw">let</span> <span class="ident">obj</span>: <span class="ident">PyObject</span> <span class="op">=</span> <span class="ident">PyDict</span>::<span class="ident">new</span>(<span class="ident">py</span>).<span class="ident">into</span>();
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">obj</span>.<span class="ident">call_method0</span>(<span class="ident">py</span>, <span class="string">&quot;asdf&quot;</span>).<span class="ident">is_err</span>());
-        <span class="macro">assert</span><span class="macro">!</span>(
-            <span class="ident">obj</span>.<span class="ident">call_method</span>(<span class="ident">py</span>, <span class="string">&quot;nonexistent_method&quot;</span>, (<span class="number">1</span>,), <span class="prelude-val">None</span>)
-                .<span class="ident">is_err</span>()
-        );
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">obj</span>
+            .<span class="ident">call_method</span>(<span class="ident">py</span>, <span class="string">&quot;nonexistent_method&quot;</span>, (<span class="number">1</span>,), <span class="prelude-val">None</span>)
+            .<span class="ident">is_err</span>());
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">obj</span>.<span class="ident">call_method0</span>(<span class="ident">py</span>, <span class="string">&quot;nonexistent_method&quot;</span>).<span class="ident">is_err</span>());
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">obj</span>.<span class="ident">call_method1</span>(<span class="ident">py</span>, <span class="string">&quot;nonexistent_method&quot;</span>, (<span class="number">1</span>,)).<span class="ident">is_err</span>());
     }

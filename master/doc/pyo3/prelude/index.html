@@ -5,7 +5,7 @@ by adding a glob import to the top of pyo3 heavy modules:</p>
 <div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="kw">use</span> <span class="ident">pyo3</span>::<span class="ident">prelude</span>::<span class="kw-2">*</span>;</pre></div>
 </div><h2 id='reexports' class='section-header'><a href="#reexports">Re-exports</a></h2>
-<table><tr><td><code>pub use python::<a class="struct" href="../../pyo3/python/struct.Python.html" title="struct pyo3::python::Python">Python</a>;</code></td></tr><tr><td><code>pub use <a class="struct" href="../../pyo3/typeob/struct.PyRawObject.html" title="struct pyo3::typeob::PyRawObject">PyRawObject</a>;</code></td></tr><tr><td><code>pub use pyo3cls::pyclass;</code></td></tr><tr><td><code>pub use pyo3cls::pyfunction;</code></td></tr><tr><td><code>pub use pyo3cls::pymethods;</code></td></tr><tr><td><code>pub use pyo3cls::pyproto;</code></td></tr><tr><td><code>pub use pyo3cls::mod3init as pymodinit;</code></td></tr></table><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table><tr><td><code>pub use crate::python::<a class="struct" href="../../pyo3/python/struct.Python.html" title="struct pyo3::python::Python">Python</a>;</code></td></tr><tr><td><code>pub use crate::<a class="struct" href="../../pyo3/typeob/struct.PyRawObject.html" title="struct pyo3::typeob::PyRawObject">PyRawObject</a>;</code></td></tr><tr><td><code>pub use pyo3cls::pyclass;</code></td></tr><tr><td><code>pub use pyo3cls::pyfunction;</code></td></tr><tr><td><code>pub use pyo3cls::pymethods;</code></td></tr><tr><td><code>pub use pyo3cls::pyproto;</code></td></tr><tr><td><code>pub use pyo3cls::mod3init as pymodinit;</code></td></tr></table><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
 <table>
                        <tr class=' module-item'>
                            <td><a class="struct" href="struct.GILGuard.html"
@@ -52,7 +52,7 @@ Corresponds to the empty tuple <code>()</code> in Python.</p>
                            <td><a class="struct" href="struct.PyObject.html"
                                   title='struct pyo3::prelude::PyObject'>PyObject</a></td>
                            <td class='docblock-short'>
-                                <p>Safe wrapper around unsafe <code>*mut ffi::PyObject</code> pointer.</p>
+                                <p>A python object</p>
 
                            </td>
                        </tr>

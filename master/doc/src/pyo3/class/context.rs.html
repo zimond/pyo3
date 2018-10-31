@@ -96,9 +96,9 @@
 <span class="doccomment">//! Trait and support implementation for context manager api</span>
 <span class="doccomment">//!</span>
 
-<span class="kw">use</span> <span class="ident">class</span>::<span class="ident">methods</span>::<span class="ident">PyMethodDef</span>;
-<span class="kw">use</span> <span class="ident">err</span>::<span class="ident">PyResult</span>;
-<span class="kw">use</span> <span class="ident">typeob</span>::<span class="ident">PyTypeInfo</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">class</span>::<span class="ident">methods</span>::<span class="ident">PyMethodDef</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">err</span>::<span class="ident">PyResult</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">typeob</span>::<span class="ident">PyTypeInfo</span>;
 
 <span class="doccomment">/// Context manager interface</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused_variables</span>)]</span>
@@ -124,15 +124,15 @@
 }
 
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyContextEnterProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>: <span class="ident">PyContextProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {
-    <span class="kw">type</span> <span class="ident">Success</span>: ::<span class="ident">IntoPyObject</span>;
+    <span class="kw">type</span> <span class="ident">Success</span>: <span class="kw">crate</span>::<span class="ident">IntoPyObject</span>;
     <span class="kw">type</span> <span class="prelude-ty">Result</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PyResult</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Success</span><span class="op">&gt;&gt;</span>;
 }
 
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyContextExitProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>: <span class="ident">PyContextProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {
-    <span class="kw">type</span> <span class="ident">ExcType</span>: ::<span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>;
-    <span class="kw">type</span> <span class="ident">ExcValue</span>: ::<span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>;
-    <span class="kw">type</span> <span class="ident">Traceback</span>: ::<span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>;
-    <span class="kw">type</span> <span class="ident">Success</span>: ::<span class="ident">IntoPyObject</span>;
+    <span class="kw">type</span> <span class="ident">ExcType</span>: <span class="kw">crate</span>::<span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>;
+    <span class="kw">type</span> <span class="ident">ExcValue</span>: <span class="kw">crate</span>::<span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>;
+    <span class="kw">type</span> <span class="ident">Traceback</span>: <span class="kw">crate</span>::<span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>;
+    <span class="kw">type</span> <span class="ident">Success</span>: <span class="kw">crate</span>::<span class="ident">IntoPyObject</span>;
     <span class="kw">type</span> <span class="prelude-ty">Result</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PyResult</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Success</span><span class="op">&gt;&gt;</span>;
 }
 

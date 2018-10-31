@@ -92,9 +92,10 @@
 <span id="92">92</span>
 <span id="93">93</span>
 <span id="94">94</span>
+<span id="95">95</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="kw">use</span> <span class="ident">ffi3</span>::<span class="ident">object</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="ident">ffi3</span>::<span class="ident">pyport</span>::<span class="ident">Py_ssize_t</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi3</span>::<span class="ident">object</span>::<span class="kw-2">*</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi3</span>::<span class="ident">pyport</span>::<span class="ident">Py_ssize_t</span>;
 <span class="kw">use</span> <span class="ident">libc</span>::<span class="ident">size_t</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">raw</span>::{<span class="ident">c_int</span>, <span class="ident">c_void</span>};
 
@@ -153,10 +154,11 @@
 <span class="attribute">#[<span class="ident">inline</span>]</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>))]</span>
 <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">PyObject_IS_GC</span>(<span class="ident">o</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span> {
-    (<span class="ident">PyType_IS_GC</span>(<span class="ident">Py_TYPE</span>(<span class="ident">o</span>)) <span class="op">!=</span> <span class="number">0</span> <span class="op">&amp;&amp;</span> <span class="kw">match</span> (<span class="kw-2">*</span><span class="ident">Py_TYPE</span>(<span class="ident">o</span>)).<span class="ident">tp_is_gc</span> {
-        <span class="prelude-val">Some</span>(<span class="ident">tp_is_gc</span>) <span class="op">=&gt;</span> <span class="ident">tp_is_gc</span>(<span class="ident">o</span>) <span class="op">!=</span> <span class="number">0</span>,
-        <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="bool-val">true</span>,
-    }) <span class="kw">as</span> <span class="ident">c_int</span>
+    (<span class="ident">PyType_IS_GC</span>(<span class="ident">Py_TYPE</span>(<span class="ident">o</span>)) <span class="op">!=</span> <span class="number">0</span>
+        <span class="op">&amp;&amp;</span> <span class="kw">match</span> (<span class="kw-2">*</span><span class="ident">Py_TYPE</span>(<span class="ident">o</span>)).<span class="ident">tp_is_gc</span> {
+            <span class="prelude-val">Some</span>(<span class="ident">tp_is_gc</span>) <span class="op">=&gt;</span> <span class="ident">tp_is_gc</span>(<span class="ident">o</span>) <span class="op">!=</span> <span class="number">0</span>,
+            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="bool-val">true</span>,
+        }) <span class="kw">as</span> <span class="ident">c_int</span>
 }
 
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">windows</span>, <span class="ident">link</span>(<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;pythonXY&quot;</span>))]</span>

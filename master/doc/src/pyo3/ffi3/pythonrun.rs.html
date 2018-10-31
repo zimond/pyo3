@@ -227,10 +227,10 @@
 <span id="227">227</span>
 <span id="228">228</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="kw">use</span> <span class="ident">ffi3</span>::<span class="ident">object</span>::<span class="kw-2">*</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi3</span>::<span class="ident">object</span>::<span class="kw-2">*</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>))]</span>
-<span class="kw">use</span> <span class="ident">ffi3</span>::<span class="ident">pyarena</span>::<span class="ident">PyArena</span>;
-<span class="kw">use</span> <span class="ident">ffi3</span>::<span class="ident">pystate</span>::<span class="ident">PyThreadState</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi3</span>::<span class="ident">pyarena</span>::<span class="ident">PyArena</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi3</span>::<span class="ident">pystate</span>::<span class="ident">PyThreadState</span>;
 <span class="kw">use</span> <span class="ident">libc</span>::{<span class="ident">wchar_t</span>, <span class="ident">FILE</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">raw</span>::{<span class="ident">c_char</span>, <span class="ident">c_int</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ptr</span>;

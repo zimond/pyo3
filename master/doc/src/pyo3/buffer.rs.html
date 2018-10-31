@@ -775,11 +775,11 @@
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">raw</span>;
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cell</span>, <span class="ident">mem</span>, <span class="ident">slice</span>};
 
-<span class="kw">use</span> <span class="ident">err</span>::{<span class="self">self</span>, <span class="ident">PyResult</span>};
-<span class="kw">use</span> <span class="ident">exceptions</span>;
-<span class="kw">use</span> <span class="ident">ffi</span>;
-<span class="kw">use</span> <span class="ident">python</span>::{<span class="ident">Python</span>, <span class="ident">ToPyPointer</span>};
-<span class="kw">use</span> <span class="ident">types</span>::<span class="ident">PyObjectRef</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">err</span>::{<span class="self">self</span>, <span class="ident">PyResult</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">exceptions</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::{<span class="ident">Python</span>, <span class="ident">ToPyPointer</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">PyObjectRef</span>;
 
 <span class="doccomment">/// Allows access to the underlying buffer used by a python object such as `bytes`, `bytearray` or `array.array`.</span>
 <span class="attribute">#[<span class="ident">repr</span>(<span class="ident">transparent</span>)]</span>
@@ -1414,17 +1414,17 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">test</span> {
     <span class="kw">use</span> <span class="kw">super</span>::<span class="ident">PyBuffer</span>;
-    <span class="kw">use</span> <span class="ident">python</span>::<span class="ident">Python</span>;
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::<span class="ident">Python</span>;
     <span class="kw">use</span> <span class="ident">std</span>;
 
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused_imports</span>)]</span>
-    <span class="kw">use</span> <span class="ident">objectprotocol</span>::<span class="ident">ObjectProtocol</span>;
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">objectprotocol</span>::<span class="ident">ObjectProtocol</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_compatible_size</span>() {
         <span class="comment">// for the cast in PyBuffer::shape()</span>
         <span class="macro">assert_eq</span><span class="macro">!</span>(
-            <span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">size_of</span>::<span class="op">&lt;</span>::<span class="ident">ffi</span>::<span class="ident">Py_ssize_t</span><span class="op">&gt;</span>(),
+            <span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">size_of</span>::<span class="op">&lt;</span><span class="kw">crate</span>::<span class="ident">ffi</span>::<span class="ident">Py_ssize_t</span><span class="op">&gt;</span>(),
             <span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">size_of</span>::<span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>()
         );
     }

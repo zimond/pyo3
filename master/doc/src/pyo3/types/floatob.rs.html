@@ -108,17 +108,17 @@
 <span class="comment">//</span>
 <span class="comment">// based on Daniel Grunwald&#39;s https://github.com/dgrunwald/rust-cpython</span>
 
-<span class="kw">use</span> <span class="ident">conversion</span>::{<span class="ident">IntoPyObject</span>, <span class="ident">ToPyObject</span>};
-<span class="kw">use</span> <span class="ident">err</span>::<span class="ident">PyErr</span>;
-<span class="kw">use</span> <span class="ident">ffi</span>;
-<span class="kw">use</span> <span class="ident">instance</span>::{<span class="ident">Py</span>, <span class="ident">PyObjectWithToken</span>};
-<span class="kw">use</span> <span class="ident">object</span>::<span class="ident">PyObject</span>;
-<span class="kw">use</span> <span class="ident">objectprotocol</span>::<span class="ident">ObjectProtocol</span>;
-<span class="kw">use</span> <span class="ident">python</span>::{<span class="ident">Python</span>, <span class="ident">ToPyPointer</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">conversion</span>::{<span class="ident">IntoPyObject</span>, <span class="ident">ToPyObject</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">err</span>::<span class="ident">PyErr</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">instance</span>::{<span class="ident">Py</span>, <span class="ident">PyObjectWithToken</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">object</span>::<span class="ident">PyObject</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">objectprotocol</span>::<span class="ident">ObjectProtocol</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::{<span class="ident">Python</span>, <span class="ident">ToPyPointer</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">raw</span>::<span class="ident">c_double</span>;
-<span class="kw">use</span> <span class="ident">types</span>::<span class="ident">PyObjectRef</span>;
-<span class="kw">use</span> <span class="ident">FromPyObject</span>;
-<span class="kw">use</span> <span class="ident">PyResult</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">PyObjectRef</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">FromPyObject</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">PyResult</span>;
 
 <span class="doccomment">/// Represents a Python `float` object.</span>
 <span class="doccomment">///</span>
@@ -189,8 +189,8 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">test</span> {
-    <span class="kw">use</span> <span class="ident">conversion</span>::<span class="ident">ToPyObject</span>;
-    <span class="kw">use</span> <span class="ident">python</span>::<span class="ident">Python</span>;
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">conversion</span>::<span class="ident">ToPyObject</span>;
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::<span class="ident">Python</span>;
 
     <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">num_to_py_object_and_back</span> (
         (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">func_name</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t1</span>:<span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t2</span>:<span class="ident">ty</span>) <span class="op">=&gt;</span> (

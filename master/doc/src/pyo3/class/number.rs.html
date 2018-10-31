@@ -1611,13 +1611,13 @@
 <span class="doccomment">//! Python Number Interface</span>
 <span class="doccomment">//! Trait and support implementation for implementing number protocol</span>
 
-<span class="kw">use</span> <span class="ident">callback</span>::<span class="ident">PyObjectCallbackConverter</span>;
-<span class="kw">use</span> <span class="ident">class</span>::<span class="ident">basic</span>::<span class="ident">PyObjectProtocolImpl</span>;
-<span class="kw">use</span> <span class="ident">class</span>::<span class="ident">methods</span>::<span class="ident">PyMethodDef</span>;
-<span class="kw">use</span> <span class="ident">err</span>::<span class="ident">PyResult</span>;
-<span class="kw">use</span> <span class="ident">ffi</span>;
-<span class="kw">use</span> <span class="ident">typeob</span>::<span class="ident">PyTypeInfo</span>;
-<span class="kw">use</span> {<span class="ident">FromPyObject</span>, <span class="ident">IntoPyObject</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">callback</span>::<span class="ident">PyObjectCallbackConverter</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">class</span>::<span class="ident">basic</span>::<span class="ident">PyObjectProtocolImpl</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">class</span>::<span class="ident">methods</span>::<span class="ident">PyMethodDef</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">err</span>::<span class="ident">PyResult</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">typeob</span>::<span class="ident">PyTypeInfo</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">FromPyObject</span>, <span class="ident">IntoPyObject</span>};
 
 <span class="doccomment">/// Number interface</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused_variables</span>)]</span>

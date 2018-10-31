@@ -88,14 +88,14 @@
 <span id="88">88</span>
 <span id="89">89</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="kw">use</span> <span class="ident">conversion</span>::{<span class="ident">IntoPyObject</span>, <span class="ident">PyTryFrom</span>, <span class="ident">ToPyObject</span>};
-<span class="kw">use</span> <span class="ident">err</span>::<span class="ident">PyResult</span>;
-<span class="kw">use</span> <span class="ident">instance</span>::<span class="ident">PyObjectWithToken</span>;
-<span class="kw">use</span> <span class="ident">object</span>::<span class="ident">PyObject</span>;
-<span class="kw">use</span> <span class="ident">python</span>::<span class="ident">Python</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">conversion</span>::{<span class="ident">IntoPyObject</span>, <span class="ident">PyTryFrom</span>, <span class="ident">ToPyObject</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">err</span>::<span class="ident">PyResult</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">instance</span>::<span class="ident">PyObjectWithToken</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">object</span>::<span class="ident">PyObject</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::<span class="ident">Python</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">borrow</span>::<span class="ident">Cow</span>;
-<span class="kw">use</span> <span class="ident">types</span>::{<span class="ident">PyObjectRef</span>, <span class="ident">PyString</span>};
-<span class="kw">use</span> <span class="ident">FromPyObject</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">PyObjectRef</span>, <span class="ident">PyString</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">FromPyObject</span>;
 
 <span class="doccomment">/// Converts Rust `str` to Python object.</span>
 <span class="doccomment">/// See `PyString::new` for details on the conversion.</span>
@@ -147,7 +147,7 @@
 
 <span class="doccomment">/// Allows extracting strings from Python objects.</span>
 <span class="doccomment">/// Accepts Python `str` and `unicode` objects.</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;source</span><span class="op">&gt;</span> ::<span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;source</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;source</span>, <span class="ident">str</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;source</span><span class="op">&gt;</span> <span class="kw">crate</span>::<span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;source</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;source</span>, <span class="ident">str</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">extract</span>(<span class="ident">ob</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;source</span> <span class="ident">PyObjectRef</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="op">&lt;</span><span class="ident">PyString</span> <span class="kw">as</span> <span class="ident">PyTryFrom</span><span class="op">&gt;</span>::<span class="ident">try_from</span>(<span class="ident">ob</span>)<span class="question-mark">?</span>.<span class="ident">to_string</span>()
     }
@@ -155,9 +155,9 @@
 
 <span class="doccomment">/// Allows extracting strings from Python objects.</span>
 <span class="doccomment">/// Accepts Python `str` and `unicode` objects.</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> ::<span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="kw">crate</span>::<span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span> {
     <span class="kw">fn</span> <span class="ident">extract</span>(<span class="ident">ob</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">PyObjectRef</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">s</span>: <span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">str</span><span class="op">&gt;</span> <span class="op">=</span> ::<span class="ident">FromPyObject</span>::<span class="ident">extract</span>(<span class="ident">ob</span>)<span class="question-mark">?</span>;
+        <span class="kw">let</span> <span class="ident">s</span>: <span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">str</span><span class="op">&gt;</span> <span class="op">=</span> <span class="kw">crate</span>::<span class="ident">FromPyObject</span>::<span class="ident">extract</span>(<span class="ident">ob</span>)<span class="question-mark">?</span>;
         <span class="kw">match</span> <span class="ident">s</span> {
             <span class="ident">Cow</span>::<span class="ident">Borrowed</span>(<span class="ident">r</span>) <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">r</span>),
             <span class="ident">Cow</span>::<span class="ident">Owned</span>(<span class="ident">r</span>) <span class="op">=&gt;</span> {

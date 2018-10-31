@@ -50,7 +50,7 @@
 <span class="attribute">#[<span class="ident">macro_use</span>]</span>
 <span class="kw">mod</span> <span class="ident">macros</span>;
 
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">async</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">pyasync</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">basic</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">buffer</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">context</span>;
@@ -62,7 +62,7 @@
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">number</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">sequence</span>;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">async</span>::<span class="ident">PyAsyncProtocol</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">pyasync</span>::<span class="ident">PyAsyncProtocol</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">basic</span>::<span class="ident">PyObjectProtocol</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">buffer</span>::<span class="ident">PyBufferProtocol</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">context</span>::<span class="ident">PyContextProtocol</span>;
@@ -75,7 +75,7 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">gc</span>::{<span class="ident">PyGCProtocol</span>, <span class="ident">PyTraverseError</span>, <span class="ident">PyVisit</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">methods</span>::{<span class="ident">PyGetterDef</span>, <span class="ident">PyMethodDef</span>, <span class="ident">PyMethodDefType</span>, <span class="ident">PyMethodType</span>, <span class="ident">PySetterDef</span>};
 
-<span class="kw">use</span> <span class="ident">ffi</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>;
 
 <span class="doccomment">/// Operators for the __richcmp__ method</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>

@@ -334,31 +334,31 @@
 <span class="doccomment">//!</span>
 <span class="doccomment">//! For more details about these types, see the [Python</span>
 <span class="doccomment">//! documentation](https://docs.python.org/3/library/datetime.html)</span>
-<span class="kw">use</span> <span class="ident">conversion</span>::<span class="ident">ToPyObject</span>;
-<span class="kw">use</span> <span class="ident">err</span>::<span class="ident">PyResult</span>;
-<span class="kw">use</span> <span class="ident">ffi</span>;
-<span class="kw">use</span> <span class="ident">ffi</span>::<span class="ident">PyDateTimeAPI</span>;
-<span class="kw">use</span> <span class="ident">ffi</span>::{<span class="ident">PyDateTime_Check</span>, <span class="ident">PyDate_Check</span>, <span class="ident">PyDelta_Check</span>, <span class="ident">PyTZInfo_Check</span>, <span class="ident">PyTime_Check</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">conversion</span>::<span class="ident">ToPyObject</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">err</span>::<span class="ident">PyResult</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>::<span class="ident">PyDateTimeAPI</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>::{<span class="ident">PyDateTime_Check</span>, <span class="ident">PyDate_Check</span>, <span class="ident">PyDelta_Check</span>, <span class="ident">PyTZInfo_Check</span>, <span class="ident">PyTime_Check</span>};
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">Py_3_6</span>)]</span>
-<span class="kw">use</span> <span class="ident">ffi</span>::{<span class="ident">PyDateTime_DATE_GET_FOLD</span>, <span class="ident">PyDateTime_TIME_GET_FOLD</span>};
-<span class="kw">use</span> <span class="ident">ffi</span>::{
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>::{<span class="ident">PyDateTime_DATE_GET_FOLD</span>, <span class="ident">PyDateTime_TIME_GET_FOLD</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>::{
     <span class="ident">PyDateTime_DATE_GET_HOUR</span>, <span class="ident">PyDateTime_DATE_GET_MICROSECOND</span>, <span class="ident">PyDateTime_DATE_GET_MINUTE</span>,
     <span class="ident">PyDateTime_DATE_GET_SECOND</span>,
 };
-<span class="kw">use</span> <span class="ident">ffi</span>::{
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>::{
     <span class="ident">PyDateTime_DELTA_GET_DAYS</span>, <span class="ident">PyDateTime_DELTA_GET_MICROSECONDS</span>, <span class="ident">PyDateTime_DELTA_GET_SECONDS</span>,
 };
-<span class="kw">use</span> <span class="ident">ffi</span>::{<span class="ident">PyDateTime_GET_DAY</span>, <span class="ident">PyDateTime_GET_MONTH</span>, <span class="ident">PyDateTime_GET_YEAR</span>};
-<span class="kw">use</span> <span class="ident">ffi</span>::{
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>::{<span class="ident">PyDateTime_GET_DAY</span>, <span class="ident">PyDateTime_GET_MONTH</span>, <span class="ident">PyDateTime_GET_YEAR</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>::{
     <span class="ident">PyDateTime_TIME_GET_HOUR</span>, <span class="ident">PyDateTime_TIME_GET_MICROSECOND</span>, <span class="ident">PyDateTime_TIME_GET_MINUTE</span>,
     <span class="ident">PyDateTime_TIME_GET_SECOND</span>,
 };
-<span class="kw">use</span> <span class="ident">instance</span>::<span class="ident">Py</span>;
-<span class="kw">use</span> <span class="ident">object</span>::<span class="ident">PyObject</span>;
-<span class="kw">use</span> <span class="ident">python</span>::{<span class="ident">Python</span>, <span class="ident">ToPyPointer</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">instance</span>::<span class="ident">Py</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">object</span>::<span class="ident">PyObject</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::{<span class="ident">Python</span>, <span class="ident">ToPyPointer</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">raw</span>::<span class="ident">c_int</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ptr</span>;
-<span class="kw">use</span> <span class="ident">types</span>::<span class="ident">PyTuple</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">PyTuple</span>;
 
 <span class="doccomment">/// Access traits</span>
 

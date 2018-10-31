@@ -287,14 +287,14 @@
 <span class="doccomment">//! Python Mapping Interface</span>
 <span class="doccomment">//! Trait and support implementation for implementing mapping support</span>
 
-<span class="kw">use</span> <span class="ident">callback</span>::{<span class="ident">LenResultConverter</span>, <span class="ident">PyObjectCallbackConverter</span>};
-<span class="kw">use</span> <span class="ident">class</span>::<span class="ident">methods</span>::<span class="ident">PyMethodDef</span>;
-<span class="kw">use</span> <span class="ident">conversion</span>::{<span class="ident">FromPyObject</span>, <span class="ident">IntoPyObject</span>};
-<span class="kw">use</span> <span class="ident">err</span>::{<span class="ident">PyErr</span>, <span class="ident">PyResult</span>};
-<span class="kw">use</span> <span class="ident">ffi</span>;
-<span class="kw">use</span> <span class="ident">python</span>::<span class="ident">Python</span>;
-<span class="kw">use</span> <span class="ident">typeob</span>::<span class="ident">PyTypeInfo</span>;
-<span class="kw">use</span> <span class="ident">types</span>::<span class="ident">exceptions</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">callback</span>::{<span class="ident">LenResultConverter</span>, <span class="ident">PyObjectCallbackConverter</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">class</span>::<span class="ident">methods</span>::<span class="ident">PyMethodDef</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">conversion</span>::{<span class="ident">FromPyObject</span>, <span class="ident">IntoPyObject</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">err</span>::{<span class="ident">PyErr</span>, <span class="ident">PyResult</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::<span class="ident">Python</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">typeob</span>::<span class="ident">PyTypeInfo</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">exceptions</span>;
 
 <span class="doccomment">/// Mapping interface</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused_variables</span>)]</span>

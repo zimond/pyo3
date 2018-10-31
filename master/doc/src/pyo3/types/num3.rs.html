@@ -209,15 +209,15 @@
 
 <span class="kw">use</span> <span class="self">self</span>::<span class="ident">num_traits</span>::<span class="ident">cast</span>::<span class="ident">cast</span>;
 <span class="kw">use</span> <span class="kw">super</span>::<span class="ident">num_common</span>::{<span class="ident">err_if_invalid_value</span>, <span class="ident">IS_LITTLE_ENDIAN</span>};
-<span class="kw">use</span> <span class="ident">conversion</span>::{<span class="ident">FromPyObject</span>, <span class="ident">IntoPyObject</span>, <span class="ident">ToPyObject</span>};
-<span class="kw">use</span> <span class="ident">err</span>::{<span class="ident">PyErr</span>, <span class="ident">PyResult</span>};
-<span class="kw">use</span> <span class="ident">ffi</span>;
-<span class="kw">use</span> <span class="ident">instance</span>::<span class="ident">PyObjectWithToken</span>;
-<span class="kw">use</span> <span class="ident">object</span>::<span class="ident">PyObject</span>;
-<span class="kw">use</span> <span class="ident">python</span>::{<span class="ident">Python</span>, <span class="ident">ToPyPointer</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">conversion</span>::{<span class="ident">FromPyObject</span>, <span class="ident">IntoPyObject</span>, <span class="ident">ToPyObject</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">err</span>::{<span class="ident">PyErr</span>, <span class="ident">PyResult</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">instance</span>::<span class="ident">PyObjectWithToken</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">object</span>::<span class="ident">PyObject</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::{<span class="ident">Python</span>, <span class="ident">ToPyPointer</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">i64</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">raw</span>::{<span class="ident">c_long</span>, <span class="ident">c_uchar</span>};
-<span class="kw">use</span> <span class="ident">types</span>::{<span class="ident">exceptions</span>, <span class="ident">PyObjectRef</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">exceptions</span>, <span class="ident">PyObjectRef</span>};
 
 <span class="doccomment">/// Represents a Python `int` object.</span>
 <span class="doccomment">///</span>
@@ -351,9 +351,9 @@
     <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">test_common</span> (
         (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">test_mod_name</span>:<span class="ident">ident</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>:<span class="ident">ty</span>) <span class="op">=&gt;</span> (
             <span class="kw">mod</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">test_mod_name</span> {
-                <span class="kw">use</span> <span class="ident">types</span>::<span class="ident">exceptions</span>;
-                <span class="kw">use</span> <span class="ident">conversion</span>::<span class="ident">ToPyObject</span>;
-                <span class="kw">use</span> <span class="ident">python</span>::<span class="ident">Python</span>;
+                <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">exceptions</span>;
+                <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">conversion</span>::<span class="ident">ToPyObject</span>;
+                <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::<span class="ident">Python</span>;
 
                 <span class="attribute">#[<span class="ident">test</span>]</span>
                 <span class="kw">fn</span> <span class="ident">from_py_string_type_error</span>() {

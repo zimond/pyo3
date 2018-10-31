@@ -209,8 +209,8 @@
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! common macros for num2.rs and num3.rs</span>
 
-<span class="kw">use</span> <span class="ident">err</span>::{<span class="ident">PyErr</span>, <span class="ident">PyResult</span>};
-<span class="kw">use</span> <span class="ident">python</span>::<span class="ident">Python</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">err</span>::{<span class="ident">PyErr</span>, <span class="ident">PyResult</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::<span class="ident">Python</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">raw</span>::<span class="ident">c_int</span>;
 
 <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">err_if_invalid_value</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">PartialEq</span><span class="op">&gt;</span>(
@@ -242,7 +242,7 @@
 
         <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;source</span><span class="op">&gt;</span> <span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;source</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rust_type</span> {
             <span class="kw">fn</span> <span class="ident">extract</span>(<span class="ident">obj</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;source</span> <span class="ident">PyObjectRef</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-                <span class="kw">let</span> <span class="ident">val</span> <span class="op">=</span> <span class="macro">try</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">objectprotocol</span>::<span class="ident">ObjectProtocol</span>::<span class="ident">extract</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">larger_type</span><span class="op">&gt;</span>(<span class="ident">obj</span>));
+                <span class="kw">let</span> <span class="ident">val</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">objectprotocol</span>::<span class="ident">ObjectProtocol</span>::<span class="ident">extract</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">larger_type</span><span class="op">&gt;</span>(<span class="ident">obj</span>)<span class="question-mark">?</span>;
                 <span class="kw">match</span> <span class="ident">cast</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">larger_type</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rust_type</span><span class="op">&gt;</span>(<span class="ident">val</span>) {
                     <span class="prelude-val">Some</span>(<span class="ident">v</span>) <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">v</span>),
                     <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">exceptions</span>::<span class="ident">OverflowError</span>.<span class="ident">into</span>())
@@ -310,8 +310,8 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">test</span> {
-    <span class="kw">use</span> <span class="ident">conversion</span>::<span class="ident">ToPyObject</span>;
-    <span class="kw">use</span> <span class="ident">python</span>::<span class="ident">Python</span>;
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">conversion</span>::<span class="ident">ToPyObject</span>;
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::<span class="ident">Python</span>;
     <span class="kw">use</span> <span class="ident">std</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -395,10 +395,10 @@
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>))]</span>
     <span class="kw">fn</span> <span class="ident">test_u128_overflow</span>() {
-        <span class="kw">use</span> <span class="ident">ffi</span>;
-        <span class="kw">use</span> <span class="ident">object</span>::<span class="ident">PyObject</span>;
+        <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>;
+        <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">object</span>::<span class="ident">PyObject</span>;
         <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">raw</span>::<span class="ident">c_uchar</span>;
-        <span class="kw">use</span> <span class="ident">types</span>::<span class="ident">exceptions</span>;
+        <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">exceptions</span>;
         <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
         <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
         <span class="kw">let</span> <span class="ident">overflow_bytes</span>: [<span class="ident">c_uchar</span>; <span class="number">20</span>] <span class="op">=</span> [<span class="number">255</span>; <span class="number">20</span>];

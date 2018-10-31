@@ -352,20 +352,20 @@
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">pyo3cls</span>;
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">spin</span>;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">class</span>::<span class="kw-2">*</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">conversion</span>::{
+<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">class</span>::<span class="kw-2">*</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">conversion</span>::{
     <span class="ident">FromPyObject</span>, <span class="ident">IntoPyObject</span>, <span class="ident">IntoPyTuple</span>, <span class="ident">PyTryFrom</span>, <span class="ident">PyTryInto</span>, <span class="ident">ReturnTypeIntoPyResult</span>,
     <span class="ident">ToBorrowedObject</span>, <span class="ident">ToPyObject</span>,
 };
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">err</span>::{<span class="ident">PyDowncastError</span>, <span class="ident">PyErr</span>, <span class="ident">PyErrArguments</span>, <span class="ident">PyErrValue</span>, <span class="ident">PyResult</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">instance</span>::{<span class="ident">AsPyRef</span>, <span class="ident">Py</span>, <span class="ident">PyNativeType</span>, <span class="ident">PyObjectWithToken</span>, <span class="ident">PyToken</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">noargs</span>::<span class="ident">NoArgs</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">object</span>::<span class="ident">PyObject</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">objectprotocol</span>::<span class="ident">ObjectProtocol</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">python</span>::{<span class="ident">IntoPyPointer</span>, <span class="ident">Python</span>, <span class="ident">ToPyPointer</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">pythonrun</span>::{<span class="ident">init_once</span>, <span class="ident">prepare_freethreaded_python</span>, <span class="ident">GILGuard</span>, <span class="ident">GILPool</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">typeob</span>::{<span class="ident">PyObjectAlloc</span>, <span class="ident">PyRawObject</span>, <span class="ident">PyTypeInfo</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">types</span>::<span class="ident">exceptions</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">err</span>::{<span class="ident">PyDowncastError</span>, <span class="ident">PyErr</span>, <span class="ident">PyErrArguments</span>, <span class="ident">PyErrValue</span>, <span class="ident">PyResult</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">instance</span>::{<span class="ident">AsPyRef</span>, <span class="ident">Py</span>, <span class="ident">PyNativeType</span>, <span class="ident">PyObjectWithToken</span>, <span class="ident">PyToken</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">noargs</span>::<span class="ident">NoArgs</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">object</span>::<span class="ident">PyObject</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">objectprotocol</span>::<span class="ident">ObjectProtocol</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::{<span class="ident">IntoPyPointer</span>, <span class="ident">Python</span>, <span class="ident">ToPyPointer</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">pythonrun</span>::{<span class="ident">init_once</span>, <span class="ident">prepare_freethreaded_python</span>, <span class="ident">GILGuard</span>, <span class="ident">GILPool</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">typeob</span>::{<span class="ident">PyObjectAlloc</span>, <span class="ident">PyRawObject</span>, <span class="ident">PyTypeInfo</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">exceptions</span>;
 
 <span class="doccomment">/// Rust FFI declarations for Python</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">ffi</span>;

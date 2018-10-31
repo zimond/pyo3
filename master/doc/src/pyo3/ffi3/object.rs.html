@@ -857,7 +857,7 @@
 <span id="857">857</span>
 <span id="858">858</span>
 </pre><div class="example-wrap"><pre class="rust ">
-<span class="kw">use</span> <span class="ident">ffi3</span>::<span class="ident">pyport</span>::{<span class="ident">Py_hash_t</span>, <span class="ident">Py_ssize_t</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi3</span>::<span class="ident">pyport</span>::{<span class="ident">Py_hash_t</span>, <span class="ident">Py_ssize_t</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">raw</span>::{<span class="ident">c_char</span>, <span class="ident">c_int</span>, <span class="ident">c_uint</span>, <span class="ident">c_ulong</span>, <span class="ident">c_void</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ptr</span>;
 
@@ -945,14 +945,14 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>))]</span>
 <span class="kw">mod</span> <span class="ident">bufferinfo</span> {
-    <span class="kw">use</span> <span class="ident">ffi3</span>::<span class="ident">pyport</span>::<span class="ident">Py_ssize_t</span>;
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi3</span>::<span class="ident">pyport</span>::<span class="ident">Py_ssize_t</span>;
     <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">raw</span>::{<span class="ident">c_char</span>, <span class="ident">c_int</span>, <span class="ident">c_void</span>};
 
     <span class="attribute">#[<span class="ident">repr</span>(<span class="ident">C</span>)]</span>
     <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>)]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Py_buffer</span> {
         <span class="kw">pub</span> <span class="ident">buf</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>,
-        <span class="kw">pub</span> <span class="ident">obj</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> ::<span class="ident">ffi3</span>::<span class="ident">PyObject</span>,
+        <span class="kw">pub</span> <span class="ident">obj</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="kw">crate</span>::<span class="ident">ffi3</span>::<span class="ident">PyObject</span>,
         <span class="kw">pub</span> <span class="ident">len</span>: <span class="ident">Py_ssize_t</span>,
         <span class="kw">pub</span> <span class="ident">itemsize</span>: <span class="ident">Py_ssize_t</span>,
         <span class="kw">pub</span> <span class="ident">readonly</span>: <span class="ident">c_int</span>,
@@ -972,10 +972,10 @@
     }
 
     <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">getbufferproc</span> <span class="op">=</span>
-        <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">arg1</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> ::<span class="ident">ffi3</span>::<span class="ident">PyObject</span>, <span class="ident">arg2</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">Py_buffer</span>, <span class="ident">arg3</span>: <span class="ident">c_int</span>)
+        <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">arg1</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="kw">crate</span>::<span class="ident">ffi3</span>::<span class="ident">PyObject</span>, <span class="ident">arg2</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">Py_buffer</span>, <span class="ident">arg3</span>: <span class="ident">c_int</span>)
             <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">releasebufferproc</span> <span class="op">=</span>
-        <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">arg1</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> ::<span class="ident">ffi3</span>::<span class="ident">PyObject</span>, <span class="ident">arg2</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">Py_buffer</span>) <span class="op">-&gt;</span> ();
+        <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">arg1</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="kw">crate</span>::<span class="ident">ffi3</span>::<span class="ident">PyObject</span>, <span class="ident">arg2</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">Py_buffer</span>) <span class="op">-&gt;</span> ();
 
     <span class="doccomment">/// Maximum number of dimensions</span>
     <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">PyBUF_MAX_NDIM</span>: <span class="ident">c_int</span> <span class="op">=</span> <span class="number">64</span>;
@@ -1055,8 +1055,8 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>))]</span>
 <span class="kw">mod</span> <span class="ident">typeobject</span> {
-    <span class="kw">use</span> <span class="ident">ffi3</span>::<span class="ident">pyport</span>::<span class="ident">Py_ssize_t</span>;
-    <span class="kw">use</span> <span class="ident">ffi3</span>::{<span class="self">self</span>, <span class="ident">object</span>};
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi3</span>::<span class="ident">pyport</span>::<span class="ident">Py_ssize_t</span>;
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi3</span>::{<span class="self">self</span>, <span class="ident">object</span>};
     <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">raw</span>::{<span class="ident">c_char</span>, <span class="ident">c_uint</span>, <span class="ident">c_ulong</span>, <span class="ident">c_void</span>};
 
     <span class="attribute">#[<span class="ident">repr</span>(<span class="ident">C</span>)]</span>
