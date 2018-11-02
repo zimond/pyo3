@@ -149,8 +149,8 @@
                     <main>
                         <a class="header" href="conversions.html#type-conversions" id="type-conversions"><h1>Type Conversions</h1></a>
 <p><code>PyO3</code> provides some handy traits to convert between Python types and Rust types.</p>
-<a class="header" href="conversions.html#extract" id="extract"><h2><code>.extract()?</code></h2></a>
-<p>The easiest way to convert a python object to a rust value is using <code>.extract()</code>.</p>
+<a class="header" href="conversions.html#extract" id="extract"><h2><code>.extract()</code></h2></a>
+<p>The easiest way to convert a python object to a rust value is using <code>.extract()?</code>.</p>
 <a class="header" href="conversions.html#topyobject-and-intopyobject-trait" id="topyobject-and-intopyobject-trait"><h2><code>ToPyObject</code> and <code>IntoPyObject</code> trait</h2></a>
 <p><a href="https://docs.rs/pyo3/0.2.7/trait.ToPyObject.html"><code>ToPyObject</code></a> trait is a conversion trait that allows various objects to be converted into <a href="https://docs.rs/pyo3/0.2.7/struct.PyObject.html"><code>PyObject</code></a>. <a href="https://docs.rs/pyo3/0.2.7/trait.IntoPyObject.html"><code>IntoPyObject</code></a> serves the same purpose except it consumes <code>self</code>.</p>
 <a class="header" href="conversions.html#intopytuple-trait" id="intopytuple-trait"><h2><code>IntoPyTuple</code> trait</h2></a>
@@ -209,7 +209,7 @@ fn main() {
     obj.call1(py, args);
 }
 </code></pre></pre>
-<p><code>kwargs</code> can by <code>None</code> or <code>Some(PyDict)</code>. You can use the
+<p><code>kwargs</code> can by <code>None</code> or <code>Some(&amp;PyDict)</code>. You can use the
 <a href="https://docs.rs/pyo3/0.2.7/trait.IntoPyDict.html"><code>IntoPyDict</code></a> trait to convert other dict-like containers, e.g. <code>HashMap</code>, <code>BTreeMap</code> as well as tuples with up to 10 elements and <code>Vec</code>s where each element is a two element tuple.</p>
 <pre><pre class="playpen"><code class="language-rust">extern crate pyo3;
 
