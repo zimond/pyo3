@@ -559,11 +559,11 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">instance</span>::<span class="ident">PyObjectWithToken</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">object</span>::<span class="ident">PyObject</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::{<span class="ident">IntoPyPointer</span>, <span class="ident">Python</span>, <span class="ident">ToPyPointer</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">typeob</span>::<span class="ident">PyTypeInfo</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">PyDict</span>, <span class="ident">PyIterator</span>, <span class="ident">PyObjectRef</span>, <span class="ident">PyString</span>, <span class="ident">PyTuple</span>, <span class="ident">PyType</span>};
 <span class="kw">use</span> <span class="ident">std</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">cmp</span>::<span class="ident">Ordering</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">raw</span>::<span class="ident">c_int</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">typeob</span>::<span class="ident">PyTypeInfo</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">PyDict</span>, <span class="ident">PyIterator</span>, <span class="ident">PyObjectRef</span>, <span class="ident">PyString</span>, <span class="ident">PyTuple</span>, <span class="ident">PyType</span>};
 
 <span class="doccomment">/// Python object model helper methods</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">ObjectProtocol</span> {

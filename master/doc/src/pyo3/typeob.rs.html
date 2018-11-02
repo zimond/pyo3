@@ -624,14 +624,14 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">instance</span>::{<span class="ident">Py</span>, <span class="ident">PyObjectWithToken</span>, <span class="ident">PyToken</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::<span class="ident">ToPyPointer</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::{<span class="ident">IntoPyPointer</span>, <span class="ident">Python</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">PyObjectRef</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">PyType</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">class</span>, <span class="ident">ffi</span>, <span class="ident">pythonrun</span>};
 <span class="kw">use</span> <span class="ident">std</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::<span class="ident">HashMap</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ffi</span>::<span class="ident">CString</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">mem</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">raw</span>::<span class="ident">c_void</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">PyObjectRef</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">PyType</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">class</span>, <span class="ident">ffi</span>, <span class="ident">pythonrun</span>};
 
 <span class="doccomment">/// Python type information.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyTypeInfo</span> {

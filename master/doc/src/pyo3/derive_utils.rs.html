@@ -208,11 +208,11 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">exceptions</span>::<span class="ident">TypeError</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">init_once</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ptr</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">PyModule</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">PyDict</span>, <span class="ident">PyObjectRef</span>, <span class="ident">PyString</span>, <span class="ident">PyTuple</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">GILPool</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">Python</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ptr</span>;
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="doccomment">/// Description of a python parameter; used for `parse_args()`.</span>

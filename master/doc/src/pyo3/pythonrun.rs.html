@@ -461,9 +461,9 @@
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::<span class="ident">Python</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">PyObjectRef</span>;
 <span class="kw">use</span> <span class="ident">spin</span>;
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">any</span>, <span class="ident">marker</span>, <span class="ident">rc</span>, <span class="ident">sync</span>};
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">PyObjectRef</span>;
 
 <span class="kw">static</span> <span class="ident">START</span>: <span class="ident">sync</span>::<span class="ident">Once</span> <span class="op">=</span> <span class="ident">sync</span>::<span class="ident">ONCE_INIT</span>;
 <span class="kw">static</span> <span class="ident">START_PYO3</span>: <span class="ident">sync</span>::<span class="ident">Once</span> <span class="op">=</span> <span class="ident">sync</span>::<span class="ident">ONCE_INIT</span>;

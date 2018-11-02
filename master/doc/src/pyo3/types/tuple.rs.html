@@ -338,8 +338,8 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">instance</span>::{<span class="ident">AsPyRef</span>, <span class="ident">Py</span>, <span class="ident">PyObjectWithToken</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">object</span>::<span class="ident">PyObject</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::{<span class="ident">IntoPyPointer</span>, <span class="ident">Python</span>, <span class="ident">ToPyPointer</span>};
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">slice</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">PyObjectRef</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">slice</span>;
 
 <span class="doccomment">/// Represents a Python `tuple` object.</span>
 <span class="attribute">#[<span class="ident">repr</span>(<span class="ident">transparent</span>)]</span>
@@ -600,9 +600,9 @@
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">instance</span>::<span class="ident">AsPyRef</span>;
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">objectprotocol</span>::<span class="ident">ObjectProtocol</span>;
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::<span class="ident">Python</span>;
-    <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::<span class="ident">HashSet</span>;
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">PyObjectRef</span>;
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">PyTuple</span>;
+    <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::<span class="ident">HashSet</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_new</span>() {

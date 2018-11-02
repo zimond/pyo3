@@ -50,7 +50,6 @@
 <span class="attribute">#[<span class="ident">macro_use</span>]</span>
 <span class="kw">mod</span> <span class="ident">macros</span>;
 
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">pyasync</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">basic</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">buffer</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">context</span>;
@@ -60,9 +59,9 @@
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">mapping</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">methods</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">number</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">pyasync</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">sequence</span>;
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">pyasync</span>::<span class="ident">PyAsyncProtocol</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">basic</span>::<span class="ident">PyObjectProtocol</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">buffer</span>::<span class="ident">PyBufferProtocol</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">context</span>::<span class="ident">PyContextProtocol</span>;
@@ -70,6 +69,7 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">iter</span>::<span class="ident">PyIterProtocol</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">mapping</span>::<span class="ident">PyMappingProtocol</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">number</span>::<span class="ident">PyNumberProtocol</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">pyasync</span>::<span class="ident">PyAsyncProtocol</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">sequence</span>::<span class="ident">PySequenceProtocol</span>;
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">gc</span>::{<span class="ident">PyGCProtocol</span>, <span class="ident">PyTraverseError</span>, <span class="ident">PyVisit</span>};
