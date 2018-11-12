@@ -206,12 +206,18 @@
 <span id="206">206</span>
 <span id="207">207</span>
 <span id="208">208</span>
+<span id="209">209</span>
+<span id="210">210</span>
+<span id="211">211</span>
+<span id="212">212</span>
+<span id="213">213</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! common macros for num2.rs and num3.rs</span>
 
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">raw</span>::<span class="ident">c_int</span>;
+
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">err</span>::{<span class="ident">PyErr</span>, <span class="ident">PyResult</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::<span class="ident">Python</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">raw</span>::<span class="ident">c_int</span>;
 
 <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">err_if_invalid_value</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">PartialEq</span><span class="op">&gt;</span>(
     <span class="ident">py</span>: <span class="ident">Python</span>,
@@ -226,7 +232,7 @@
 }
 
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">int_fits_larger_int</span>(
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">int_fits_larger_int</span> (
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">rust_type</span>:<span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">larger_type</span>:<span class="ident">ty</span>) <span class="op">=&gt;</span> (
         <span class="kw">impl</span> <span class="ident">ToPyObject</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rust_type</span> {
             <span class="attribute">#[<span class="ident">inline</span>]</span>
@@ -265,6 +271,9 @@
         <span class="kw">impl</span> <span class="ident">IntoPyObject</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">rust_type</span> {
             <span class="kw">fn</span> <span class="ident">into_object</span>(<span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyObject</span> {
                 <span class="kw">unsafe</span> {
+                    <span class="comment">// TODO: Replace this with functions from the from_bytes family</span>
+                    <span class="comment">// Once they are stabilized</span>
+                    <span class="comment">// https://github.com/rust-lang/rust/issues/52963</span>
                     <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>::<span class="op">&lt;</span><span class="kw">_</span>, [<span class="ident">c_uchar</span>; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">byte_size</span>]<span class="op">&gt;</span>(<span class="self">self</span>);
                     <span class="kw">let</span> <span class="ident">obj</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">_PyLong_FromByteArray</span>(
                         <span class="ident">bytes</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_uchar</span>,
@@ -310,9 +319,10 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">test</span> {
+    <span class="kw">use</span> <span class="ident">std</span>;
+
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">conversion</span>::<span class="ident">ToPyObject</span>;
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::<span class="ident">Python</span>;
-    <span class="kw">use</span> <span class="ident">std</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_u32_max</span>() {

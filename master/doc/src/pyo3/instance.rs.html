@@ -347,10 +347,23 @@
 <span id="347">347</span>
 <span id="348">348</span>
 <span id="349">349</span>
+<span id="350">350</span>
+<span id="351">351</span>
+<span id="352">352</span>
+<span id="353">353</span>
+<span id="354">354</span>
+<span id="355">355</span>
+<span id="356">356</span>
+<span id="357">357</span>
+<span id="358">358</span>
+<span id="359">359</span>
+<span id="360">360</span>
+<span id="361">361</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 
 <span class="kw">use</span> <span class="ident">std</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">mem</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ptr</span>::<span class="ident">NonNull</span>;
 
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">conversion</span>::{<span class="ident">FromPyObject</span>, <span class="ident">IntoPyObject</span>, <span class="ident">ToPyObject</span>};
@@ -359,7 +372,7 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">instance</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">object</span>::<span class="ident">PyObject</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">objectprotocol</span>::<span class="ident">ObjectProtocol</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::{<span class="ident">IntoPyPointer</span>, <span class="ident">NonNullPyObject</span>, <span class="ident">Python</span>, <span class="ident">ToPyPointer</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::{<span class="ident">IntoPyPointer</span>, <span class="ident">Python</span>, <span class="ident">ToPyPointer</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">pythonrun</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">typeob</span>::<span class="ident">PyTypeCreate</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">typeob</span>::{<span class="ident">PyTypeInfo</span>, <span class="ident">PyTypeObject</span>};
@@ -435,10 +448,12 @@
 
 <span class="doccomment">/// Safe wrapper around unsafe `*mut ffi::PyObject` pointer with specified type information.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Py</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">NonNullPyObject</span>, <span class="ident">std</span>::<span class="ident">marker</span>::<span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>);
+<span class="attribute">#[<span class="ident">repr</span>(<span class="ident">transparent</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Py</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">NonNull</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">PyObject</span><span class="op">&gt;</span>, <span class="ident">std</span>::<span class="ident">marker</span>::<span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>);
 
 <span class="comment">// `Py&lt;T&gt;` is thread-safe, because any python related operations require a Python&lt;&#39;p&gt; token.</span>
 <span class="kw">unsafe</span> <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Send</span> <span class="kw">for</span> <span class="ident">Py</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {}
+
 <span class="kw">unsafe</span> <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Sync</span> <span class="kw">for</span> <span class="ident">Py</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {}
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Py</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
@@ -501,6 +516,15 @@
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">clone_ref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">Py</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> { <span class="ident">Py</span>::<span class="ident">from_borrowed_ptr</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>()) }
+    }
+
+    <span class="doccomment">/// Returns the inner pointer without decreasing the refcount</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This will eventually move into its own trait</span>
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">into_non_null</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">NonNull</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">PyObject</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">pointer</span> <span class="op">=</span> <span class="self">self</span>.<span class="number">0</span>;
+        <span class="ident">mem</span>::<span class="ident">forget</span>(<span class="self">self</span>);
+        <span class="ident">pointer</span>
     }
 }
 
@@ -601,8 +625,8 @@
     <span class="doccomment">/// Converts `Py` instance -&gt; PyObject.</span>
     <span class="doccomment">/// Consumes `self` without calling `Py_DECREF()`</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">into_object</span>(<span class="self">self</span>, <span class="ident">_py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyObject</span> {
-        <span class="kw">unsafe</span> { <span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="self">self</span>) }
+    <span class="kw">fn</span> <span class="ident">into_object</span>(<span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyObject</span> {
+        <span class="kw">unsafe</span> { <span class="ident">PyObject</span>::<span class="ident">from_owned_ptr</span>(<span class="ident">py</span>, <span class="self">self</span>.<span class="ident">into_ptr</span>()) }
     }
 }
 
@@ -644,7 +668,7 @@
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">From</span><span class="op">&lt;</span><span class="ident">Py</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;&gt;</span> <span class="kw">for</span> <span class="ident">PyObject</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">ob</span>: <span class="ident">Py</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
-        <span class="kw">unsafe</span> { <span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="ident">ob</span>) }
+        <span class="kw">unsafe</span> { <span class="ident">PyObject</span>::<span class="ident">from_not_null</span>(<span class="ident">ob</span>.<span class="ident">into_non_null</span>()) }
     }
 }
 

@@ -340,6 +340,11 @@
 <span id="340">340</span>
 <span id="341">341</span>
 <span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
+<span id="345">345</span>
+<span id="346">346</span>
+<span id="347">347</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 
@@ -352,7 +357,7 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">err</span>::{<span class="ident">PyDowncastError</span>, <span class="ident">PyErr</span>, <span class="ident">PyResult</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">instance</span>::{<span class="ident">AsPyRef</span>, <span class="ident">PyObjectWithGIL</span>};
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::{<span class="ident">IntoPyPointer</span>, <span class="ident">NonNullPyObject</span>, <span class="ident">Python</span>, <span class="ident">ToPyPointer</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::{<span class="ident">IntoPyPointer</span>, <span class="ident">Python</span>, <span class="ident">ToPyPointer</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">pythonrun</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">PyDict</span>, <span class="ident">PyObjectRef</span>, <span class="ident">PyTuple</span>};
 
@@ -364,13 +369,18 @@
 <span class="doccomment">/// Technically, it is a safe wrapper around the unsafe `*mut ffi::PyObject` pointer.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="attribute">#[<span class="ident">repr</span>(<span class="ident">transparent</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PyObject</span>(<span class="ident">NonNullPyObject</span>);
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PyObject</span>(<span class="ident">NonNull</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">PyObject</span><span class="op">&gt;</span>);
 
 <span class="comment">// `PyObject` is thread-safe, any python related operations require a Python&lt;&#39;p&gt; token.</span>
 <span class="kw">unsafe</span> <span class="kw">impl</span> <span class="ident">Send</span> <span class="kw">for</span> <span class="ident">PyObject</span> {}
 <span class="kw">unsafe</span> <span class="kw">impl</span> <span class="ident">Sync</span> <span class="kw">for</span> <span class="ident">PyObject</span> {}
 
 <span class="kw">impl</span> <span class="ident">PyObject</span> {
+    <span class="doccomment">/// For internal conversions</span>
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">from_not_null</span>(<span class="ident">ptr</span>: <span class="ident">NonNull</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">PyObject</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">PyObject</span> {
+        <span class="ident">PyObject</span>(<span class="ident">ptr</span>)
+    }
+
     <span class="doccomment">/// Creates a `PyObject` instance for the given FFI pointer.</span>
     <span class="doccomment">/// This moves ownership over the pointer into the `PyObject`.</span>
     <span class="doccomment">/// Undefined behavior if the pointer is NULL or invalid.</span>

@@ -129,14 +129,6 @@
 <span id="129">129</span>
 <span id="130">130</span>
 <span id="131">131</span>
-<span id="132">132</span>
-<span id="133">133</span>
-<span id="134">134</span>
-<span id="135">135</span>
-<span id="136">136</span>
-<span id="137">137</span>
-<span id="138">138</span>
-<span id="139">139</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 
@@ -210,18 +202,10 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_method_def</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">ffi</span>::<span class="ident">PyMethodDef</span> {
         <span class="kw">let</span> <span class="ident">meth</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">ml_meth</span> {
             <span class="ident">PyMethodType</span>::<span class="ident">PyCFunction</span>(<span class="ident">meth</span>) <span class="op">=&gt;</span> <span class="ident">meth</span>,
-            <span class="ident">PyMethodType</span>::<span class="ident">PyCFunctionWithKeywords</span>(<span class="ident">meth</span>) <span class="op">=&gt;</span> <span class="kw">unsafe</span> {
-                <span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">PyCFunctionWithKeywords</span>, <span class="ident">ffi</span>::<span class="ident">PyCFunction</span><span class="op">&gt;</span>(<span class="ident">meth</span>)
-            },
-            <span class="ident">PyMethodType</span>::<span class="ident">PyNoArgsFunction</span>(<span class="ident">meth</span>) <span class="op">=&gt;</span> <span class="kw">unsafe</span> {
-                <span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">PyNoArgsFunction</span>, <span class="ident">ffi</span>::<span class="ident">PyCFunction</span><span class="op">&gt;</span>(<span class="ident">meth</span>)
-            },
-            <span class="ident">PyMethodType</span>::<span class="ident">PyNewFunc</span>(<span class="ident">meth</span>) <span class="op">=&gt;</span> <span class="kw">unsafe</span> {
-                <span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">newfunc</span>, <span class="ident">ffi</span>::<span class="ident">PyCFunction</span><span class="op">&gt;</span>(<span class="ident">meth</span>)
-            },
-            <span class="ident">PyMethodType</span>::<span class="ident">PyInitFunc</span>(<span class="ident">meth</span>) <span class="op">=&gt;</span> <span class="kw">unsafe</span> {
-                <span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>::<span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">initproc</span>, <span class="ident">ffi</span>::<span class="ident">PyCFunction</span><span class="op">&gt;</span>(<span class="ident">meth</span>)
-            },
+            <span class="ident">PyMethodType</span>::<span class="ident">PyCFunctionWithKeywords</span>(<span class="ident">meth</span>) <span class="op">=&gt;</span> <span class="kw">unsafe</span> { <span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="ident">meth</span>) },
+            <span class="ident">PyMethodType</span>::<span class="ident">PyNoArgsFunction</span>(<span class="ident">meth</span>) <span class="op">=&gt;</span> <span class="kw">unsafe</span> { <span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="ident">meth</span>) },
+            <span class="ident">PyMethodType</span>::<span class="ident">PyNewFunc</span>(<span class="ident">meth</span>) <span class="op">=&gt;</span> <span class="kw">unsafe</span> { <span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="ident">meth</span>) },
+            <span class="ident">PyMethodType</span>::<span class="ident">PyInitFunc</span>(<span class="ident">meth</span>) <span class="op">=&gt;</span> <span class="kw">unsafe</span> { <span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>(<span class="ident">meth</span>) },
         };
 
         <span class="ident">ffi</span>::<span class="ident">PyMethodDef</span> {

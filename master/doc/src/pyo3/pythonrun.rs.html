@@ -457,12 +457,14 @@
 <span id="457">457</span>
 <span id="458">458</span>
 <span id="459">459</span>
+<span id="460">460</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::{<span class="ident">NonNullPyObject</span>, <span class="ident">Python</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::<span class="ident">Python</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">PyObjectRef</span>;
 <span class="kw">use</span> <span class="ident">spin</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ptr</span>::<span class="ident">NonNull</span>;
 <span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">any</span>, <span class="ident">marker</span>, <span class="ident">rc</span>, <span class="ident">sync</span>};
 
 <span class="kw">static</span> <span class="ident">START</span>: <span class="ident">sync</span>::<span class="ident">Once</span> <span class="op">=</span> <span class="ident">sync</span>::<span class="ident">ONCE_INIT</span>;
@@ -690,7 +692,7 @@
         .<span class="ident">unwrap</span>()
 }
 
-<span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">register_pointer</span>(<span class="ident">obj</span>: <span class="ident">NonNullPyObject</span>) {
+<span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">register_pointer</span>(<span class="ident">obj</span>: <span class="ident">NonNull</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">PyObject</span><span class="op">&gt;</span>) {
     <span class="kw">let</span> <span class="ident">pool</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="kw-2">mut</span> <span class="ident">ReleasePool</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span><span class="ident">POOL</span>;
 
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">v</span> <span class="op">=</span> <span class="ident">pool</span>.<span class="ident">p</span>.<span class="ident">lock</span>();
