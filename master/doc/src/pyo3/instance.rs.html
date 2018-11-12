@@ -506,7 +506,7 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Py</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">T</span>: <span class="ident">PyTypeInfo</span>,
+    <span class="ident">T</span>: <span class="ident">PyTypeCreate</span>,
 {
     <span class="doccomment">/// Create new instance of T and move it under python management</span>
     <span class="doccomment">/// Returns `Py&lt;T&gt;`.</span>

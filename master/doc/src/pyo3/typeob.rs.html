@@ -599,16 +599,6 @@
 <span id="599">599</span>
 <span id="600">600</span>
 <span id="601">601</span>
-<span id="602">602</span>
-<span id="603">603</span>
-<span id="604">604</span>
-<span id="605">605</span>
-<span id="606">606</span>
-<span id="607">607</span>
-<span id="608">608</span>
-<span id="609">609</span>
-<span id="610">610</span>
-<span id="611">611</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 
@@ -807,30 +797,11 @@
 }
 
 <span class="doccomment">/// A Python object allocator that is usable as a base type for `#[pyclass]`</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyObjectAlloc</span>: <span class="ident">PyTypeInfo</span> {
-    <span class="doccomment">/// Allocates a new object (usually by calling ty-&gt;tp_alloc),</span>
-    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">alloc</span>(<span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span><span class="op">&gt;</span>;
-
-    <span class="doccomment">/// Calls the rust destructor for the object and frees the memory</span>
-    <span class="doccomment">/// (usually by calling ptr-&gt;ob_type-&gt;tp_free).</span>
-    <span class="doccomment">/// This function is used as tp_dealloc implementation.</span>
-    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">dealloc</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">obj</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>);
-
-    <span class="doccomment">/// Calls the rust destructor for the object.</span>
-    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">drop</span>(<span class="ident">_py</span>: <span class="ident">Python</span>, <span class="ident">_obj</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>) {}
-}
-
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">PyObjectAlloc</span> <span class="kw">for</span> <span class="ident">T</span>
-<span class="kw">where</span>
-    <span class="ident">T</span>: <span class="ident">PyTypeInfo</span>,
-{
-    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unconditional_recursion</span>)]</span>
-    <span class="doccomment">/// Calls the rust destructor for the object.</span>
-    <span class="ident">default</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">drop</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">obj</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>) {
-        <span class="ident">pytype_drop</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>(<span class="ident">py</span>, <span class="ident">obj</span>);
-    }
-
-    <span class="ident">default</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">alloc</span>(<span class="ident">_py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span><span class="op">&gt;</span> {
+<span class="doccomment">///</span>
+<span class="doccomment">/// All native types and all `#[pyclass]` types use the default functions, while</span>
+<span class="doccomment">/// [PyObjectWithFreeList](crate::freelist::PyObjectWithFreeList) gets a special version.</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyObjectAlloc</span>: <span class="ident">PyTypeInfo</span> <span class="op">+</span> <span class="ident">Sized</span> {
+    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">alloc</span>(<span class="ident">_py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span><span class="op">&gt;</span> {
         <span class="comment">// TODO: remove this</span>
         <span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">PyTypeCreate</span><span class="op">&gt;</span>::<span class="ident">init_type</span>();
 
@@ -841,7 +812,10 @@
         <span class="prelude-val">Ok</span>(<span class="ident">obj</span>)
     }
 
-    <span class="ident">default</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">dealloc</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">obj</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>) {
+    <span class="doccomment">/// Calls the rust destructor for the object and frees the memory</span>
+    <span class="doccomment">/// (usually by calling ptr-&gt;ob_type-&gt;tp_free).</span>
+    <span class="doccomment">/// This function is used as tp_dealloc implementation.</span>
+    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">dealloc</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">obj</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>) {
         <span class="self">Self</span>::<span class="ident">drop</span>(<span class="ident">py</span>, <span class="ident">obj</span>);
 
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">Py_3</span>)]</span>
@@ -868,6 +842,12 @@
                 }
             }
         }
+    }
+
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unconditional_recursion</span>)]</span>
+    <span class="doccomment">/// Calls the rust destructor for the object.</span>
+    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">drop</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">obj</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>) {
+        <span class="ident">pytype_drop</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>(<span class="ident">py</span>, <span class="ident">obj</span>);
     }
 }
 
