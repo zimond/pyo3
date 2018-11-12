@@ -663,7 +663,7 @@ impl MyClass {
 
      #[new]
      fn __new__(obj: &amp;PyRawObject, num: i32) -&gt; PyResult&lt;()&gt; {
-         obj.init(|_| {
+         obj.init(||   {
              MyClass {
                  num,
              }
@@ -697,14 +697,13 @@ with value of custom class struct. Subclass must call parent's <code>__new__</co
 #[pyclass]
 struct BaseClass {
    val1: usize,
-   token: PyToken,
 }
 
 #[pymethods]
 impl BaseClass {
    #[new]
    fn __new__(obj: &amp;PyRawObject) -&gt; PyResult&lt;()&gt; {
-       obj.init(|token| BaseClass{val1: 10, token})
+       obj.init(||   BaseClass{ val1: 10 })
    }
 
    pub fn method(&amp;self) -&gt; PyResult&lt;()&gt; {
@@ -715,14 +714,13 @@ impl BaseClass {
 #[pyclass(extends=BaseClass)]
 struct SubClass {
    val2: usize,
-   token: PyToken,
 }
 
 #[pymethods]
 impl SubClass {
    #[new]
    fn __new__(obj: &amp;PyRawObject) -&gt; PyResult&lt;()&gt; {
-       obj.init(|token| SubClass{val2: 10, token});
+       obj.init(||   SubClass{ val2: 10 });
        BaseClass::__new__(obj)
    }
 
@@ -1099,7 +1097,6 @@ use pyo3::prelude::*;
 #[pyclass]
 struct ClassWithGCSupport {
     obj: Option&lt;PyObject&gt;,
-    token: PyToken,
 }
 
 #[pyproto]
@@ -1145,7 +1142,6 @@ use pyo3::prelude::*;
 #[pyclass]
 struct MyIterator {
     iter: Box&lt;Iterator&lt;Item=PyObject&gt; + Send&gt;,
-    token: PyToken,
 }
 
 #[pyproto]
@@ -1257,7 +1253,7 @@ struct MyClass {
 impl MyClass {
     #[new]
     fn __new__(obj: &amp;PyRawObject, num: u32) -&gt; PyResult&lt;()&gt; {
-        obj.init(|token| {
+        obj.init(|| {
             MyClass {
                 num,
             }
