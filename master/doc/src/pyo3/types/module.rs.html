@@ -204,10 +204,10 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::{<span class="ident">Python</span>, <span class="ident">ToPyPointer</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">typeob</span>::{<span class="ident">initialize_type</span>, <span class="ident">PyTypeInfo</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">exceptions</span>, <span class="ident">PyDict</span>, <span class="ident">PyObjectRef</span>, <span class="ident">PyType</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">PyObjectAlloc</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ffi</span>::{<span class="ident">CStr</span>, <span class="ident">CString</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">raw</span>::<span class="ident">c_char</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">str</span>;
-<span class="kw">use</span> <span class="ident">PyObjectAlloc</span>;
 
 <span class="doccomment">/// Represents a Python `module` object.</span>
 <span class="attribute">#[<span class="ident">repr</span>(<span class="ident">transparent</span>)]</span>
