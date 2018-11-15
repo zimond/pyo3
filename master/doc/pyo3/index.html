@@ -97,325 +97,52 @@ rustflags = [
 <p><a href="https://github.com/PyO3/setuptools-rust"><code>setuptools-rust</code></a> can be used to generate a python package and includes the commands above by default. See <a href="examples/word-count">examples/word-count</a> and the associated setup.py.</p>
 </div><h2 id='reexports' class='section-header'><a href="#reexports">Re-exports</a></h2>
 <table><tr><td><code>pub use crate::<a class="mod" href="../pyo3/class/index.html" title="mod pyo3::class">class</a>::*;</code></td></tr><tr><td><code>pub use crate::python::<a class="trait" href="../pyo3/python/trait.IntoPyPointer.html" title="trait pyo3::python::IntoPyPointer">IntoPyPointer</a>;</code></td></tr><tr><td><code>pub use crate::python::<a class="struct" href="../pyo3/python/struct.Python.html" title="struct pyo3::python::Python">Python</a>;</code></td></tr><tr><td><code>pub use crate::python::<a class="trait" href="../pyo3/python/trait.ToPyPointer.html" title="trait pyo3::python::ToPyPointer">ToPyPointer</a>;</code></td></tr><tr><td><code>pub use crate::typeob::<a class="trait" href="../pyo3/typeob/trait.PyObjectAlloc.html" title="trait pyo3::typeob::PyObjectAlloc">PyObjectAlloc</a>;</code></td></tr><tr><td><code>pub use crate::typeob::<a class="struct" href="../pyo3/typeob/struct.PyRawObject.html" title="struct pyo3::typeob::PyRawObject">PyRawObject</a>;</code></td></tr><tr><td><code>pub use crate::typeob::<a class="trait" href="../pyo3/typeob/trait.PyTypeInfo.html" title="trait pyo3::typeob::PyTypeInfo">PyTypeInfo</a>;</code></td></tr><tr><td><code>pub use crate::types::<a class="mod" href="../pyo3/types/exceptions/index.html" title="mod pyo3::types::exceptions">exceptions</a>;</code></td></tr></table><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
-<table>
-                       <tr class=' module-item'>
-                           <td><a class="mod" href="buffer/index.html"
-                                  title='mod pyo3::buffer'>buffer</a></td>
-                           <td class='docblock-short'>
-                                <p><code>PyBuffer</code> implementation</p>
-
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="mod" href="class/index.html"
-                                  title='mod pyo3::class'>class</a></td>
-                           <td class='docblock-short'>
-                                <p>Python object protocols</p>
-
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="mod" href="ffi/index.html"
-                                  title='mod pyo3::ffi'>ffi</a></td>
-                           <td class='docblock-short'>
-                                <p>Rust FFI declarations for Python</p>
-
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="mod" href="freelist/index.html"
-                                  title='mod pyo3::freelist'>freelist</a></td>
-                           <td class='docblock-short'>
-                                <p>Free allocation list</p>
-
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="mod" href="prelude/index.html"
-                                  title='mod pyo3::prelude'>prelude</a></td>
-                           <td class='docblock-short'>
-                                <p>A collection of items you most likely want to have in scope when working with pyo3</p>
-
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="mod" href="proc_macro/index.html"
-                                  title='mod pyo3::proc_macro'>proc_macro</a></td>
-                           <td class='docblock-short'>
-                                <p>The proc macros, which are also part of the prelude</p>
-
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="mod" href="python/index.html"
-                                  title='mod pyo3::python'>python</a></td>
-                           <td class='docblock-short'>
-                                
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="mod" href="typeob/index.html"
-                                  title='mod pyo3::typeob'>typeob</a></td>
-                           <td class='docblock-short'>
-                                <p>Python type object information</p>
-
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="mod" href="types/index.html"
-                                  title='mod pyo3::types'>types</a></td>
-                           <td class='docblock-short'>
-                                <p>Various types defined by the python interpreter such as <code>int</code>, <code>str</code> and <code>tuple</code></p>
-
-                           </td>
-                       </tr></table><h2 id='macros' class='section-header'><a href="#macros">Macros</a></h2>
-<table>
-                       <tr class=' module-item'>
-                           <td><a class="macro" href="macro.import_exception.html"
-                                  title='macro pyo3::import_exception'>import_exception</a></td>
-                           <td class='docblock-short'>
-                                <p>Defines rust type for exception defined in Python code.</p>
-
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="macro" href="macro.int_convert_bignum.html"
-                                  title='macro pyo3::int_convert_bignum'>int_convert_bignum</a></td>
-                           <td class='docblock-short'>
-                                
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="macro" href="macro.int_fits_larger_int.html"
-                                  title='macro pyo3::int_fits_larger_int'>int_fits_larger_int</a></td>
-                           <td class='docblock-short'>
-                                
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="macro" href="macro.py_exception.html"
-                                  title='macro pyo3::py_exception'>py_exception</a></td>
-                           <td class='docblock-short'>
-                                <p>Defines a new exception type.</p>
-
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="macro" href="macro.pyobject_downcast.html"
-                                  title='macro pyo3::pyobject_downcast'>pyobject_downcast</a></td>
-                           <td class='docblock-short'>
-                                <p>Implements a typesafe conversions throught <a href="../pyo3/prelude/trait.FromPyObject.html" title="FromPyObject">FromPyObject</a>, given a typecheck function as second
+<table><tr class='module-item'><td><a class="mod" href="buffer/index.html" title='pyo3::buffer mod'>buffer</a></td><td class='docblock-short'><p><code>PyBuffer</code> implementation</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="class/index.html" title='pyo3::class mod'>class</a></td><td class='docblock-short'><p>Python object protocols</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="ffi/index.html" title='pyo3::ffi mod'>ffi</a></td><td class='docblock-short'><p>Rust FFI declarations for Python</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="freelist/index.html" title='pyo3::freelist mod'>freelist</a></td><td class='docblock-short'><p>Free allocation list</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="prelude/index.html" title='pyo3::prelude mod'>prelude</a></td><td class='docblock-short'><p>A collection of items you most likely want to have in scope when working with pyo3</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="proc_macro/index.html" title='pyo3::proc_macro mod'>proc_macro</a></td><td class='docblock-short'><p>The proc macros, which are also part of the prelude</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="python/index.html" title='pyo3::python mod'>python</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="mod" href="typeob/index.html" title='pyo3::typeob mod'>typeob</a></td><td class='docblock-short'><p>Python type object information</p>
+</td></tr><tr class='module-item'><td><a class="mod" href="types/index.html" title='pyo3::types mod'>types</a></td><td class='docblock-short'><p>Various types defined by the python interpreter such as <code>int</code>, <code>str</code> and <code>tuple</code></p>
+</td></tr></table><h2 id='macros' class='section-header'><a href="#macros">Macros</a></h2>
+<table><tr class='module-item'><td><a class="macro" href="macro.import_exception.html" title='pyo3::import_exception macro'>import_exception</a></td><td class='docblock-short'><p>Defines rust type for exception defined in Python code.</p>
+</td></tr><tr class='module-item'><td><a class="macro" href="macro.int_convert_bignum.html" title='pyo3::int_convert_bignum macro'>int_convert_bignum</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="macro" href="macro.int_fits_larger_int.html" title='pyo3::int_fits_larger_int macro'>int_fits_larger_int</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="macro" href="macro.py_exception.html" title='pyo3::py_exception macro'>py_exception</a></td><td class='docblock-short'><p>Defines a new exception type.</p>
+</td></tr><tr class='module-item'><td><a class="macro" href="macro.pyobject_downcast.html" title='pyo3::pyobject_downcast macro'>pyobject_downcast</a></td><td class='docblock-short'><p>Implements a typesafe conversions throught <a href="../pyo3/prelude/trait.FromPyObject.html" title="FromPyObject">FromPyObject</a>, given a typecheck function as second
 parameter</p>
-
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="macro" href="macro.pyobject_native_type.html"
-                                  title='macro pyo3::pyobject_native_type'>pyobject_native_type</a></td>
-                           <td class='docblock-short'>
-                                
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="macro" href="macro.pyobject_native_type_convert.html"
-                                  title='macro pyo3::pyobject_native_type_convert'>pyobject_native_type_convert</a></td>
-                           <td class='docblock-short'>
-                                
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="macro" href="macro.pyobject_native_type_named.html"
-                                  title='macro pyo3::pyobject_native_type_named'>pyobject_native_type_named</a></td>
-                           <td class='docblock-short'>
-                                
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="macro" href="macro.wrap_function.html"
-                                  title='macro pyo3::wrap_function'>wrap_function</a></td>
-                           <td class='docblock-short'>
-                                <p>Returns a function that takes a <a href="../pyo3/python/struct.Python.html" title="Python">Python</a> instance and returns a python function.</p>
-
-                           </td>
-                       </tr></table><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
-<table>
-                       <tr class=' module-item'>
-                           <td><a class="struct" href="struct.GILGuard.html"
-                                  title='struct pyo3::GILGuard'>GILGuard</a></td>
-                           <td class='docblock-short'>
-                                <p>RAII type that represents the Global Interpreter Lock acquisition.</p>
-
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="struct" href="struct.NoArgs.html"
-                                  title='struct pyo3::NoArgs'>NoArgs</a></td>
-                           <td class='docblock-short'>
-                                <p>An empty struct that represents the empty argument list.
+</td></tr><tr class='module-item'><td><a class="macro" href="macro.pyobject_native_type.html" title='pyo3::pyobject_native_type macro'>pyobject_native_type</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="macro" href="macro.pyobject_native_type_convert.html" title='pyo3::pyobject_native_type_convert macro'>pyobject_native_type_convert</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="macro" href="macro.pyobject_native_type_named.html" title='pyo3::pyobject_native_type_named macro'>pyobject_native_type_named</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="macro" href="macro.wrap_function.html" title='pyo3::wrap_function macro'>wrap_function</a></td><td class='docblock-short'><p>Returns a function that takes a <a href="../pyo3/python/struct.Python.html" title="Python">Python</a> instance and returns a python function.</p>
+</td></tr></table><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table><tr class='module-item'><td><a class="struct" href="struct.GILGuard.html" title='pyo3::GILGuard struct'>GILGuard</a></td><td class='docblock-short'><p>RAII type that represents the Global Interpreter Lock acquisition.</p>
+</td></tr><tr class='module-item'><td><a class="struct" href="struct.NoArgs.html" title='pyo3::NoArgs struct'>NoArgs</a></td><td class='docblock-short'><p>An empty struct that represents the empty argument list.
 Corresponds to the empty tuple <code>()</code> in Python.</p>
-
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="struct" href="struct.Py.html"
-                                  title='struct pyo3::Py'>Py</a></td>
-                           <td class='docblock-short'>
-                                <p>Safe wrapper around unsafe <code>*mut ffi::PyObject</code> pointer with specified type information.</p>
-
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="struct" href="struct.PyDowncastError.html"
-                                  title='struct pyo3::PyDowncastError'>PyDowncastError</a></td>
-                           <td class='docblock-short'>
-                                <p>Marker type that indicates an error while downcasting</p>
-
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="struct" href="struct.PyErr.html"
-                                  title='struct pyo3::PyErr'>PyErr</a></td>
-                           <td class='docblock-short'>
-                                <p>Represents a Python exception that was raised.</p>
-
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="struct" href="struct.PyObject.html"
-                                  title='struct pyo3::PyObject'>PyObject</a></td>
-                           <td class='docblock-short'>
-                                <p>A python object</p>
-
-                           </td>
-                       </tr></table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
-<table>
-                       <tr class=' module-item'>
-                           <td><a class="enum" href="enum.PyErrValue.html"
-                                  title='enum pyo3::PyErrValue'>PyErrValue</a></td>
-                           <td class='docblock-short'>
-                                <p>Represents a <code>PyErr</code> value</p>
-
-                           </td>
-                       </tr></table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
-<table>
-                       <tr class=' module-item'>
-                           <td><a class="trait" href="trait.AsPyRef.html"
-                                  title='trait pyo3::AsPyRef'>AsPyRef</a></td>
-                           <td class='docblock-short'>
-                                <p>Trait implements object reference extraction from python managed pointer.</p>
-
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="trait" href="trait.FromPyObject.html"
-                                  title='trait pyo3::FromPyObject'>FromPyObject</a></td>
-                           <td class='docblock-short'>
-                                <p><code>FromPyObject</code> is implemented by various types that can be extracted from
+</td></tr><tr class='module-item'><td><a class="struct" href="struct.Py.html" title='pyo3::Py struct'>Py</a></td><td class='docblock-short'><p>Safe wrapper around unsafe <code>*mut ffi::PyObject</code> pointer with specified type information.</p>
+</td></tr><tr class='module-item'><td><a class="struct" href="struct.PyDowncastError.html" title='pyo3::PyDowncastError struct'>PyDowncastError</a></td><td class='docblock-short'><p>Marker type that indicates an error while downcasting</p>
+</td></tr><tr class='module-item'><td><a class="struct" href="struct.PyErr.html" title='pyo3::PyErr struct'>PyErr</a></td><td class='docblock-short'><p>Represents a Python exception that was raised.</p>
+</td></tr><tr class='module-item'><td><a class="struct" href="struct.PyObject.html" title='pyo3::PyObject struct'>PyObject</a></td><td class='docblock-short'><p>A python object</p>
+</td></tr></table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
+<table><tr class='module-item'><td><a class="enum" href="enum.PyErrValue.html" title='pyo3::PyErrValue enum'>PyErrValue</a></td><td class='docblock-short'><p>Represents a <code>PyErr</code> value</p>
+</td></tr></table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
+<table><tr class='module-item'><td><a class="trait" href="trait.AsPyRef.html" title='pyo3::AsPyRef trait'>AsPyRef</a></td><td class='docblock-short'><p>Trait implements object reference extraction from python managed pointer.</p>
+</td></tr><tr class='module-item'><td><a class="trait" href="trait.FromPyObject.html" title='pyo3::FromPyObject trait'>FromPyObject</a></td><td class='docblock-short'><p><code>FromPyObject</code> is implemented by various types that can be extracted from
 a Python object reference.</p>
-
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="trait" href="trait.IntoPyObject.html"
-                                  title='trait pyo3::IntoPyObject'>IntoPyObject</a></td>
-                           <td class='docblock-short'>
-                                <p>Conversion trait that allows various objects to be converted into <code>PyObject</code>
+</td></tr><tr class='module-item'><td><a class="trait" href="trait.IntoPyObject.html" title='pyo3::IntoPyObject trait'>IntoPyObject</a></td><td class='docblock-short'><p>Conversion trait that allows various objects to be converted into <code>PyObject</code>
 by consuming original object.</p>
-
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="trait" href="trait.IntoPyTuple.html"
-                                  title='trait pyo3::IntoPyTuple'>IntoPyTuple</a></td>
-                           <td class='docblock-short'>
-                                <p>Conversion trait that allows various objects to be converted into <code>PyTuple</code> object.</p>
-
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="trait" href="trait.ObjectProtocol.html"
-                                  title='trait pyo3::ObjectProtocol'>ObjectProtocol</a></td>
-                           <td class='docblock-short'>
-                                <p>Python object model helper methods</p>
-
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="trait" href="trait.PyErrArguments.html"
-                                  title='trait pyo3::PyErrArguments'>PyErrArguments</a></td>
-                           <td class='docblock-short'>
-                                <p>Helper conversion trait that allows to use custom arguments for exception constructor.</p>
-
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="trait" href="trait.PyObjectWithGIL.html"
-                                  title='trait pyo3::PyObjectWithGIL'>PyObjectWithGIL</a></td>
-                           <td class='docblock-short'>
-                                <p>Any instance that is managed Python can have access to <code>gil</code>.</p>
-
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="trait" href="trait.PyTryFrom.html"
-                                  title='trait pyo3::PyTryFrom'>PyTryFrom</a></td>
-                           <td class='docblock-short'>
-                                <p>Trait implemented by Python object types that allow a checked downcast.
+</td></tr><tr class='module-item'><td><a class="trait" href="trait.IntoPyTuple.html" title='pyo3::IntoPyTuple trait'>IntoPyTuple</a></td><td class='docblock-short'><p>Conversion trait that allows various objects to be converted into <code>PyTuple</code> object.</p>
+</td></tr><tr class='module-item'><td><a class="trait" href="trait.ObjectProtocol.html" title='pyo3::ObjectProtocol trait'>ObjectProtocol</a></td><td class='docblock-short'><p>Python object model helper methods</p>
+</td></tr><tr class='module-item'><td><a class="trait" href="trait.PyErrArguments.html" title='pyo3::PyErrArguments trait'>PyErrArguments</a></td><td class='docblock-short'><p>Helper conversion trait that allows to use custom arguments for exception constructor.</p>
+</td></tr><tr class='module-item'><td><a class="trait" href="trait.PyObjectWithGIL.html" title='pyo3::PyObjectWithGIL trait'>PyObjectWithGIL</a></td><td class='docblock-short'><p>Any instance that is managed Python can have access to <code>gil</code>.</p>
+</td></tr><tr class='module-item'><td><a class="trait" href="trait.PyTryFrom.html" title='pyo3::PyTryFrom trait'>PyTryFrom</a></td><td class='docblock-short'><p>Trait implemented by Python object types that allow a checked downcast.
 This trait is similar to <code>std::convert::TryFrom</code></p>
-
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="trait" href="trait.PyTryInto.html"
-                                  title='trait pyo3::PyTryInto'>PyTryInto</a></td>
-                           <td class='docblock-short'>
-                                <p>Trait implemented by Python object types that allow a checked downcast.
+</td></tr><tr class='module-item'><td><a class="trait" href="trait.PyTryInto.html" title='pyo3::PyTryInto trait'>PyTryInto</a></td><td class='docblock-short'><p>Trait implemented by Python object types that allow a checked downcast.
 This trait is similar to <code>std::convert::TryInto</code></p>
-
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="trait" href="trait.ReturnTypeIntoPyResult.html"
-                                  title='trait pyo3::ReturnTypeIntoPyResult'>ReturnTypeIntoPyResult</a></td>
-                           <td class='docblock-short'>
-                                <p>This trait wraps a T: IntoPyObject into PyResult<T> while PyResult<T> remains PyResult<T>.</p>
-
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="trait" href="trait.ToBorrowedObject.html"
-                                  title='trait pyo3::ToBorrowedObject'>ToBorrowedObject</a></td>
-                           <td class='docblock-short'>
-                                <p>This trait has two implementations: The slow one is implemented for
+</td></tr><tr class='module-item'><td><a class="trait" href="trait.ReturnTypeIntoPyResult.html" title='pyo3::ReturnTypeIntoPyResult trait'>ReturnTypeIntoPyResult</a></td><td class='docblock-short'><p>This trait wraps a T: IntoPyObject into PyResult<T> while PyResult<T> remains PyResult<T>.</p>
+</td></tr><tr class='module-item'><td><a class="trait" href="trait.ToBorrowedObject.html" title='pyo3::ToBorrowedObject trait'>ToBorrowedObject</a></td><td class='docblock-short'><p>This trait has two implementations: The slow one is implemented for
 all <a href="../pyo3/prelude/trait.ToPyObject.html" title="ToPyObject">ToPyObject</a> and creates a new object using <a href="../pyo3/prelude/trait.ToPyObject.html#tymethod.to_object" title="ToPyObject::to_object">ToPyObject::to_object</a>,
 while the fast one is only implemented for ToPyPointer (we know
 that every ToPyObject is also ToPyObject) and uses <a href="../pyo3/python/trait.ToPyPointer.html#tymethod.as_ptr" title="ToPyPointer::as_ptr()">ToPyPointer::as_ptr()</a></p>
-
-                           </td>
-                       </tr>
-                       <tr class=' module-item'>
-                           <td><a class="trait" href="trait.ToPyObject.html"
-                                  title='trait pyo3::ToPyObject'>ToPyObject</a></td>
-                           <td class='docblock-short'>
-                                <p>Conversion trait that allows various objects to be converted into <code>PyObject</code></p>
-
-                           </td>
-                       </tr></table><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
-<table>
-                       <tr class=' module-item'>
-                           <td><a class="fn" href="fn.prepare_freethreaded_python.html"
-                                  title='fn pyo3::prepare_freethreaded_python'>prepare_freethreaded_python</a></td>
-                           <td class='docblock-short'>
-                                <p>Prepares the use of Python in a free-threaded context.</p>
-
-                           </td>
-                       </tr></table><h2 id='types' class='section-header'><a href="#types">Type Definitions</a></h2>
-<table>
-                       <tr class=' module-item'>
-                           <td><a class="type" href="type.PyResult.html"
-                                  title='type pyo3::PyResult'>PyResult</a></td>
-                           <td class='docblock-short'>
-                                <p>Represents the result of a Python call.</p>
-
-                           </td>
-                       </tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../";window.currentCrate = "pyo3";</script><script src="../aliases.js"></script><script src="../main.js"></script><script defer src="../search-index.js"></script></body></html>
+</td></tr><tr class='module-item'><td><a class="trait" href="trait.ToPyObject.html" title='pyo3::ToPyObject trait'>ToPyObject</a></td><td class='docblock-short'><p>Conversion trait that allows various objects to be converted into <code>PyObject</code></p>
+</td></tr></table><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
+<table><tr class='module-item'><td><a class="fn" href="fn.prepare_freethreaded_python.html" title='pyo3::prepare_freethreaded_python fn'>prepare_freethreaded_python</a></td><td class='docblock-short'><p>Prepares the use of Python in a free-threaded context.</p>
+</td></tr></table><h2 id='types' class='section-header'><a href="#types">Type Definitions</a></h2>
+<table><tr class='module-item'><td><a class="type" href="type.PyResult.html" title='pyo3::PyResult type'>PyResult</a></td><td class='docblock-short'><p>Represents the result of a Python call.</p>
+</td></tr></table></section><section id="search" class="content hidden"></section><section class="footer"></section><aside id="help" class="hidden"><div><h1 class="hidden">Help</h1><div class="shortcuts"><h2>Keyboard Shortcuts</h2><dl><dt><kbd>?</kbd></dt><dd>Show this help dialog</dd><dt><kbd>S</kbd></dt><dd>Focus the search field</dd><dt><kbd>↑</kbd></dt><dd>Move up in search results</dd><dt><kbd>↓</kbd></dt><dd>Move down in search results</dd><dt><kbd>↹</kbd></dt><dd>Switch tab</dd><dt><kbd>&#9166;</kbd></dt><dd>Go to active search result</dd><dt><kbd>+</kbd></dt><dd>Expand all sections</dd><dt><kbd>-</kbd></dt><dd>Collapse all sections</dd></dl></div><div class="infos"><h2>Search Tricks</h2><p>Prefix searches with a type followed by a colon (e.g. <code>fn:</code>) to restrict the search to a given type.</p><p>Accepted types are: <code>fn</code>, <code>mod</code>, <code>struct</code>, <code>enum</code>, <code>trait</code>, <code>type</code>, <code>macro</code>, and <code>const</code>.</p><p>Search functions by type signature (e.g. <code>vec -> usize</code> or <code>* -> vec</code>)</p><p>Search multiple things at once by splitting your query with comma (e.g. <code>str,u8</code> or <code>String,struct:Vec,test</code>)</p></div></div></aside><script>window.rootPath = "../";window.currentCrate = "pyo3";</script><script src="../aliases.js"></script><script src="../main.js"></script><script defer src="../search-index.js"></script></body></html>

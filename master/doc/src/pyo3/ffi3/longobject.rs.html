@@ -74,7 +74,6 @@
 <span id="74">74</span>
 <span id="75">75</span>
 <span id="76">76</span>
-<span id="77">77</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi3</span>::<span class="ident">object</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi3</span>::<span class="ident">pyport</span>::<span class="ident">Py_ssize_t</span>;
@@ -83,10 +82,9 @@
     <span class="ident">c_char</span>, <span class="ident">c_double</span>, <span class="ident">c_int</span>, <span class="ident">c_long</span>, <span class="ident">c_longlong</span>, <span class="ident">c_uchar</span>, <span class="ident">c_ulong</span>, <span class="ident">c_ulonglong</span>, <span class="ident">c_void</span>,
 };
 
-<span class="attribute">#[<span class="ident">repr</span>(<span class="ident">C</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PyLongObject</span> {
-    <span class="ident">_private</span>: [<span class="ident">u8</span>; <span class="number">0</span>],
-}
+<span class="doccomment">/// This is an opaque type in the python c api</span>
+<span class="attribute">#[<span class="ident">repr</span>(<span class="ident">transparent</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PyLongObject</span>(<span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>);
 
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">windows</span>, <span class="ident">link</span>(<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;pythonXY&quot;</span>))]</span>
 <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> {

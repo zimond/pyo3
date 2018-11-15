@@ -95,6 +95,7 @@
 <span id="95">95</span>
 <span id="96">96</span>
 <span id="97">97</span>
+<span id="98">98</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 
@@ -152,6 +153,7 @@
     <span class="ident">T</span>: <span class="ident">PyBufferProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>,
 {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">needless_update</span>)]</span> <span class="comment">// For python 2 it&#39;s not useless</span>
     <span class="kw">fn</span> <span class="ident">tp_as_buffer</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">PyBufferProcs</span><span class="op">&gt;</span> {
         <span class="prelude-val">Some</span>(<span class="ident">ffi</span>::<span class="ident">PyBufferProcs</span> {
             <span class="ident">bf_getbuffer</span>: <span class="self">Self</span>::<span class="ident">cb_bf_getbuffer</span>(),

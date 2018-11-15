@@ -599,6 +599,7 @@
 <span id="599">599</span>
 <span id="600">600</span>
 <span id="601">601</span>
+<span id="602">602</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 
@@ -687,7 +688,7 @@
 <span class="doccomment">/// impl MyClass {</span>
 <span class="doccomment">///    #[new]</span>
 <span class="doccomment">///    fn __new__(obj: &amp;PyRawObject) -&gt; PyResult&lt;()&gt; {</span>
-<span class="doccomment">///        obj.init(||   MyClass { })</span>
+<span class="doccomment">///        obj.init(|| MyClass { })</span>
 <span class="doccomment">///    }</span>
 <span class="doccomment">/// }</span>
 <span class="doccomment">/// ```</span>
@@ -751,6 +752,7 @@
         <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">f</span>();
 
         <span class="kw">unsafe</span> {
+            <span class="comment">// Do not remove the `as *mut u8` part or you&#39;ll get some weird overflow error</span>
             <span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> (<span class="self">self</span>.<span class="ident">ptr</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u8</span>).<span class="ident">offset</span>(<span class="ident">T</span>::<span class="ident">OFFSET</span>) <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">T</span>;
             <span class="ident">std</span>::<span class="ident">ptr</span>::<span class="ident">write</span>(<span class="ident">ptr</span>, <span class="ident">value</span>);
         }
