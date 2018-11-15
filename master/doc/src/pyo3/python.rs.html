@@ -565,6 +565,7 @@
 <span class="kw">use</span> <span class="ident">std</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ffi</span>::<span class="ident">CString</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">marker</span>::<span class="ident">PhantomData</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ptr</span>::<span class="ident">NonNull</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">raw</span>::<span class="ident">c_int</span>;
 
 <span class="doccomment">/// Marker type that indicates that the GIL is currently held.</span>
@@ -859,7 +860,7 @@
     {
         <span class="kw">let</span> <span class="ident">p</span>;
         <span class="kw">unsafe</span> {
-            <span class="ident">p</span> <span class="op">=</span> <span class="ident">pythonrun</span>::<span class="ident">register_owned</span>(<span class="self">self</span>, <span class="ident">obj</span>.<span class="ident">into_ptr</span>());
+            <span class="ident">p</span> <span class="op">=</span> <span class="ident">pythonrun</span>::<span class="ident">register_owned</span>(<span class="self">self</span>, <span class="ident">obj</span>.<span class="ident">into_nonnull</span>());
         }
         <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">PyTryFrom</span><span class="op">&gt;</span>::<span class="ident">try_from</span>(<span class="ident">p</span>)
     }
@@ -869,17 +870,15 @@
     <span class="kw">where</span>
         <span class="ident">T</span>: <span class="ident">PyTypeInfo</span>,
     {
-        <span class="kw">let</span> <span class="ident">p</span> <span class="op">=</span> <span class="ident">pythonrun</span>::<span class="ident">register_owned</span>(<span class="self">self</span>, <span class="ident">obj</span>.<span class="ident">into_ptr</span>());
+        <span class="kw">let</span> <span class="ident">p</span> <span class="op">=</span> <span class="ident">pythonrun</span>::<span class="ident">register_owned</span>(<span class="self">self</span>, <span class="ident">obj</span>.<span class="ident">into_nonnull</span>());
         <span class="self">self</span>.<span class="ident">unchecked_downcast</span>(<span class="ident">p</span>)
     }
 
     <span class="doccomment">/// Register `ffi::PyObject` pointer in release pool</span>
-
     <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">from_borrowed_ptr_to_obj</span>(<span class="self">self</span>, <span class="ident">ptr</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">PyObjectRef</span> {
-        <span class="kw">if</span> <span class="ident">ptr</span>.<span class="ident">is_null</span>() {
-            <span class="kw">crate</span>::<span class="ident">err</span>::<span class="ident">panic_after_error</span>();
-        } <span class="kw">else</span> {
-            <span class="ident">pythonrun</span>::<span class="ident">register_borrowed</span>(<span class="self">self</span>, <span class="ident">ptr</span>)
+        <span class="kw">match</span> <span class="ident">NonNull</span>::<span class="ident">new</span>(<span class="ident">ptr</span>) {
+            <span class="prelude-val">Some</span>(<span class="ident">p</span>) <span class="op">=&gt;</span> <span class="ident">pythonrun</span>::<span class="ident">register_borrowed</span>(<span class="self">self</span>, <span class="ident">p</span>),
+            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="kw">crate</span>::<span class="ident">err</span>::<span class="ident">panic_after_error</span>(),
         }
     }
 
@@ -890,11 +889,12 @@
     <span class="kw">where</span>
         <span class="ident">T</span>: <span class="ident">PyTypeInfo</span>,
     {
-        <span class="kw">if</span> <span class="ident">ptr</span>.<span class="ident">is_null</span>() {
-            <span class="kw">crate</span>::<span class="ident">err</span>::<span class="ident">panic_after_error</span>();
-        } <span class="kw">else</span> {
-            <span class="kw">let</span> <span class="ident">p</span> <span class="op">=</span> <span class="ident">pythonrun</span>::<span class="ident">register_owned</span>(<span class="self">self</span>, <span class="ident">ptr</span>);
-            <span class="self">self</span>.<span class="ident">unchecked_downcast</span>(<span class="ident">p</span>)
+        <span class="kw">match</span> <span class="ident">NonNull</span>::<span class="ident">new</span>(<span class="ident">ptr</span>) {
+            <span class="prelude-val">Some</span>(<span class="ident">p</span>) <span class="op">=&gt;</span> {
+                <span class="kw">let</span> <span class="ident">p</span> <span class="op">=</span> <span class="ident">pythonrun</span>::<span class="ident">register_owned</span>(<span class="self">self</span>, <span class="ident">p</span>);
+                <span class="self">self</span>.<span class="ident">unchecked_downcast</span>(<span class="ident">p</span>)
+            }
+            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="kw">crate</span>::<span class="ident">err</span>::<span class="ident">panic_after_error</span>(),
         }
     }
 
@@ -904,56 +904,58 @@
     <span class="kw">where</span>
         <span class="ident">T</span>: <span class="ident">PyTypeInfo</span>,
     {
-        <span class="kw">if</span> <span class="ident">ptr</span>.<span class="ident">is_null</span>() {
-            <span class="kw">crate</span>::<span class="ident">err</span>::<span class="ident">panic_after_error</span>();
-        } <span class="kw">else</span> {
-            <span class="kw">let</span> <span class="ident">p</span> <span class="op">=</span> <span class="ident">pythonrun</span>::<span class="ident">register_owned</span>(<span class="self">self</span>, <span class="ident">ptr</span>);
-            <span class="self">self</span>.<span class="ident">unchecked_mut_downcast</span>(<span class="ident">p</span>)
+        <span class="kw">match</span> <span class="ident">NonNull</span>::<span class="ident">new</span>(<span class="ident">ptr</span>) {
+            <span class="prelude-val">Some</span>(<span class="ident">p</span>) <span class="op">=&gt;</span> {
+                <span class="kw">let</span> <span class="ident">p</span> <span class="op">=</span> <span class="ident">pythonrun</span>::<span class="ident">register_owned</span>(<span class="self">self</span>, <span class="ident">p</span>);
+                <span class="self">self</span>.<span class="ident">unchecked_mut_downcast</span>(<span class="ident">p</span>)
+            }
+            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="kw">crate</span>::<span class="ident">err</span>::<span class="ident">panic_after_error</span>(),
         }
     }
 
     <span class="doccomment">/// Register owned `ffi::PyObject` pointer in release pool.</span>
     <span class="doccomment">/// Returns `Err(PyErr)` if the pointer is `null`.</span>
     <span class="doccomment">/// do unchecked downcast to specific type.</span>
-
     <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">from_owned_ptr_or_err</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">ptr</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">T</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">T</span>: <span class="ident">PyTypeInfo</span>,
     {
-        <span class="kw">if</span> <span class="ident">ptr</span>.<span class="ident">is_null</span>() {
-            <span class="prelude-val">Err</span>(<span class="ident">PyErr</span>::<span class="ident">fetch</span>(<span class="self">self</span>))
-        } <span class="kw">else</span> {
-            <span class="kw">let</span> <span class="ident">p</span> <span class="op">=</span> <span class="ident">pythonrun</span>::<span class="ident">register_owned</span>(<span class="self">self</span>, <span class="ident">ptr</span>);
-            <span class="prelude-val">Ok</span>(<span class="self">self</span>.<span class="ident">unchecked_downcast</span>(<span class="ident">p</span>))
+        <span class="kw">match</span> <span class="ident">NonNull</span>::<span class="ident">new</span>(<span class="ident">ptr</span>) {
+            <span class="prelude-val">Some</span>(<span class="ident">p</span>) <span class="op">=&gt;</span> {
+                <span class="kw">let</span> <span class="ident">p</span> <span class="op">=</span> <span class="ident">pythonrun</span>::<span class="ident">register_owned</span>(<span class="self">self</span>, <span class="ident">p</span>);
+                <span class="prelude-val">Ok</span>(<span class="self">self</span>.<span class="ident">unchecked_downcast</span>(<span class="ident">p</span>))
+            }
+            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">PyErr</span>::<span class="ident">fetch</span>(<span class="self">self</span>)),
         }
     }
 
     <span class="doccomment">/// Register owned `ffi::PyObject` pointer in release pool.</span>
     <span class="doccomment">/// Returns `None` if the pointer is `null`.</span>
     <span class="doccomment">/// do unchecked downcast to specific type.</span>
-
     <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">from_owned_ptr_or_opt</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">ptr</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">T</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">T</span>: <span class="ident">PyTypeInfo</span>,
     {
-        <span class="kw">if</span> <span class="ident">ptr</span>.<span class="ident">is_null</span>() {
-            <span class="prelude-val">None</span>
-        } <span class="kw">else</span> {
-            <span class="kw">let</span> <span class="ident">p</span> <span class="op">=</span> <span class="ident">pythonrun</span>::<span class="ident">register_owned</span>(<span class="self">self</span>, <span class="ident">ptr</span>);
-            <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">unchecked_downcast</span>(<span class="ident">p</span>))
-        }
+        <span class="ident">NonNull</span>::<span class="ident">new</span>(<span class="ident">ptr</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> {
+            <span class="kw">let</span> <span class="ident">p</span> <span class="op">=</span> <span class="ident">pythonrun</span>::<span class="ident">register_owned</span>(<span class="self">self</span>, <span class="ident">p</span>);
+            <span class="self">self</span>.<span class="ident">unchecked_downcast</span>(<span class="ident">p</span>)
+        })
     }
 
     <span class="doccomment">/// Register borrowed `ffi::PyObject` pointer in release pool.</span>
     <span class="doccomment">/// Panics if the pointer is `null`.</span>
     <span class="doccomment">/// do unchecked downcast to specific type.</span>
-
     <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">from_borrowed_ptr</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">ptr</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">T</span>
     <span class="kw">where</span>
         <span class="ident">T</span>: <span class="ident">PyTypeInfo</span>,
     {
-        <span class="kw">let</span> <span class="ident">p</span> <span class="op">=</span> <span class="ident">pythonrun</span>::<span class="ident">register_borrowed</span>(<span class="self">self</span>, <span class="ident">ptr</span>);
-        <span class="self">self</span>.<span class="ident">unchecked_downcast</span>(<span class="ident">p</span>)
+        <span class="kw">match</span> <span class="ident">NonNull</span>::<span class="ident">new</span>(<span class="ident">ptr</span>) {
+            <span class="prelude-val">Some</span>(<span class="ident">p</span>) <span class="op">=&gt;</span> {
+                <span class="kw">let</span> <span class="ident">p</span> <span class="op">=</span> <span class="ident">pythonrun</span>::<span class="ident">register_borrowed</span>(<span class="self">self</span>, <span class="ident">p</span>);
+                <span class="self">self</span>.<span class="ident">unchecked_downcast</span>(<span class="ident">p</span>)
+            }
+            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="kw">crate</span>::<span class="ident">err</span>::<span class="ident">panic_after_error</span>(),
+        }
     }
 
     <span class="doccomment">/// Register borrowed `ffi::PyObject` pointer in release pool.</span>
@@ -963,44 +965,42 @@
     <span class="kw">where</span>
         <span class="ident">T</span>: <span class="ident">PyTypeInfo</span>,
     {
-        <span class="kw">if</span> <span class="ident">ptr</span>.<span class="ident">is_null</span>() {
-            <span class="kw">crate</span>::<span class="ident">err</span>::<span class="ident">panic_after_error</span>();
-        } <span class="kw">else</span> {
-            <span class="kw">let</span> <span class="ident">p</span> <span class="op">=</span> <span class="ident">pythonrun</span>::<span class="ident">register_borrowed</span>(<span class="self">self</span>, <span class="ident">ptr</span>);
-            <span class="self">self</span>.<span class="ident">unchecked_mut_downcast</span>(<span class="ident">p</span>)
+        <span class="kw">match</span> <span class="ident">NonNull</span>::<span class="ident">new</span>(<span class="ident">ptr</span>) {
+            <span class="prelude-val">Some</span>(<span class="ident">p</span>) <span class="op">=&gt;</span> {
+                <span class="kw">let</span> <span class="ident">p</span> <span class="op">=</span> <span class="ident">pythonrun</span>::<span class="ident">register_borrowed</span>(<span class="self">self</span>, <span class="ident">p</span>);
+                <span class="self">self</span>.<span class="ident">unchecked_mut_downcast</span>(<span class="ident">p</span>)
+            }
+            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="kw">crate</span>::<span class="ident">err</span>::<span class="ident">panic_after_error</span>(),
         }
     }
 
     <span class="doccomment">/// Register borrowed `ffi::PyObject` pointer in release pool.</span>
     <span class="doccomment">/// Returns `Err(PyErr)` if the pointer is `null`.</span>
     <span class="doccomment">/// do unchecked downcast to specific type.</span>
-
     <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">from_borrowed_ptr_or_err</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">ptr</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">T</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">T</span>: <span class="ident">PyTypeInfo</span>,
     {
-        <span class="kw">if</span> <span class="ident">ptr</span>.<span class="ident">is_null</span>() {
-            <span class="prelude-val">Err</span>(<span class="ident">PyErr</span>::<span class="ident">fetch</span>(<span class="self">self</span>))
-        } <span class="kw">else</span> {
-            <span class="kw">let</span> <span class="ident">p</span> <span class="op">=</span> <span class="ident">pythonrun</span>::<span class="ident">register_borrowed</span>(<span class="self">self</span>, <span class="ident">ptr</span>);
-            <span class="prelude-val">Ok</span>(<span class="self">self</span>.<span class="ident">unchecked_downcast</span>(<span class="ident">p</span>))
+        <span class="kw">match</span> <span class="ident">NonNull</span>::<span class="ident">new</span>(<span class="ident">ptr</span>) {
+            <span class="prelude-val">Some</span>(<span class="ident">p</span>) <span class="op">=&gt;</span> {
+                <span class="kw">let</span> <span class="ident">p</span> <span class="op">=</span> <span class="ident">pythonrun</span>::<span class="ident">register_borrowed</span>(<span class="self">self</span>, <span class="ident">p</span>);
+                <span class="prelude-val">Ok</span>(<span class="self">self</span>.<span class="ident">unchecked_downcast</span>(<span class="ident">p</span>))
+            }
+            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">PyErr</span>::<span class="ident">fetch</span>(<span class="self">self</span>)),
         }
     }
 
     <span class="doccomment">/// Register borrowed `ffi::PyObject` pointer in release pool.</span>
     <span class="doccomment">/// Returns `None` if the pointer is `null`.</span>
     <span class="doccomment">/// do unchecked downcast to specific `T`.</span>
-
     <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">from_borrowed_ptr_or_opt</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">ptr</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">T</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">T</span>: <span class="ident">PyTypeInfo</span>,
     {
-        <span class="kw">if</span> <span class="ident">ptr</span>.<span class="ident">is_null</span>() {
-            <span class="prelude-val">None</span>
-        } <span class="kw">else</span> {
-            <span class="kw">let</span> <span class="ident">p</span> <span class="op">=</span> <span class="ident">pythonrun</span>::<span class="ident">register_borrowed</span>(<span class="self">self</span>, <span class="ident">ptr</span>);
-            <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">unchecked_downcast</span>(<span class="ident">p</span>))
-        }
+        <span class="ident">NonNull</span>::<span class="ident">new</span>(<span class="ident">ptr</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> {
+            <span class="kw">let</span> <span class="ident">p</span> <span class="op">=</span> <span class="ident">pythonrun</span>::<span class="ident">register_borrowed</span>(<span class="self">self</span>, <span class="ident">p</span>);
+            <span class="self">self</span>.<span class="ident">unchecked_downcast</span>(<span class="ident">p</span>)
+        })
     }
 
     <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>

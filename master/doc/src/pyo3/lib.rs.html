@@ -218,6 +218,25 @@
 <span id="218">218</span>
 <span id="219">219</span>
 <span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
+<span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
+<span id="237">237</span>
+<span id="238">238</span>
+<span id="239">239</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="attribute">#![<span class="ident">feature</span>(<span class="ident">specialization</span>)]</span>
 
@@ -277,8 +296,8 @@
 <span class="doccomment">//!</span>
 <span class="doccomment">//! To allow Python to load the rust code as a Python extension</span>
 <span class="doccomment">//! module, you need an initialization function with `Fn(Python, &amp;PyModule) -&gt; PyResult&lt;()&gt;`</span>
-<span class="doccomment">//! that is annotates with `#[pymodinit]`. By default the function name will become the module name,</span>
-<span class="doccomment">//! but you can override that with `#[pymodinit(name)]`.</span>
+<span class="doccomment">//! that is annotates with `#[pymodule]`. By default the function name will become the module name,</span>
+<span class="doccomment">//! but you can override that with `#[pymodule(name)]`.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! To creates a Python callable object that invokes a Rust function, specify rust</span>
 <span class="doccomment">//! function and decorate it with `#[pyfn()]` attribute. `pyfn()` accepts three parameters.</span>
@@ -299,7 +318,7 @@
 <span class="doccomment">//! // Add bindings to the generated python module</span>
 <span class="doccomment">//! // N.B: names: &quot;librust2py&quot; must be the name of the `.so` or `.pyd` file</span>
 <span class="doccomment">//! /// This module is implemented in Rust.</span>
-<span class="doccomment">//! #[pymodinit]</span>
+<span class="doccomment">//! #[pymodule]</span>
 <span class="doccomment">//! fn rust2py(py: Python, m: &amp;PyModule) -&gt; PyResult&lt;()&gt; {</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//!     #[pyfn(m, &quot;sum_as_string&quot;)]</span>
@@ -413,16 +432,16 @@
 <span class="doccomment">/// The proc macros, which are also part of the prelude</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">proc_macro</span> {
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">Py_3</span>))]</span>
-    <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">pyo3cls</span>::<span class="ident">mod2init</span> <span class="kw">as</span> <span class="ident">pymodinit</span>;
+    <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">pyo3cls</span>::<span class="ident">mod2init</span> <span class="kw">as</span> <span class="ident">pymodule</span>;
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">Py_3</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">pyo3cls</span>::<span class="ident">mod3init</span> <span class="kw">as</span> <span class="ident">pymodinit</span>;
+    <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">pyo3cls</span>::<span class="ident">mod3init</span> <span class="kw">as</span> <span class="ident">pymodule</span>;
     <span class="doccomment">/// The proc macro attributes</span>
     <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">pyo3cls</span>::{<span class="ident">pyclass</span>, <span class="ident">pyfunction</span>, <span class="ident">pymethods</span>, <span class="ident">pyproto</span>};
 }
 
 <span class="doccomment">/// Returns a function that takes a [Python] instance and returns a python function.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// Use this together with `#[function]` and [types::PyModule::add_function].</span>
+<span class="doccomment">/// Use this together with `#[pyfunction]` and [types::PyModule::add_wrapped].</span>
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">wrap_function</span> {
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">function_name</span>:<span class="ident">ident</span>) <span class="op">=&gt;</span> {{
@@ -436,6 +455,25 @@
 
         <span class="macro">m</span><span class="macro">!</span> {
             <span class="kw-2">&amp;</span><span class="string">&quot;method&quot;</span>
+        }
+    }};
+}
+
+<span class="doccomment">/// Returns a function that takes a [Python] instance and returns a python module.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Use this together with `#[pymodule]` and [types::PyModule::add_wrapped].</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">Py_3</span>)]</span>
+<span class="attribute">#[<span class="ident">macro_export</span>]</span>
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">wrap_module</span> {
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">module_name</span>:<span class="ident">ident</span>) <span class="op">=&gt;</span> {{
+        <span class="kw">use</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">mashup</span>::<span class="kw-2">*</span>;
+
+        <span class="macro">mashup</span><span class="macro">!</span> {
+            <span class="ident">m</span>[<span class="string">&quot;method&quot;</span>] <span class="op">=</span> <span class="ident">PyInit_</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">module_name</span>;
+        }
+
+        <span class="macro">m</span><span class="macro">!</span> {
+            <span class="kw-2">&amp;</span><span class="op">|</span><span class="ident">py</span><span class="op">|</span> <span class="kw">unsafe</span> { <span class="kw">crate</span>::<span class="ident">PyObject</span>::<span class="ident">from_owned_ptr</span>(<span class="ident">py</span>, <span class="string">&quot;method&quot;</span>()) }
         }
     }};
 }

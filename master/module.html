@@ -154,12 +154,10 @@
 extern crate pyo3;
 use pyo3::{PyResult, Python, PyModule};
 
-
-
 // add bindings to the generated python module
 // N.B: names: &quot;librust2py&quot; must be the name of the `.so` or `.pyd` file
 /// This module is implemented in Rust.
-#[pymodinit]
+#[pymodule]
 fn rust2py(py: Python, m: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
 
     // pyo3 aware function. All of our python interface could be declared in a separate module.
@@ -181,19 +179,46 @@ fn sum_as_string(a:i64, b:i64) -&gt; String {
 
 # fn main() {}
 </code></pre></pre>
-<p>The <code>#[pymodinit}</code> procedural macro attribute takes care of exporting the initialization function of your module to Python. It takes one argument as the name of your module, it must be the name of the <code>.so</code> or <code>.pyd</code> file.</p>
+<p>The <code>#[pymodule]</code> procedural macro attribute takes care of exporting the initialization function of your module to Python. It takes one argument as the name of your module, which must be the name of the <code>.so</code> or <code>.pyd</code> file.</p>
+<p>To import the module, either copy the shared library as described in <a href="./overview.md">Get Started</a> or use a tool, e.g. <code>pyo3-pack develop</code> with <a href="https://github.com/PyO3/pyo3-pack">pyo3-pack</a> or <code>python setup.py develop</code> with <a href="https://github.com/PyO3/setuptools-rust">setuptools-rust</a>.</p>
+<a class="header" href="module.html#documentation" id="documentation"><h2>Documentation</h2></a>
 <p>The <a href="https://doc.rust-lang.org/stable/book/first-edition/comments.html">Rust doc comments</a> of the module initialization function will be applied automatically as the Python doc string of your module.</p>
 <pre><code class="language-python">import rust2py
 
 print(rust2py.__doc__)
 </code></pre>
 <p>Which means that the above Python code will print <code>This module is implemented in Rust.</code>.</p>
-<blockquote>
-<p>On macOS, you will need to rename the output from <code>*.dylib</code> to <code>*.so</code>.</p>
-<p>On Windows, you will need to rename the output from <code>*.dll</code> to <code>*.pyd</code>.</p>
-</blockquote>
-<p>For <code>setup.py</code> integration, You can use <a href="https://github.com/PyO3/setuptools-rust">setuptools-rust</a>,
-learn more about it in <a href="./distribution.html">Distribution</a>.</p>
+<a class="header" href="module.html#modules-as-objects" id="modules-as-objects"><h2>Modules as objects</h2></a>
+<p>In python, modules are first class objects. This means can store them as values or add them to dicts or other modules:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+#[pyfunction]
+fn subfunction() -&gt; String {
+    &quot;Subfunction&quot;.to_string()
+}
+
+#[pymodule]
+fn submodule(_py: Python, module: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
+    module.add_wrapped(wrap_function!(subfunction))?;
+    Ok(())
+}
+
+#[pymodule]
+fn supermodule(_py: Python, module: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
+    module.add_wrapped(wrap_module!(submodule))?;
+    Ok(())
+}
+
+fn nested_call() {
+    let gil = GILGuard::acquire();
+    let py = gil.python();
+    let supermodule = wrap_module!(supermodule)(py);
+    ctx.set_item(&quot;supermodule&quot;, supermodule);
+
+    py.run(&quot;assert supermodule.submodule.subfuntion() == 'Subfunction'&quot;, None, Some(&amp;ctx)).unwrap();
+}
+#}</code></pre></pre>
 
                     </main>
 

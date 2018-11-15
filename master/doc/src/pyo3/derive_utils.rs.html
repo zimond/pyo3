@@ -311,7 +311,7 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">Py_3</span>)]</span>
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="doccomment">/// Builds a module (or null) from a user given initializer. Used for `#[pymodinit]`.</span>
+<span class="doccomment">/// Builds a module (or null) from a user given initializer. Used for `#[pymodule]`.</span>
 <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">make_module</span>(
     <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
     <span class="ident">doc</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
@@ -361,7 +361,7 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">Py_3</span>))]</span>
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="doccomment">/// Builds a module (or null) from a user given initializer. Used for `#[pymodinit]`.</span>
+<span class="doccomment">/// Builds a module (or null) from a user given initializer. Used for `#[pymodule]`.</span>
 <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">make_module</span>(
     <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
     <span class="ident">doc</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,

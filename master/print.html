@@ -186,9 +186,9 @@ fn sum_as_string(a: usize, b: usize) -&gt; PyResult&lt;String&gt; {
 }
 
 /// This module is a python moudle implemented in Rust.
-#[pymodinit]
+#[pymodule]
 fn rust_py(py: Python, m: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
-    m.add_function(wrap_function!(sum_as_string))?;
+    m.add_wrapped(wrap_function!(sum_as_string))?;
 
     Ok(())
 }
@@ -513,12 +513,10 @@ several standard library modules.</p>
 extern crate pyo3;
 use pyo3::{PyResult, Python, PyModule};
 
-
-
 // add bindings to the generated python module
 // N.B: names: &quot;librust2py&quot; must be the name of the `.so` or `.pyd` file
 /// This module is implemented in Rust.
-#[pymodinit]
+#[pymodule]
 fn rust2py(py: Python, m: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
 
     // pyo3 aware function. All of our python interface could be declared in a separate module.
@@ -540,19 +538,46 @@ fn sum_as_string(a:i64, b:i64) -&gt; String {
 
 # fn main() {}
 </code></pre></pre>
-<p>The <code>#[pymodinit}</code> procedural macro attribute takes care of exporting the initialization function of your module to Python. It takes one argument as the name of your module, it must be the name of the <code>.so</code> or <code>.pyd</code> file.</p>
+<p>The <code>#[pymodule]</code> procedural macro attribute takes care of exporting the initialization function of your module to Python. It takes one argument as the name of your module, which must be the name of the <code>.so</code> or <code>.pyd</code> file.</p>
+<p>To import the module, either copy the shared library as described in <a href="./overview.md">Get Started</a> or use a tool, e.g. <code>pyo3-pack develop</code> with <a href="https://github.com/PyO3/pyo3-pack">pyo3-pack</a> or <code>python setup.py develop</code> with <a href="https://github.com/PyO3/setuptools-rust">setuptools-rust</a>.</p>
+<a class="header" href="print.html#documentation" id="documentation"><h2>Documentation</h2></a>
 <p>The <a href="https://doc.rust-lang.org/stable/book/first-edition/comments.html">Rust doc comments</a> of the module initialization function will be applied automatically as the Python doc string of your module.</p>
 <pre><code class="language-python">import rust2py
 
 print(rust2py.__doc__)
 </code></pre>
 <p>Which means that the above Python code will print <code>This module is implemented in Rust.</code>.</p>
-<blockquote>
-<p>On macOS, you will need to rename the output from <code>*.dylib</code> to <code>*.so</code>.</p>
-<p>On Windows, you will need to rename the output from <code>*.dll</code> to <code>*.pyd</code>.</p>
-</blockquote>
-<p>For <code>setup.py</code> integration, You can use <a href="https://github.com/PyO3/setuptools-rust">setuptools-rust</a>,
-learn more about it in <a href="./distribution.html">Distribution</a>.</p>
+<a class="header" href="print.html#modules-as-objects" id="modules-as-objects"><h2>Modules as objects</h2></a>
+<p>In python, modules are first class objects. This means can store them as values or add them to dicts or other modules:</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+#[pyfunction]
+fn subfunction() -&gt; String {
+    &quot;Subfunction&quot;.to_string()
+}
+
+#[pymodule]
+fn submodule(_py: Python, module: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
+    module.add_wrapped(wrap_function!(subfunction))?;
+    Ok(())
+}
+
+#[pymodule]
+fn supermodule(_py: Python, module: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
+    module.add_wrapped(wrap_module!(submodule))?;
+    Ok(())
+}
+
+fn nested_call() {
+    let gil = GILGuard::acquire();
+    let py = gil.python();
+    let supermodule = wrap_module!(supermodule)(py);
+    ctx.set_item(&quot;supermodule&quot;, supermodule);
+
+    py.run(&quot;assert supermodule.submodule.subfuntion() == 'Subfunction'&quot;, None, Some(&amp;ctx)).unwrap();
+}
+#}</code></pre></pre>
 <a class="header" href="print.html#python-function" id="python-function"><h1>Python Function</h1></a>
 <p>Pyo3 supports two ways to define a function in python. Both require registering
 the function to a <a href="./module.md">module</a></p>
@@ -563,7 +588,7 @@ extern crate pyo3;
 use pyo3::prelude::*;
 
 
-#[pymodinit]
+#[pymodule]
 fn rust2py(py: Python, m: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
 
     // Note that the `#[pyfn()]` annotation automatically converts the arguments from
@@ -579,7 +604,7 @@ fn rust2py(py: Python, m: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
 # fn main() {}
 </code></pre></pre>
 <p>The other is annotating a function with <code>#[py::function]</code> and then adding it
-to the module using the <code>add_function_to_module!</code> macro, which takes the module
+to the module using the <code>add_wrapped_to_module!</code> macro, which takes the module
 as first parameter, the function name as second and an instance of <code>Python</code>
 as third.</p>
 <pre><pre class="playpen"><code class="language-rust">#![feature(specialization)]
@@ -593,9 +618,9 @@ fn double(x: usize) -&gt; usize {
     x * 2
 }
 
-#[pymodinit]
+#[pymodule]
 fn module_with_functions(py: Python, m: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
-    m.add_function(wrap_function!(double)).unwrap();
+    m.add_wrapped(wrap_function!(double)).unwrap();
 
     Ok(())
 }
@@ -1175,7 +1200,7 @@ we have a <code>wc_parallel</code> function utilize the <a href="https://github.
 </code></pre>
 <p>Then in the Python bridge, we have a function <code>search</code> exposed to Python runtime which calls <code>wc_parallel</code> inside
 <code>Python::allow_threads</code> method to enable true parallelism:</p>
-<pre><code class="language-rust ignore">#[pymodinit]
+<pre><code class="language-rust ignore">#[pymodule]
 fn word_count(py: Python, m: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
 
     #[pyfn(m, &quot;search&quot;)]
@@ -1205,7 +1230,7 @@ then we can run <code>pytest tests</code> to benchmark them.</p>
 <p><img src="https://user-images.githubusercontent.com/1556054/28604608-81bd6d22-71fe-11e7-8a2c-c3cf3bd0f622.png" alt="Benchmark Result" /></p>
 <a class="header" href="print.html#debugging" id="debugging"><h1>Debugging</h1></a>
 <a class="header" href="print.html#macros" id="macros"><h2>Macros</h2></a>
-<p>Pyo3's attributes, <code>#[pyclass]</code>, <code>#[pymodinit]</code>, etc. are <a href="https://doc.rust-lang.org/unstable-book/language-features/proc-macro.html">procedural macros</a>, which means that rewrite the source of the annotated item. You can view the generated source with the following command, which also expands a few other things:</p>
+<p>Pyo3's attributes, <code>#[pyclass]</code>, <code>#[pymodule]</code>, etc. are <a href="https://doc.rust-lang.org/unstable-book/language-features/proc-macro.html">procedural macros</a>, which means that rewrite the source of the annotated item. You can view the generated source with the following command, which also expands a few other things:</p>
 <pre><code class="language-bash">cargo rustc --profile=check -- -Z unstable-options --pretty=expanded &gt; expanded.rs; rustfmt expanded.rs
 </code></pre>
 <p>(You might need to install <a href="https://github.com/rust-lang-nursery/rustfmt">rustfmt</a> if you don't already have it.)</p>
