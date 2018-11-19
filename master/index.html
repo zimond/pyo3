@@ -84,7 +84,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="overview.html" class="active"><strong aria-hidden="true">1.</strong> Get Started</a></li><li><a href="conversions.html"><strong aria-hidden="true">2.</strong> Type Conversions</a></li><li><a href="exception.html"><strong aria-hidden="true">3.</strong> Python Exception</a></li><li><a href="module.html"><strong aria-hidden="true">4.</strong> Python Module</a></li><li><a href="function.html"><strong aria-hidden="true">5.</strong> Python Function</a></li><li><a href="class.html"><strong aria-hidden="true">6.</strong> Python Class</a></li><li><a href="parallelism.html"><strong aria-hidden="true">7.</strong> Parallelism</a></li><li><a href="debugging.html"><strong aria-hidden="true">8.</strong> Debugging</a></li><li><a href="distribution.html"><strong aria-hidden="true">9.</strong> Distribution</a></li><li><a href="rust-cpython.html"><strong aria-hidden="true">10.</strong> Appendix: Pyo3 and rust-cpython</a></li></ol>
+            <ol class="chapter"><li><a href="get_started.html" class="active"><strong aria-hidden="true">1.</strong> Get Started</a></li><li><a href="conversions.html"><strong aria-hidden="true">2.</strong> Type Conversions</a></li><li><a href="exception.html"><strong aria-hidden="true">3.</strong> Python Exception</a></li><li><a href="module.html"><strong aria-hidden="true">4.</strong> Python Module</a></li><li><a href="function.html"><strong aria-hidden="true">5.</strong> Python Function</a></li><li><a href="class.html"><strong aria-hidden="true">6.</strong> Python Class</a></li><li><a href="parallelism.html"><strong aria-hidden="true">7.</strong> Parallelism</a></li><li><a href="debugging.html"><strong aria-hidden="true">8.</strong> Debugging</a></li><li><a href="building-and-distribution.html"><strong aria-hidden="true">9.</strong> Building and Distribution</a></li><li><a href="rust-cpython.html"><strong aria-hidden="true">10.</strong> Appendix: Pyo3 and rust-cpython</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -146,13 +146,13 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="overview.html#pyo3" id="pyo3"><h1>PyO3</h1></a>
+                        <a class="header" href="get_started.html#pyo3" id="pyo3"><h1>PyO3</h1></a>
 <p><a href="http://www.rust-lang.org/">Rust</a> bindings for <a href="https://www.python.org/">Python</a>. This includes running and interacting with python code from a rust binaries as well as writing native python modules.</p>
 <p><a href="./doc/index.html">API documentation</a></p>
-<a class="header" href="overview.html#usage" id="usage"><h2>Usage</h2></a>
+<a class="header" href="get_started.html#usage" id="usage"><h2>Usage</h2></a>
 <p>Pyo3 supports python 2.7 as well as python 3.5 and up. The minimum required rust version is 1.29.0-nightly 2018-07-16.</p>
 <p>You can either write a native python module in rust or use python from a rust binary.</p>
-<a class="header" href="overview.html#using-rust-from-python" id="using-rust-from-python"><h3>Using rust from python</h3></a>
+<a class="header" href="get_started.html#using-rust-from-python" id="using-rust-from-python"><h3>Using rust from python</h3></a>
 <p>Pyo3 can be used to generate a native python module.</p>
 <p><strong><code>Cargo.toml</code>:</strong></p>
 <pre><code class="language-toml">[package]
@@ -201,7 +201,7 @@ rustflags = [
 </code></pre>
 <p>Also on macOS, you will need to rename the output from *.dylib to *.so. On Windows, you will need to rename the output from *.dll to *.pyd.</p>
 <p><a href="https://github.com/PyO3/setuptools-rust"><code>setuptools-rust</code></a> can be used to generate a python package and includes the commands above by default. See <a href="examples/https://github.com/PyO3/pyo3/tree/master/examples/word-count">examples/word-count</a> and the associated setup.py.</p>
-<a class="header" href="overview.html#using-python-from-rust" id="using-python-from-rust"><h3>Using python from rust</h3></a>
+<a class="header" href="get_started.html#using-python-from-rust" id="using-python-from-rust"><h3>Using python from rust</h3></a>
 <p>Add <code>pyo3</code> this to your <code>Cargo.toml</code>:</p>
 <pre><code class="language-toml">[dependencies]
 pyo3 = &quot;0.3&quot;
@@ -228,7 +228,7 @@ fn main() -&gt; PyResult&lt;()&gt; {
     Ok(())
 }
 </code></pre></pre>
-<a class="header" href="overview.html#examples-and-tooling" id="examples-and-tooling"><h2>Examples and tooling</h2></a>
+<a class="header" href="get_started.html#examples-and-tooling" id="examples-and-tooling"><h2>Examples and tooling</h2></a>
 <ul>
 <li><a href="https://github.com/PyO3/pyo3/tree/master/examples/word-count">examples/word-count</a> <em>Counting the occurences of a word in a text file</em></li>
 <li><a href="https://github.com/mre/hyperjson">hyperjson</a> <em>A hyper-fast Python module for reading/writing JSON data using Rust's serde-json</em></li>

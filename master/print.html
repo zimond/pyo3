@@ -85,7 +85,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="overview.html"><strong aria-hidden="true">1.</strong> Get Started</a></li><li><a href="conversions.html"><strong aria-hidden="true">2.</strong> Type Conversions</a></li><li><a href="exception.html"><strong aria-hidden="true">3.</strong> Python Exception</a></li><li><a href="module.html"><strong aria-hidden="true">4.</strong> Python Module</a></li><li><a href="function.html"><strong aria-hidden="true">5.</strong> Python Function</a></li><li><a href="class.html"><strong aria-hidden="true">6.</strong> Python Class</a></li><li><a href="parallelism.html"><strong aria-hidden="true">7.</strong> Parallelism</a></li><li><a href="debugging.html"><strong aria-hidden="true">8.</strong> Debugging</a></li><li><a href="distribution.html"><strong aria-hidden="true">9.</strong> Distribution</a></li><li><a href="rust-cpython.html"><strong aria-hidden="true">10.</strong> Appendix: Pyo3 and rust-cpython</a></li></ol>
+            <ol class="chapter"><li><a href="get_started.html"><strong aria-hidden="true">1.</strong> Get Started</a></li><li><a href="conversions.html"><strong aria-hidden="true">2.</strong> Type Conversions</a></li><li><a href="exception.html"><strong aria-hidden="true">3.</strong> Python Exception</a></li><li><a href="module.html"><strong aria-hidden="true">4.</strong> Python Module</a></li><li><a href="function.html"><strong aria-hidden="true">5.</strong> Python Function</a></li><li><a href="class.html"><strong aria-hidden="true">6.</strong> Python Class</a></li><li><a href="parallelism.html"><strong aria-hidden="true">7.</strong> Parallelism</a></li><li><a href="debugging.html"><strong aria-hidden="true">8.</strong> Debugging</a></li><li><a href="building-and-distribution.html"><strong aria-hidden="true">9.</strong> Building and Distribution</a></li><li><a href="rust-cpython.html"><strong aria-hidden="true">10.</strong> Appendix: Pyo3 and rust-cpython</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -1238,10 +1238,31 @@ then we can run <code>pytest tests</code> to benchmark them.</p>
 <pre><code class="language-bash">cargo rustc --profile=check -- -Z unstable-options --pretty=expanded -Z trace-macros &gt; expanded.rs; rustfmt expanded.rs
 </code></pre>
 <p>See <a href="https://github.com/dtolnay/cargo-expand">cargo expand</a> for a more elaborate version of those commands.</p>
+<a class="header" href="print.html#building-and-distribution" id="building-and-distribution"><h1>Building and Distribution</h1></a>
+<a class="header" href="print.html#python-version" id="python-version"><h2>Python version</h2></a>
+<p>pyo3 uses a build script to determine the python version and set the correct linker arguments. By default it uses the <code>python3</code> executable. With the <code>python2</code> feature it uses the <code>python2</code> executable. You can override the python interpreter by setting <code>PYTHON_SYS_EXECUTABLE</code>. Note that you still need to activate the <code>python2</code> with  <code>PYTHON_SYS_EXECUTABLE=python2</code> (see <a href="https://github.com/PyO3/pyo3/issues/276">pyo3/pyo3#276</a> for details).</p>
 <a class="header" href="print.html#linking" id="linking"><h2>Linking</h2></a>
-<p>When building, you can set <code>PYTHON_SYS_EXECUTABLE</code> to the python interpreter that pyo3 should be linked to. You might need to set the <code>python2</code> or <code>python3</code> feature accordingly. On linux/mac you might have to change <code>LD_LIBRARY_PATH</code> to include libpython, while on windows you might need to set <code>LIB</code> to include <code>pythonxy.lib</code> (where x and y are major and minor version), which is normally either in the <code>libs</code> or <code>Lib</code> folder of a python installation. Also make sure that python is in <code>PATH</code> when you're not using  <code>PYTHON_SYS_EXECUTABLE</code>.</p>
-<a class="header" href="print.html#distribution" id="distribution"><h1>Distribution</h1></a>
-<p>There are two way to distribute your module as python package: The old <a href="https://github.com/PyO3/setuptools-rust">setuptools-rust</a> and the new <a href="https://github.com/pyo3/pyo3-pack">pyo3-pack</a>. setuptools-rust needs some configuration files (<code>setup.py</code>,  <code>MANIFEST.in</code>, <code>build-wheels.sh</code>, etc.) and external tools (docker, twine). pyo3-pack doesn't need any configuration files. It can not yet build sdist though (<a href="https://github.com/PyO3/pyo3-pack/issues/2">pyo3/pyo3-pack#2</a>).</p>
+<p>Different linker arguments must be set for libraries/extension modules and binaries, which includes both standalone binaries and tests. (More specifically, binaries must be told where to find libpython and libraries must not link to libpython for <a href="https://www.python.org/dev/peps/pep-0513/">manylinux</a> compliance).</p>
+<p>Since pyo3's build script can't know whether you're building a binary or a library, you have to activate the <code>extension-module</code> feature to get the build options for a library, or it'll default to binary.</p>
+<p>If you have e.g. a library crate and a profiling crate alongside, you need to use optional features. E.g. you put the following in the library crate:</p>
+<pre><code class="language-toml">[dependencies]
+pyo3 = &quot;0.5.0&quot;
+
+[lib]
+name = &quot;hyperjson&quot;
+crate-type = [&quot;rlib&quot;, &quot;cdylib&quot;]
+
+[features]
+default = [&quot;pyo3/extension-module&quot;]
+</code></pre>
+<p>And this in the profiling crate:</p>
+<pre><code class="language-toml">[dependencies]
+my_main_crate = { path = &quot;..&quot;, default-features = false }
+pyo3 = &quot;0.5.0&quot;
+</code></pre>
+<p>On linux/mac you might have to change <code>LD_LIBRARY_PATH</code> to include libpython, while on windows you might need to set <code>LIB</code> to include <code>pythonxy.lib</code> (where x and y are major and minor version), which is normally either in the <code>libs</code> or <code>Lib</code> folder of a python installation.</p>
+<a class="header" href="print.html#distribution" id="distribution"><h2>Distribution</h2></a>
+<p>There are two ways to distribute your module as python package: The old <a href="https://github.com/PyO3/setuptools-rust">setuptools-rust</a> and the new <a href="https://github.com/pyo3/pyo3-pack">pyo3-pack</a>. setuptools-rust needs some configuration files (<code>setup.py</code>,  <code>MANIFEST.in</code>, <code>build-wheels.sh</code>, etc.) and external tools (docker, twine). pyo3-pack doesn't need any configuration files. It can not yet build sdist though (<a href="https://github.com/PyO3/pyo3-pack/issues/2">pyo3/pyo3-pack#2</a>).</p>
 <a class="header" href="print.html#appendix-pyo3-and-rust-cpython" id="appendix-pyo3-and-rust-cpython"><h1>Appendix: pyo3 and rust-cpython</h1></a>
 <p>Pyo3 began as fork of <a href="https://github.com/dgrunwald/rust-cpython">rust-cpython</a> when rust-cpython wasn't maintained. Over the time pyo3 has become fundamentally different from rust-cpython.</p>
 <p>This chapter is based on the discussion in <a href="https://github.com/PyO3/pyo3/issues/55">PyO3/pyo3#55</a>.</p>
