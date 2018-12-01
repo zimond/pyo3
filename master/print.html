@@ -341,13 +341,13 @@ fn main() {
 <p>TODO</p>
 <a class="header" href="print.html#python-exception" id="python-exception"><h1>Python Exception</h1></a>
 <a class="header" href="print.html#define-a-new-exception" id="define-a-new-exception"><h2>Define a new exception</h2></a>
-<p>You can use the <code>py_exception!</code> macro to define a new exception type:</p>
+<p>You can use the <code>create_exception!</code> macro to define a new exception type:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
 #[macro_use] extern crate pyo3;
 
-py_exception!(module, MyError, pyo3::exceptions::Exception);
+create_exception!(module, MyError, pyo3::exceptions::Exception);
 #}</code></pre></pre>
 <ul>
 <li><code>module</code> is the name of the containing module.</li>
@@ -358,8 +358,9 @@ py_exception!(module, MyError, pyo3::exceptions::Exception);
 
 use pyo3::Python;
 use pyo3::types::PyDict;
+use pyo3::exceptions::Exception;
 
-py_exception!(mymodule, CustomError, pyo3::exceptions::Exception);
+create_exception!(mymodule, CustomError, Exception);
 
 fn main() {
     let gil = Python::acquire_gil();
@@ -391,7 +392,7 @@ fn main() {
 </code></pre>
 <p>If rust type exists for exception, then it is possible to use <code>new</code> method.
 For example each standard exception defined in <code>exc</code> module
-has corresponding rust type, exceptions defined by <code>py_exception!</code> and <code>import_exception!</code> macro
+has corresponding rust type, exceptions defined by <code>create_exception!</code> and <code>import_exception!</code> macro
 have rust type as well.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]

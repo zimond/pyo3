@@ -272,8 +272,8 @@
             <span class="kw">fn</span> <span class="ident">into_object</span>(<span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyObject</span> {
                 <span class="kw">unsafe</span> {
                     <span class="comment">// TODO: Replace this with functions from the from_bytes family</span>
-                    <span class="comment">// Once they are stabilized</span>
-                    <span class="comment">// https://github.com/rust-lang/rust/issues/52963</span>
+                    <span class="comment">//       Once they are stabilized</span>
+                    <span class="comment">//       https://github.com/rust-lang/rust/issues/52963</span>
                     <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">transmute</span>::<span class="op">&lt;</span><span class="kw">_</span>, [<span class="ident">c_uchar</span>; <span class="macro-nonterminal">$</span><span class="macro-nonterminal">byte_size</span>]<span class="op">&gt;</span>(<span class="self">self</span>);
                     <span class="kw">let</span> <span class="ident">obj</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">_PyLong_FromByteArray</span>(
                         <span class="ident">bytes</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">c_uchar</span>,

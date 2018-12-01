@@ -432,9 +432,9 @@
 <span class="doccomment">/// The proc macros, which are also part of the prelude</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">proc_macro</span> {
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">Py_3</span>))]</span>
-    <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">pyo3cls</span>::<span class="ident">mod2init</span> <span class="kw">as</span> <span class="ident">pymodule</span>;
+    <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">pyo3cls</span>::<span class="ident">pymodule2</span> <span class="kw">as</span> <span class="ident">pymodule</span>;
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">Py_3</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">pyo3cls</span>::<span class="ident">mod3init</span> <span class="kw">as</span> <span class="ident">pymodule</span>;
+    <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">pyo3cls</span>::<span class="ident">pymodule3</span> <span class="kw">as</span> <span class="ident">pymodule</span>;
     <span class="doccomment">/// The proc macro attributes</span>
     <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">pyo3cls</span>::{<span class="ident">pyclass</span>, <span class="ident">pyfunction</span>, <span class="ident">pymethods</span>, <span class="ident">pyproto</span>};
 }

@@ -856,8 +856,13 @@
 <span id="856">856</span>
 <span id="857">857</span>
 <span id="858">858</span>
+<span id="859">859</span>
+<span id="860">860</span>
+<span id="861">861</span>
+<span id="862">862</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi3</span>::<span class="ident">pyport</span>::{<span class="ident">Py_hash_t</span>, <span class="ident">Py_ssize_t</span>};
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">mem</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">raw</span>::{<span class="ident">c_char</span>, <span class="ident">c_int</span>, <span class="ident">c_uint</span>, <span class="ident">c_ulong</span>, <span class="ident">c_void</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ptr</span>;
 
@@ -883,7 +888,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">py_sys_config</span> <span class="op">=</span> <span class="string">&quot;Py_TRACE_REFS&quot;</span>))]</span>
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">PyObject_HEAD_INIT</span>: <span class="ident">PyObject</span> <span class="op">=</span> <span class="ident">PyObject</span> {
     <span class="ident">ob_refcnt</span>: <span class="number">1</span>,
-    <span class="ident">ob_type</span>: ::<span class="ident">std</span>::<span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
+    <span class="ident">ob_type</span>: <span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
 };
 
 <span class="attribute">#[<span class="ident">repr</span>(<span class="ident">C</span>)]</span>
@@ -946,6 +951,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>))]</span>
 <span class="kw">mod</span> <span class="ident">bufferinfo</span> {
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi3</span>::<span class="ident">pyport</span>::<span class="ident">Py_ssize_t</span>;
+    <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">mem</span>;
     <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">raw</span>::{<span class="ident">c_char</span>, <span class="ident">c_int</span>, <span class="ident">c_void</span>};
 
     <span class="attribute">#[<span class="ident">repr</span>(<span class="ident">C</span>)]</span>
@@ -967,7 +973,7 @@
     <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">Py_buffer</span> {
         <span class="attribute">#[<span class="ident">inline</span>]</span>
         <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-&gt;</span> <span class="self">Self</span> {
-            <span class="kw">unsafe</span> { ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">zeroed</span>() }
+            <span class="kw">unsafe</span> { <span class="ident">mem</span>::<span class="ident">zeroed</span>() }
         }
     }
 
@@ -1057,7 +1063,9 @@
 <span class="kw">mod</span> <span class="ident">typeobject</span> {
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi3</span>::<span class="ident">pyport</span>::<span class="ident">Py_ssize_t</span>;
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi3</span>::{<span class="self">self</span>, <span class="ident">object</span>};
+    <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">mem</span>;
     <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">raw</span>::{<span class="ident">c_char</span>, <span class="ident">c_uint</span>, <span class="ident">c_ulong</span>, <span class="ident">c_void</span>};
+    <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ptr</span>;
 
     <span class="attribute">#[<span class="ident">repr</span>(<span class="ident">C</span>)]</span>
     <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Copy</span>, <span class="ident">Clone</span>)]</span>
@@ -1103,7 +1111,7 @@
     <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">PyNumberMethods</span> {
         <span class="attribute">#[<span class="ident">inline</span>]</span>
         <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-&gt;</span> <span class="self">Self</span> {
-            <span class="kw">unsafe</span> { ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">zeroed</span>() }
+            <span class="kw">unsafe</span> { <span class="ident">mem</span>::<span class="ident">zeroed</span>() }
         }
     }
     <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">as_expr</span> {
@@ -1179,7 +1187,7 @@
     <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">PySequenceMethods</span> {
         <span class="attribute">#[<span class="ident">inline</span>]</span>
         <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-&gt;</span> <span class="self">Self</span> {
-            <span class="kw">unsafe</span> { ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">zeroed</span>() }
+            <span class="kw">unsafe</span> { <span class="ident">mem</span>::<span class="ident">zeroed</span>() }
         }
     }
     <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">PySequenceMethods_INIT</span>: <span class="ident">PySequenceMethods</span> <span class="op">=</span> <span class="ident">PySequenceMethods</span> {
@@ -1187,9 +1195,9 @@
         <span class="ident">sq_concat</span>: <span class="prelude-val">None</span>,
         <span class="ident">sq_repeat</span>: <span class="prelude-val">None</span>,
         <span class="ident">sq_item</span>: <span class="prelude-val">None</span>,
-        <span class="ident">was_sq_slice</span>: ::<span class="ident">std</span>::<span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
+        <span class="ident">was_sq_slice</span>: <span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
         <span class="ident">sq_ass_item</span>: <span class="prelude-val">None</span>,
-        <span class="ident">was_sq_ass_slice</span>: ::<span class="ident">std</span>::<span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
+        <span class="ident">was_sq_ass_slice</span>: <span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
         <span class="ident">sq_contains</span>: <span class="prelude-val">None</span>,
         <span class="ident">sq_inplace_concat</span>: <span class="prelude-val">None</span>,
         <span class="ident">sq_inplace_repeat</span>: <span class="prelude-val">None</span>,
@@ -1205,7 +1213,7 @@
     <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">PyMappingMethods</span> {
         <span class="attribute">#[<span class="ident">inline</span>]</span>
         <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-&gt;</span> <span class="self">Self</span> {
-            <span class="kw">unsafe</span> { ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">zeroed</span>() }
+            <span class="kw">unsafe</span> { <span class="ident">mem</span>::<span class="ident">zeroed</span>() }
         }
     }
     <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">PyMappingMethods_INIT</span>: <span class="ident">PyMappingMethods</span> <span class="op">=</span> <span class="ident">PyMappingMethods</span> {
@@ -1224,7 +1232,7 @@
     <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">PyAsyncMethods</span> {
         <span class="attribute">#[<span class="ident">inline</span>]</span>
         <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-&gt;</span> <span class="self">Self</span> {
-            <span class="kw">unsafe</span> { ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">zeroed</span>() }
+            <span class="kw">unsafe</span> { <span class="ident">mem</span>::<span class="ident">zeroed</span>() }
         }
     }
     <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">PyAsyncMethods_INIT</span>: <span class="ident">PyAsyncMethods</span> <span class="op">=</span> <span class="ident">PyAsyncMethods</span> {
@@ -1242,7 +1250,7 @@
     <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">PyBufferProcs</span> {
         <span class="attribute">#[<span class="ident">inline</span>]</span>
         <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-&gt;</span> <span class="self">Self</span> {
-            <span class="kw">unsafe</span> { ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">zeroed</span>() }
+            <span class="kw">unsafe</span> { <span class="ident">mem</span>::<span class="ident">zeroed</span>() }
         }
     }
     <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">PyBufferProcs_INIT</span>: <span class="ident">PyBufferProcs</span> <span class="op">=</span> <span class="ident">PyBufferProcs</span> {
@@ -1321,37 +1329,37 @@
                         <span class="ident">ob_base</span>: <span class="ident">ffi3</span>::<span class="ident">object</span>::<span class="ident">PyObject_HEAD_INIT</span>,
                         <span class="ident">ob_size</span>: <span class="number">0</span>
                     },
-                    <span class="ident">tp_name</span>: ::<span class="ident">std</span>::<span class="ident">ptr</span>::<span class="ident">null</span>(),
+                    <span class="ident">tp_name</span>: <span class="ident">ptr</span>::<span class="ident">null</span>(),
                     <span class="ident">tp_basicsize</span>: <span class="number">0</span>,
                     <span class="ident">tp_itemsize</span>: <span class="number">0</span>,
                     <span class="ident">tp_dealloc</span>: <span class="prelude-val">None</span>,
                     <span class="ident">tp_print</span>: <span class="prelude-val">None</span>,
                     <span class="ident">tp_getattr</span>: <span class="prelude-val">None</span>,
                     <span class="ident">tp_setattr</span>: <span class="prelude-val">None</span>,
-                    <span class="macro-nonterminal">$</span><span class="macro-nonterminal">tp_as_async</span>: ::<span class="ident">std</span>::<span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
+                    <span class="macro-nonterminal">$</span><span class="macro-nonterminal">tp_as_async</span>: <span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
                     <span class="ident">tp_repr</span>: <span class="prelude-val">None</span>,
-                    <span class="ident">tp_as_number</span>: ::<span class="ident">std</span>::<span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
-                    <span class="ident">tp_as_sequence</span>: ::<span class="ident">std</span>::<span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
-                    <span class="ident">tp_as_mapping</span>: ::<span class="ident">std</span>::<span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
+                    <span class="ident">tp_as_number</span>: <span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
+                    <span class="ident">tp_as_sequence</span>: <span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
+                    <span class="ident">tp_as_mapping</span>: <span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
                     <span class="ident">tp_hash</span>: <span class="prelude-val">None</span>,
                     <span class="ident">tp_call</span>: <span class="prelude-val">None</span>,
                     <span class="ident">tp_str</span>: <span class="prelude-val">None</span>,
                     <span class="ident">tp_getattro</span>: <span class="prelude-val">None</span>,
                     <span class="ident">tp_setattro</span>: <span class="prelude-val">None</span>,
-                    <span class="ident">tp_as_buffer</span>: ::<span class="ident">std</span>::<span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
+                    <span class="ident">tp_as_buffer</span>: <span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
                     <span class="ident">tp_flags</span>: <span class="ident">ffi3</span>::<span class="ident">object</span>::<span class="ident">Py_TPFLAGS_DEFAULT</span>,
-                    <span class="ident">tp_doc</span>: ::<span class="ident">std</span>::<span class="ident">ptr</span>::<span class="ident">null</span>(),
+                    <span class="ident">tp_doc</span>: <span class="ident">ptr</span>::<span class="ident">null</span>(),
                     <span class="ident">tp_traverse</span>: <span class="prelude-val">None</span>,
                     <span class="ident">tp_clear</span>: <span class="prelude-val">None</span>,
                     <span class="ident">tp_richcompare</span>: <span class="prelude-val">None</span>,
                     <span class="ident">tp_weaklistoffset</span>: <span class="number">0</span>,
                     <span class="ident">tp_iter</span>: <span class="prelude-val">None</span>,
                     <span class="ident">tp_iternext</span>: <span class="prelude-val">None</span>,
-                    <span class="ident">tp_methods</span>: ::<span class="ident">std</span>::<span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
-                    <span class="ident">tp_members</span>: ::<span class="ident">std</span>::<span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
-                    <span class="ident">tp_getset</span>: ::<span class="ident">std</span>::<span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
-                    <span class="ident">tp_base</span>: ::<span class="ident">std</span>::<span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
-                    <span class="ident">tp_dict</span>: ::<span class="ident">std</span>::<span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
+                    <span class="ident">tp_methods</span>: <span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
+                    <span class="ident">tp_members</span>: <span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
+                    <span class="ident">tp_getset</span>: <span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
+                    <span class="ident">tp_base</span>: <span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
+                    <span class="ident">tp_dict</span>: <span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
                     <span class="ident">tp_descr_get</span>: <span class="prelude-val">None</span>,
                     <span class="ident">tp_descr_set</span>: <span class="prelude-val">None</span>,
                     <span class="ident">tp_dictoffset</span>: <span class="number">0</span>,
@@ -1360,11 +1368,11 @@
                     <span class="ident">tp_new</span>: <span class="prelude-val">None</span>,
                     <span class="ident">tp_free</span>: <span class="prelude-val">None</span>,
                     <span class="ident">tp_is_gc</span>: <span class="prelude-val">None</span>,
-                    <span class="ident">tp_bases</span>: ::<span class="ident">std</span>::<span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
-                    <span class="ident">tp_mro</span>: ::<span class="ident">std</span>::<span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
-                    <span class="ident">tp_cache</span>: ::<span class="ident">std</span>::<span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
-                    <span class="ident">tp_subclasses</span>: ::<span class="ident">std</span>::<span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
-                    <span class="ident">tp_weaklist</span>: ::<span class="ident">std</span>::<span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
+                    <span class="ident">tp_bases</span>: <span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
+                    <span class="ident">tp_mro</span>: <span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
+                    <span class="ident">tp_cache</span>: <span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
+                    <span class="ident">tp_subclasses</span>: <span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
+                    <span class="ident">tp_weaklist</span>: <span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
                     <span class="ident">tp_del</span>: <span class="prelude-val">None</span>,
                     <span class="ident">tp_version_tag</span>: <span class="number">0</span>,
                     $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tail</span>)<span class="op">*</span>
@@ -1381,8 +1389,8 @@
                 <span class="ident">tp_allocs</span>: <span class="number">0</span>,
                 <span class="ident">tp_frees</span>: <span class="number">0</span>,
                 <span class="ident">tp_maxalloc</span>: <span class="number">0</span>,
-                <span class="ident">tp_prev</span>: ::<span class="ident">std</span>::<span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
-                <span class="ident">tp_next</span>: ::<span class="ident">std</span>::<span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
+                <span class="ident">tp_prev</span>: <span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
+                <span class="ident">tp_next</span>: <span class="ident">ptr</span>::<span class="ident">null_mut</span>(),
             )
         }
     }
@@ -1415,7 +1423,7 @@
     <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">PyHeapTypeObject</span> {
         <span class="attribute">#[<span class="ident">inline</span>]</span>
         <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-&gt;</span> <span class="self">Self</span> {
-            <span class="kw">unsafe</span> { ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">zeroed</span>() }
+            <span class="kw">unsafe</span> { <span class="ident">mem</span>::<span class="ident">zeroed</span>() }
         }
     }
 
@@ -1441,7 +1449,7 @@
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">PyType_Slot</span> {
     <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-&gt;</span> <span class="ident">PyType_Slot</span> {
-        <span class="kw">unsafe</span> { ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">zeroed</span>() }
+        <span class="kw">unsafe</span> { <span class="ident">mem</span>::<span class="ident">zeroed</span>() }
     }
 }
 
@@ -1457,7 +1465,7 @@
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">PyType_Spec</span> {
     <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-&gt;</span> <span class="ident">PyType_Spec</span> {
-        <span class="kw">unsafe</span> { ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">zeroed</span>() }
+        <span class="kw">unsafe</span> { <span class="ident">mem</span>::<span class="ident">zeroed</span>() }
     }
 }
 
