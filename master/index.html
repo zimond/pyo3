@@ -164,7 +164,7 @@ name = &quot;rust_py&quot;
 crate-type = [&quot;cdylib&quot;]
 
 [dependencies.pyo3]
-version = &quot;0.3&quot;
+version = &quot;0.5&quot;
 features = [&quot;extension-module&quot;]
 </code></pre>
 <p><strong><code>src/lib.rs</code></strong></p>
@@ -204,7 +204,7 @@ rustflags = [
 <a class="header" href="get_started.html#using-python-from-rust" id="using-python-from-rust"><h3>Using python from rust</h3></a>
 <p>Add <code>pyo3</code> this to your <code>Cargo.toml</code>:</p>
 <pre><code class="language-toml">[dependencies]
-pyo3 = &quot;0.3&quot;
+pyo3 = &quot;0.5&quot;
 </code></pre>
 <p>Example program displaying the value of <code>sys.version</code>:</p>
 <pre><pre class="playpen"><code class="language-rust">#![feature(specialization)]

@@ -165,7 +165,7 @@ name = &quot;rust_py&quot;
 crate-type = [&quot;cdylib&quot;]
 
 [dependencies.pyo3]
-version = &quot;0.3&quot;
+version = &quot;0.5&quot;
 features = [&quot;extension-module&quot;]
 </code></pre>
 <p><strong><code>src/lib.rs</code></strong></p>
@@ -205,7 +205,7 @@ rustflags = [
 <a class="header" href="print.html#using-python-from-rust" id="using-python-from-rust"><h3>Using python from rust</h3></a>
 <p>Add <code>pyo3</code> this to your <code>Cargo.toml</code>:</p>
 <pre><code class="language-toml">[dependencies]
-pyo3 = &quot;0.3&quot;
+pyo3 = &quot;0.5&quot;
 </code></pre>
 <p>Example program displaying the value of <code>sys.version</code>:</p>
 <pre><pre class="playpen"><code class="language-rust">#![feature(specialization)]
@@ -242,10 +242,10 @@ fn main() -&gt; PyResult&lt;()&gt; {
 <a class="header" href="print.html#extract" id="extract"><h2><code>.extract()</code></h2></a>
 <p>The easiest way to convert a python object to a rust value is using <code>.extract()?</code>.</p>
 <a class="header" href="print.html#topyobject-and-intopyobject-trait" id="topyobject-and-intopyobject-trait"><h2><code>ToPyObject</code> and <code>IntoPyObject</code> trait</h2></a>
-<p><a href="https://docs.rs/pyo3/0.2.7/trait.ToPyObject.html"><code>ToPyObject</code></a> trait is a conversion trait that allows various objects to be converted into <a href="https://docs.rs/pyo3/0.2.7/struct.PyObject.html"><code>PyObject</code></a>. <a href="https://docs.rs/pyo3/0.2.7/trait.IntoPyObject.html"><code>IntoPyObject</code></a> serves the same purpose except it consumes <code>self</code>.</p>
+<p><a href="https://docs.rs/pyo3/0.5.2/trait.ToPyObject.html"><code>ToPyObject</code></a> trait is a conversion trait that allows various objects to be converted into <a href="https://docs.rs/pyo3/0.5.2/struct.PyObject.html"><code>PyObject</code></a>. <a href="https://docs.rs/pyo3/0.5.2/trait.IntoPyObject.html"><code>IntoPyObject</code></a> serves the same purpose except it consumes <code>self</code>.</p>
 <a class="header" href="print.html#intopytuple-trait" id="intopytuple-trait"><h2><code>IntoPyTuple</code> trait</h2></a>
-<p><a href="https://docs.rs/pyo3/0.2.7/trait.IntoPyTuple.html"><code>IntoPyTuple</code></a> trait is a conversion trait that allows various objects to be converted into <a href="https://docs.rs/pyo3/0.2.7/struct.PyTuple.html"><code>PyTuple</code></a> object.</p>
-<p>For example, <a href="https://docs.rs/pyo3/0.2.7/trait.IntoPyTuple.html"><code>IntoPyTuple</code></a> trait is implemented for <code>()</code> so that you can convert it into a empty <a href="https://docs.rs/pyo3/0.2.7/struct.PyTuple.html"><code>PyTuple</code></a></p>
+<p><a href="https://docs.rs/pyo3/0.5.2/trait.IntoPyTuple.html"><code>IntoPyTuple</code></a> trait is a conversion trait that allows various objects to be converted into <a href="https://docs.rs/pyo3/0.5.2/struct.PyTuple.html"><code>PyTuple</code></a> object.</p>
+<p>For example, <a href="https://docs.rs/pyo3/0.5.2/trait.IntoPyTuple.html"><code>IntoPyTuple</code></a> trait is implemented for <code>()</code> so that you can convert it into a empty <a href="https://docs.rs/pyo3/0.5.2/struct.PyTuple.html"><code>PyTuple</code></a></p>
 <pre><pre class="playpen"><code class="language-rust">extern crate pyo3;
 use pyo3::{Python, IntoPyTuple};
 
@@ -258,14 +258,14 @@ fn main() {
 <a class="header" href="print.html#frompyobject-and-reffrompyobject-trait" id="frompyobject-and-reffrompyobject-trait"><h2><code>FromPyObject</code> and <code>RefFromPyObject</code> trait</h2></a>
 <a class="header" href="print.html#args-and-kwargs-for-python-object-call" id="args-and-kwargs-for-python-object-call"><h2><code>*args</code> and <code>**kwargs</code> for python object call</h2></a>
 <p>There are several way how to pass positional and keyword arguments to python object call.
-<a href="https://docs.rs/pyo3/0.2.7/trait.ObjectProtocol.html"><code>ObjectProtocol</code></a> trait
+<a href="https://docs.rs/pyo3/0.5.2/trait.ObjectProtocol.html"><code>ObjectProtocol</code></a> trait
 provides two methods:</p>
 <ul>
 <li><code>call</code> - call callable python object.</li>
 <li><code>call_method</code> - call specific method on the object.</li>
 </ul>
 <p>Both methods accept <code>args</code> and <code>kwargs</code> arguments. <code>args</code> argument is generate over
-<a href="https://docs.rs/pyo3/0.2.7/trait.IntoPyTuple.html"><code>IntoPyTuple</code></a> trait. So args could be <code>PyTuple</code> instance or
+<a href="https://docs.rs/pyo3/0.5.2/trait.IntoPyTuple.html"><code>IntoPyTuple</code></a> trait. So args could be <code>PyTuple</code> instance or
 rust tuple with up to 10 elements. Or <code>NoArgs</code> object which represents empty tuple object.</p>
 <pre><pre class="playpen"><code class="language-rust">extern crate pyo3;
 use pyo3::prelude::*;
@@ -300,7 +300,7 @@ fn main() {
 }
 </code></pre></pre>
 <p><code>kwargs</code> can by <code>None</code> or <code>Some(&amp;PyDict)</code>. You can use the
-<a href="https://docs.rs/pyo3/0.2.7/trait.IntoPyDict.html"><code>IntoPyDict</code></a> trait to convert other dict-like containers, e.g. <code>HashMap</code>, <code>BTreeMap</code> as well as tuples with up to 10 elements and <code>Vec</code>s where each element is a two element tuple.</p>
+<a href="https://docs.rs/pyo3/0.5.2/trait.IntoPyDict.html"><code>IntoPyDict</code></a> trait to convert other dict-like containers, e.g. <code>HashMap</code>, <code>BTreeMap</code> as well as tuples with up to 10 elements and <code>Vec</code>s where each element is a two element tuple.</p>
 <pre><pre class="playpen"><code class="language-rust">extern crate pyo3;
 
 use std::collections::HashMap;
@@ -1037,7 +1037,7 @@ of them. To provide specific python object behavior you need to implement specif
 for your struct. Important note, each protocol implementation block has to be annotated
 with <code>#[pyproto]</code> attribute.</p>
 <a class="header" href="print.html#basic-object-customization" id="basic-object-customization"><h3>Basic object customization</h3></a>
-<p><a href="https://docs.rs/pyo3/0.2.7/class/basic/trait.PyObjectProtocol.html"><code>PyObjectProtocol</code></a> trait provide several basic customizations.</p>
+<p><a href="https://docs.rs/pyo3/0.5.2/class/basic/trait.PyObjectProtocol.html"><code>PyObjectProtocol</code></a> trait provide several basic customizations.</p>
 <a class="header" href="print.html#attribute-access" id="attribute-access"><h4>Attribute access</h4></a>
 <p>To customize object attribute access define following methods:</p>
 <ul>
@@ -1102,7 +1102,7 @@ even on Python 2.7 where the Python spelling was <code>__nonzero__</code>.</p>
 <p>If your type owns references to other python objects, you will need to
 integrate with Python's garbage collector so that the GC is aware of
 those references.
-To do this, implement <a href="https://docs.rs/pyo3/0.2.7/class/gc/trait.PyGCProtocol.html"><code>PyGCProtocol</code></a> trait for your struct.
+To do this, implement <a href="https://docs.rs/pyo3/0.5.2/class/gc/trait.PyGCProtocol.html"><code>PyGCProtocol</code></a> trait for your struct.
 It includes two methods <code>__traverse__</code> and <code>__clear__</code>.
 These correspond to the slots <code>tp_traverse</code> and <code>tp_clear</code> in the Python C API.
 <code>__traverse__</code> must call <code>visit.call()</code> for each reference to another python object.
@@ -1147,7 +1147,7 @@ i.e. <code>#[pyclass(gc)]</code>. In that case instances of custom class partici
 collector, and it is possible to track them with <code>gc</code> module methods.</p>
 <a class="header" href="print.html#iterator-types" id="iterator-types"><h3>Iterator Types</h3></a>
 <p>Iterators can be defined using the
-<a href="https://docs.rs/pyo3/0.2.7/class/iter/trait.PyIterProtocol.html"><code>PyIterProtocol</code></a> trait.
+<a href="https://docs.rs/pyo3/0.5.2/class/iter/trait.PyIterProtocol.html"><code>PyIterProtocol</code></a> trait.
 It includes two methods <code>__iter__</code> and <code>__next__</code>:</p>
 <ul>
 <li><code>fn __iter__(&amp;mut self) -&gt; PyResult&lt;impl IntoPyObject&gt;</code></li>
@@ -1246,7 +1246,7 @@ then we can run <code>pytest tests</code> to benchmark them.</p>
 <p>Since pyo3's build script can't know whether you're building a binary or a library, you have to activate the <code>extension-module</code> feature to get the build options for a library, or it'll default to binary.</p>
 <p>If you have e.g. a library crate and a profiling crate alongside, you need to use optional features. E.g. you put the following in the library crate:</p>
 <pre><code class="language-toml">[dependencies]
-pyo3 = &quot;0.5.0&quot;
+pyo3 = &quot;0.5.2&quot;
 
 [lib]
 name = &quot;hyperjson&quot;
@@ -1258,7 +1258,7 @@ default = [&quot;pyo3/extension-module&quot;]
 <p>And this in the profiling crate:</p>
 <pre><code class="language-toml">[dependencies]
 my_main_crate = { path = &quot;..&quot;, default-features = false }
-pyo3 = &quot;0.5.0&quot;
+pyo3 = &quot;0.5.2&quot;
 </code></pre>
 <p>On linux/mac you might have to change <code>LD_LIBRARY_PATH</code> to include libpython, while on windows you might need to set <code>LIB</code> to include <code>pythonxy.lib</code> (where x and y are major and minor version), which is normally either in the <code>libs</code> or <code>Lib</code> folder of a python installation.</p>
 <a class="header" href="print.html#distribution" id="distribution"><h2>Distribution</h2></a>
