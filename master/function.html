@@ -148,7 +148,7 @@
                 <div id="content" class="content">
                     <main>
                         <a class="header" href="function.html#python-function" id="python-function"><h1>Python Function</h1></a>
-<p>Pyo3 supports two ways to define a function in python. Both require registering
+<p>PyO3 supports two ways to define a function in python. Both require registering
 the function to a <a href="./module.md">module</a></p>
 <p>One way is defining the function in the module definition.</p>
 <pre><pre class="playpen"><code class="language-rust">#![feature(proc_macro)]
@@ -172,7 +172,7 @@ fn rust2py(py: Python, m: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
 
 # fn main() {}
 </code></pre></pre>
-<p>The other is annotating a function with <code>#[py::function]</code> and then adding it
+<p>The other is annotating a function with <code>#[pyfunction]</code> and then adding it
 to the module using the <code>add_wrapped_to_module!</code> macro, which takes the module
 as first parameter, the function name as second and an instance of <code>Python</code>
 as third.</p>
@@ -196,10 +196,37 @@ fn module_with_functions(py: Python, m: &amp;PyModule) -&gt; PyResult&lt;()&gt; 
 
 # fn main() {}
 </code></pre></pre>
+<a class="header" href="function.html#making-the-function-signature-available-to-python" id="making-the-function-signature-available-to-python"><h3>Making the function signature available to Python</h3></a>
+<p>In order to make the function signature available to Python to be retrieved via
+<code>inspect.signature</code>, simply make sure the first line of your doc-string is
+formatted like in the example below. Please note that the new-line after the
+<code>--</code> is mandatory. The <code>/</code> signifies the end of positional only arguments. This
+is not a feature of this library in particular, but the general format used by
+CPython for annotating signatures of built-in functions. Function signatures for
+built-ins are new in Python 3 — in Python 2, it is simply considered to be part
+of the doc-string.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+/// add(a, b, /)
+/// --
+///
+/// This function adds two unsigned 64-bit integers.
+#[pyfunction]
+fn add(a: u64, b: u64) -&gt; u64 {
+    a + b
+}
+#}</code></pre></pre>
+<p>When annotated like this, signatures are also correctly displayed in IPython.</p>
+<pre><code>&gt;&gt;&gt; pyo3_test.add?
+Signature: pyo3_test.add(a, b, /)
+Docstring: This function adds two unsigned 64-bit integers.
+Type:      builtin_function_or_method
+</code></pre>
 <a class="header" href="function.html#closures" id="closures"><h2>Closures</h2></a>
 <p>Currently, there are no conversions between <code>Fn</code>s in rust and callables in python. This would definitely be possible and very useful, so contributions are welcome. In the meantime, you can do the following:</p>
 <a class="header" href="function.html#calling-a-python-function-in-rust" id="calling-a-python-function-in-rust"><h3>Calling a python function in rust</h3></a>
-<p>You can use <code>ObjectProtocol::is_callable</code> to check if you got a callable, which is true for functions (including lambdas), methods and objects with a <code>__call__</code> method. You can call the object with <code>ObjectProtocol::call</code> with the args as first parameter and the kwargs (or <code>NoArgs</code>) as second paramter. There are also <code>ObjectProtocol::call0</code> with no args and <code>ObjectProtocol::call1</code> with only the args.</p>
+<p>You can use <code>ObjectProtocol::is_callable</code> to check if you got a callable, which is true for functions (including lambdas), methods and objects with a <code>__call__</code> method. You can call the object with <code>ObjectProtocol::call</code> with the args as first parameter and the kwargs (or <code>NoArgs</code>) as second parameter. There are also <code>ObjectProtocol::call0</code> with no args and <code>ObjectProtocol::call1</code> with only the args.</p>
 <a class="header" href="function.html#calling-rust-fns-in-python" id="calling-rust-fns-in-python"><h3>Calling rust <code>Fn</code>s in python</h3></a>
 <p>If you have a static function, you can expose it with <code>#[pyfunction]</code> and use <code>wrap_function!</code> to get the corresponding <code>PyObject</code>. For dynamic functions, e.g. lambda and functions that were passed as arguments, you must put them in some kind of owned container, e.g. a box. (Long-Term a special container similar to wasm-bindgen's <code>Closure</code> should take care of that). You can than use a <code>#[pyclass]</code> struct with that container as field as a way to pass the function over the ffi-barrier. You can even make that class callable with <code>__call__</code> so it looks like a function in python code.</p>
 
