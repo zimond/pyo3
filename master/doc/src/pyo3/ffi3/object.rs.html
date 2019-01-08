@@ -860,6 +860,14 @@
 <span id="860">860</span>
 <span id="861">861</span>
 <span id="862">862</span>
+<span id="863">863</span>
+<span id="864">864</span>
+<span id="865">865</span>
+<span id="866">866</span>
+<span id="867">867</span>
+<span id="868">868</span>
+<span id="869">869</span>
+<span id="870">870</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi3</span>::<span class="ident">pyport</span>::{<span class="ident">Py_hash_t</span>, <span class="ident">Py_ssize_t</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">mem</span>;
@@ -921,9 +929,11 @@
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">binaryfunc</span> <span class="op">=</span>
     <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">arg1</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>, <span class="ident">arg2</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>;
 
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">ternaryfunc</span> <span class="op">=</span>
-    <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">arg1</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>, <span class="ident">arg2</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>, <span class="ident">arg3</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>)
-        <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>;
+<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">ternaryfunc</span> <span class="op">=</span> <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(
+    <span class="ident">arg1</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>,
+    <span class="ident">arg2</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>,
+    <span class="ident">arg3</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>,
+) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>;
 
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">inquiry</span> <span class="op">=</span> <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">arg1</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
 
@@ -977,9 +987,11 @@
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">getbufferproc</span> <span class="op">=</span>
-        <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">arg1</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="kw">crate</span>::<span class="ident">ffi3</span>::<span class="ident">PyObject</span>, <span class="ident">arg2</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">Py_buffer</span>, <span class="ident">arg3</span>: <span class="ident">c_int</span>)
-            <span class="op">-&gt;</span> <span class="ident">c_int</span>;
+    <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">getbufferproc</span> <span class="op">=</span> <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(
+        <span class="ident">arg1</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="kw">crate</span>::<span class="ident">ffi3</span>::<span class="ident">PyObject</span>,
+        <span class="ident">arg2</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">Py_buffer</span>,
+        <span class="ident">arg3</span>: <span class="ident">c_int</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
     <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">releasebufferproc</span> <span class="op">=</span>
         <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">arg1</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="kw">crate</span>::<span class="ident">ffi3</span>::<span class="ident">PyObject</span>, <span class="ident">arg2</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">Py_buffer</span>) <span class="op">-&gt;</span> ();
 
@@ -1041,16 +1053,20 @@
     <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">arg1</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>, <span class="ident">arg2</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>, <span class="ident">arg3</span>: <span class="ident">c_int</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>;
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">getiterfunc</span> <span class="op">=</span> <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">arg1</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>;
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">iternextfunc</span> <span class="op">=</span> <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">arg1</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>;
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">descrgetfunc</span> <span class="op">=</span>
-    <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">arg1</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>, <span class="ident">arg2</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>, <span class="ident">arg3</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>)
-        <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>;
+<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">descrgetfunc</span> <span class="op">=</span> <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(
+    <span class="ident">arg1</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>,
+    <span class="ident">arg2</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>,
+    <span class="ident">arg3</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>,
+) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>;
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">descrsetfunc</span> <span class="op">=</span>
     <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">arg1</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>, <span class="ident">arg2</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>, <span class="ident">arg3</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">initproc</span> <span class="op">=</span>
     <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">arg1</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>, <span class="ident">arg2</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>, <span class="ident">arg3</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="ident">c_int</span>;
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">newfunc</span> <span class="op">=</span>
-    <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">arg1</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyTypeObject</span>, <span class="ident">arg2</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>, <span class="ident">arg3</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>)
-        <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>;
+<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">newfunc</span> <span class="op">=</span> <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(
+    <span class="ident">arg1</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyTypeObject</span>,
+    <span class="ident">arg2</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>,
+    <span class="ident">arg3</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>,
+) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>;
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">allocfunc</span> <span class="op">=</span>
     <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">arg1</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyTypeObject</span>, <span class="ident">arg2</span>: <span class="ident">Py_ssize_t</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyObject</span>;
 
