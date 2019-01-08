@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="sidebar-visible">
+<html lang="en" class="sidebar-visible no-js">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -9,44 +9,31 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff" />
 
-        <base href="">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
 
-        <link rel="stylesheet" href="book.css">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
         <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
-        <link rel="shortcut icon" href="favicon.png">
-
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-
+        <!-- Highlight.js Stylesheets -->
         <link rel="stylesheet" href="highlight.css">
         <link rel="stylesheet" href="tomorrow-night.css">
         <link rel="stylesheet" href="ayu-highlight.css">
 
-        <!-- Custom theme -->
+        <!-- Custom theme stylesheets -->
         
 
         
-
-        <!-- Fetch Clipboard.js from CDN but have a local fallback -->
-        <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.1/clipboard.min.js"></script>
-        <script>
-            if (typeof Clipboard == 'undefined') {
-                document.write(unescape("%3Cscript src='clipboard.min.js'%3E%3C/script%3E"));
-            }
-        </script>
-
-        <noscript>
-            <style type="text/css">
-                .javascript-only {
-                    display: none;
-                }
-            </style>
-        </noscript>
-
     </head>
     <body class="light">
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">var path_to_root = "";</script>
+
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script type="text/javascript">
             try {
@@ -69,7 +56,7 @@
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
             if (theme === null || theme === undefined) { theme = 'light'; }
             document.body.className = theme;
-            document.querySelector('html').className = theme;
+            document.querySelector('html').className = theme + ' js';
         </script>
 
         <!-- Hide / unhide sidebar before it is displayed -->
@@ -94,7 +81,7 @@
                 
                 <div id="menu-bar" class="menu-bar">
                     <div id="menu-bar-sticky-container">
-                        <div class="left-buttons javascript-only">
+                        <div class="left-buttons">
                             <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
                                 <i class="fa fa-bars"></i>
                             </button>
@@ -126,13 +113,15 @@
                 </div>
 
                 
-                <div id="searchbar-outer" class="searchbar-outer">
-                    <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
-                </div>
-                <div id="searchresults-outer" class="searchresults-outer">
-                    <div class="searchresults-header" id="searchresults-header"></div>
-                    <ul id="searchresults">
-                    </ul>
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
                 </div>
                 
 
@@ -147,8 +136,8 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="class.html#python-class" id="python-class"><h1>Python Class</h1></a>
-<a class="header" href="class.html#define-new-class" id="define-new-class"><h2>Define new class</h2></a>
+                        <a class="header" href="#python-class" id="python-class"><h1>Python Class</h1></a>
+<a class="header" href="#define-new-class" id="define-new-class"><h2>Define new class</h2></a>
 <p>To define python custom class, rust struct needs to be annotated with <code>#[pyclass]</code> attribute.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -164,7 +153,7 @@ struct MyClass {
 }
 #}</code></pre></pre>
 <p>The above example generates implementations for <code>PyTypeInfo</code> and <code>PyTypeObject</code> for <code>MyClass</code>.</p>
-<a class="header" href="class.html#customizing-the-class" id="customizing-the-class"><h2>Customizing the class</h2></a>
+<a class="header" href="#customizing-the-class" id="customizing-the-class"><h2>Customizing the class</h2></a>
 <p>The <code>#[pyclass]</code> macro accepts following parameters:</p>
 <ul>
 <li><code>name=XXX</code> - Set the class name shown in python code. By default struct name is used as a class name.</li>
@@ -179,7 +168,7 @@ python object that can be collected, the <code>PyGCProtocol</code> trait has to 
 <li><code>subclass</code> - Allows Python classes to inherit from this class</li>
 <li><code>dict</code> - adds <code>__dict__</code> support, the instances of this type have a dictionary containing instance variables. (Incomplete, see <a href="https://github.com/PyO3/pyo3/issues/123">#123</a>)</li>
 </ul>
-<a class="header" href="class.html#constructor" id="constructor"><h2>Constructor</h2></a>
+<a class="header" href="#constructor" id="constructor"><h2>Constructor</h2></a>
 <p>By default it is not possible to create an instance of a custom class from python code.
 To declare a constructor, you need to define a class method and annotate it with <code>#[new]</code>
 attribute. Only the python <code>__new__</code> method can be specified, <code>__init__</code> is not available.</p>
@@ -221,7 +210,7 @@ a derived class declared in Python.</li>
 <li>For details on <code>parameter-list</code>, see the documentation of <code>Method arguments</code> section.</li>
 <li>The return type must be <code>PyResult&lt;T&gt;</code> for some <code>T</code> that implements <code>IntoPyObject</code>. Usually, <code>T</code> will be <code>MyType</code>.</li>
 </ul>
-<a class="header" href="class.html#inheritance" id="inheritance"><h2>Inheritance</h2></a>
+<a class="header" href="#inheritance" id="inheritance"><h2>Inheritance</h2></a>
 <p>By default <code>PyObject</code> is used as default base class. To override default base class
 <code>base</code> parameter for <code>class</code> needs to be used. Value is full path to base class.
 <code>__new__</code> method accepts <code>PyRawObject</code> object. <code>obj</code> instance must be initialized
@@ -270,7 +259,7 @@ impl SubClass {
 #}</code></pre></pre>
 <p><code>ObjectProtocol</code> trait provides <code>get_base()</code> method. It returns reference to instance of
 base class.</p>
-<a class="header" href="class.html#object-properties" id="object-properties"><h2>Object properties</h2></a>
+<a class="header" href="#object-properties" id="object-properties"><h2>Object properties</h2></a>
 <p>Descriptor methods can be defined in
 <code>#[pymethods]</code> <code>impl</code> block only and has to be annotated with <code>#[getter]</code> or <code>[setter]</code>
 attributes. i.e.</p>
@@ -369,7 +358,7 @@ struct MyClass {
 }
 #}</code></pre></pre>
 <p>Then it is available from Python code as <code>self.num</code>.</p>
-<a class="header" href="class.html#instance-methods" id="instance-methods"><h2>Instance methods</h2></a>
+<a class="header" href="#instance-methods" id="instance-methods"><h2>Instance methods</h2></a>
 <p>To define python compatible method, <code>impl</code> block for struct has to be annotated
 with <code>#[pymethods]</code> attribute. <code>pyo3</code> library generates python compatible
 wrappers for all functions in this block with some variations, like descriptors,
@@ -422,7 +411,7 @@ impl MyClass {
 }
 #}</code></pre></pre>
 <p>From python perspective <code>method2</code>, in above example, does not accept any arguments.</p>
-<a class="header" href="class.html#class-methods" id="class-methods"><h2>Class methods</h2></a>
+<a class="header" href="#class-methods" id="class-methods"><h2>Class methods</h2></a>
 <p>To specify class method for custom class, method needs to be annotated
 with<code>#[classmethod]</code> attribute.</p>
 <pre><pre class="playpen"><code class="language-rust">
@@ -453,7 +442,7 @@ This may be the type object of a derived class.</li>
 <li>For details on <code>parameter-list</code>, see the documentation of <code>Method arguments</code> section.</li>
 <li>The return type must be <code>PyResult&lt;T&gt;</code> for some <code>T</code> that implements <code>IntoPyObject</code>.</li>
 </ul>
-<a class="header" href="class.html#static-methods" id="static-methods"><h2>Static methods</h2></a>
+<a class="header" href="#static-methods" id="static-methods"><h2>Static methods</h2></a>
 <p>To specify class method for custom class, method needs to be annotated
 with <code>#[staticmethod]</code> attribute. The return type must be <code>PyResult&lt;T&gt;</code>
 for some <code>T</code> that implements <code>IntoPyObject</code>.</p>
@@ -477,7 +466,7 @@ impl MyClass {
      }
 }
 #}</code></pre></pre>
-<a class="header" href="class.html#callable-object" id="callable-object"><h2>Callable object</h2></a>
+<a class="header" href="#callable-object" id="callable-object"><h2>Callable object</h2></a>
 <p>To specify custom <code>__call__</code> method for custom class, call method needs to be annotated
 with <code>#[call]</code> attribute. Arguments of the method are specified same as for instance method.</p>
 <pre><pre class="playpen"><code class="language-rust">
@@ -502,7 +491,7 @@ impl MyClass {
      }
 }
 #}</code></pre></pre>
-<a class="header" href="class.html#method-arguments" id="method-arguments"><h2>Method arguments</h2></a>
+<a class="header" href="#method-arguments" id="method-arguments"><h2>Method arguments</h2></a>
 <p>By default pyo3 library uses function signature to determine which arguments are required.
 Then it scans incoming <code>args</code> parameter and then incoming <code>kwargs</code> parameter. If it can not
 find all required parameters, it raises <code>TypeError</code> exception.
@@ -544,15 +533,15 @@ impl MyClass {
     }
 }
 #}</code></pre></pre>
-<a class="header" href="class.html#class-customizations" id="class-customizations"><h2>Class customizations</h2></a>
+<a class="header" href="#class-customizations" id="class-customizations"><h2>Class customizations</h2></a>
 <p>Python object model defines several protocols for different object behavior,
 like sequence, mapping or number protocols. pyo3 library defines separate trait for each
 of them. To provide specific python object behavior you need to implement specific trait
 for your struct. Important note, each protocol implementation block has to be annotated
 with <code>#[pyproto]</code> attribute.</p>
-<a class="header" href="class.html#basic-object-customization" id="basic-object-customization"><h3>Basic object customization</h3></a>
+<a class="header" href="#basic-object-customization" id="basic-object-customization"><h3>Basic object customization</h3></a>
 <p><a href="https://docs.rs/pyo3/0.5.2/class/basic/trait.PyObjectProtocol.html"><code>PyObjectProtocol</code></a> trait provide several basic customizations.</p>
-<a class="header" href="class.html#attribute-access" id="attribute-access"><h4>Attribute access</h4></a>
+<a class="header" href="#attribute-access" id="attribute-access"><h4>Attribute access</h4></a>
 <p>To customize object attribute access define following methods:</p>
 <ul>
 <li><code>fn __getattr__(&amp;self, name: FromPyObject) -&gt; PyResult&lt;impl IntoPyObject&gt;</code></li>
@@ -560,7 +549,7 @@ with <code>#[pyproto]</code> attribute.</p>
 <li><code>fn __delattr__(&amp;mut self, name: FromPyObject) -&gt; PyResult&lt;()&gt;</code></li>
 </ul>
 <p>Each methods corresponds to python's <code>self.attr</code>, <code>self.attr = value</code> and <code>del self.attr</code> code.</p>
-<a class="header" href="class.html#string-conversions" id="string-conversions"><h4>String Conversions</h4></a>
+<a class="header" href="#string-conversions" id="string-conversions"><h4>String Conversions</h4></a>
 <ul>
 <li>
 <p><code>fn __repr__(&amp;self) -&gt; PyResult&lt;impl ToPyObject&lt;ObjectType=PyString&gt;&gt;</code></p>
@@ -587,7 +576,7 @@ On Python 3.x, <code>__unicode__</code> is allowed but has no effect.</p>
 Possible return types are <code>PyResult&lt;String&gt;</code> or <code>PyResult&lt;PyString&gt;</code>.</p>
 </li>
 </ul>
-<a class="header" href="class.html#comparison-operators" id="comparison-operators"><h4>Comparison operators</h4></a>
+<a class="header" href="#comparison-operators" id="comparison-operators"><h4>Comparison operators</h4></a>
 <ul>
 <li>
 <p><code>fn __richcmp__(&amp;self, other: impl FromPyObject, op: CompareOp) -&gt; PyResult&lt;impl ToPyObject&gt;</code></p>
@@ -603,7 +592,7 @@ automatically <code>return NotImplemented</code>.</p>
 The return type must be <code>PyResult&lt;T&gt;</code> where <code>T</code> is one of Rust's primitive integer types.</p>
 </li>
 </ul>
-<a class="header" href="class.html#other-methods" id="other-methods"><h4>Other methods</h4></a>
+<a class="header" href="#other-methods" id="other-methods"><h4>Other methods</h4></a>
 <ul>
 <li>
 <p><code>fn __bool__(&amp;self) -&gt; PyResult&lt;bool&gt;</code></p>
@@ -612,7 +601,7 @@ This method works for both python 3 and python 2,
 even on Python 2.7 where the Python spelling was <code>__nonzero__</code>.</p>
 </li>
 </ul>
-<a class="header" href="class.html#garbage-collector-integration" id="garbage-collector-integration"><h3>Garbage Collector Integration</h3></a>
+<a class="header" href="#garbage-collector-integration" id="garbage-collector-integration"><h3>Garbage Collector Integration</h3></a>
 <p>If your type owns references to other python objects, you will need to
 integrate with Python's garbage collector so that the GC is aware of
 those references.
@@ -659,7 +648,7 @@ impl PyGCProtocol for ClassWithGCSupport {
 <p>It is also possible to enable gc for custom class using <code>gc</code> parameter for <code>class</code> annotation.
 i.e. <code>#[pyclass(gc)]</code>. In that case instances of custom class participate in python garbage
 collector, and it is possible to track them with <code>gc</code> module methods.</p>
-<a class="header" href="class.html#iterator-types" id="iterator-types"><h3>Iterator Types</h3></a>
+<a class="header" href="#iterator-types" id="iterator-types"><h3>Iterator Types</h3></a>
 <p>Iterators can be defined using the
 <a href="https://docs.rs/pyo3/0.5.2/class/iter/trait.PyIterProtocol.html"><code>PyIterProtocol</code></a> trait.
 It includes two methods <code>__iter__</code> and <code>__next__</code>:</p>
@@ -732,39 +721,25 @@ impl PyIterProtocol for MyIterator {
 
         </div>
 
-
-        <!-- Local fallback for Font Awesome -->
-        <script>
-            if (getComputedStyle(document.querySelector(".fa")).fontFamily !== "FontAwesome") {
-                var link = document.createElement('link');
-                link.rel = 'stylesheet';
-                link.type = 'text/css';
-                link.href = '_FontAwesome/css/font-awesome.css';
-                document.head.insertBefore(link, document.head.firstChild)
-            }
-        </script>
-
         
 
         
 
         
 
-        
-        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
-        
         
         <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
         <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
         
 
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
         
 
-        <script src="highlight.js"></script>
-        <script src="book.js"></script>
-
-        <!-- Custom JS script -->
         
 
     </body>
