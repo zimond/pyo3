@@ -138,19 +138,31 @@
                     <main>
                         <a class="header" href="#pyo3" id="pyo3"><h1>PyO3</h1></a>
 <p><a href="http://www.rust-lang.org/">Rust</a> bindings for <a href="https://www.python.org/">Python</a>. This includes running and interacting with python code from a rust binaries as well as writing native python modules.</p>
-<p><a href="./doc/index.html">API documentation</a></p>
+<ul>
+<li>
+<p>User Guide: <a href="https://pyo3.rs">stable</a> | <a href="https://pyo3.rs/master">master</a></p>
+</li>
+<li>
+<p>API Documentation: <a href="https://pyo3.rs/master/doc">master</a></p>
+</li>
+</ul>
+<p>A comparison with rust-cpython can be found <a href="https://pyo3.rs/master/rust-cpython.html">in the guide</a>.</p>
 <a class="header" href="#usage" id="usage"><h2>Usage</h2></a>
-<p>Pyo3 supports python 2.7 as well as python 3.5 and up. The minimum required rust version is 1.29.0-nightly 2018-07-16.</p>
+<p>Pyo3 supports python 2.7 as well as python 3.5 and up. The minimum required rust version is 1.30.0-nightly 2018-08-18.</p>
 <p>You can either write a native python module in rust or use python from a rust binary.</p>
-<a class="header" href="#using-rust-from-python" id="using-rust-from-python"><h3>Using rust from python</h3></a>
+<p>On some OSs, you need some additional packages.</p>
+<p>E.g. if you are on Ubuntu18.04, please run</p>
+<pre><code class="language-bash">sudo apt install python3-dev python-dev
+</code></pre>
+<a class="header" href="#using-rust-from-python" id="using-rust-from-python"><h2>Using rust from python</h2></a>
 <p>Pyo3 can be used to generate a native python module.</p>
 <p><strong><code>Cargo.toml</code>:</strong></p>
 <pre><code class="language-toml">[package]
-name = &quot;rust-py&quot;
+name = &quot;string-sum&quot;
 version = &quot;0.1.0&quot;
 
 [lib]
-name = &quot;rust_py&quot;
+name = &quot;string_sum&quot;
 crate-type = [&quot;cdylib&quot;]
 
 [dependencies.pyo3]
@@ -174,24 +186,24 @@ fn sum_as_string(a: usize, b: usize) -&gt; PyResult&lt;String&gt; {
     Ok((a + b).to_string())
 }
 
-/// This module is a python moudle implemented in Rust.
+/// This module is a python module implemented in Rust.
 #[pymodule]
-fn rust_py(py: Python, m: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
+fn string_sum(py: Python, m: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
     m.add_wrapped(wrap_function!(sum_as_string))?;
 
     Ok(())
 }
 #}</code></pre></pre>
-<p>On windows and linux, you can build normally with <code>cargo build --release</code>. On Mac Os, you need to set additional linker arguments. One option is to compile with <code>cargo rustc --release -- -C link-arg=-undefined -C link-arg=dynamic_lookup</code>, the other is to create a <code>.cargo/config</code> with the following content:</p>
+<p>On windows and linux, you can build normally with <code>cargo build --release</code>. On macOS, you need to set additional linker arguments. One option is to compile with <code>cargo rustc --release -- -C link-arg=-undefined -C link-arg=dynamic_lookup</code>, the other is to create a <code>.cargo/config</code> with the following content:</p>
 <pre><code class="language-toml">[target.x86_64-apple-darwin]
 rustflags = [
   &quot;-C&quot;, &quot;link-arg=-undefined&quot;,
   &quot;-C&quot;, &quot;link-arg=dynamic_lookup&quot;,
 ]
 </code></pre>
-<p>Also on macOS, you will need to rename the output from *.dylib to *.so. On Windows, you will need to rename the output from *.dll to *.pyd.</p>
-<p><a href="https://github.com/PyO3/setuptools-rust"><code>setuptools-rust</code></a> can be used to generate a python package and includes the commands above by default. See <a href="examples/https://github.com/PyO3/pyo3/tree/master/examples/word-count">examples/word-count</a> and the associated setup.py.</p>
-<a class="header" href="#using-python-from-rust" id="using-python-from-rust"><h3>Using python from rust</h3></a>
+<p>For developing, you can copy and rename the shared library from the target folder: On macOS, rename <code>libstring_sum.dylib</code> to <code>string_sum.so</code>, on windows <code>libstring_sum.dll</code> to <code>string_sum.pyd</code> and on linux <code>libstring_sum.so</code> to <code>string_sum.so</code>. Then open a python shell in the same folder and you'll be able to <code>import string_sum</code>.</p>
+<p>To build, test and publish your crate as python module, you can use <a href="https://github.com/PyO3/pyo3-pack">pyo3-pack</a> or <a href="https://github.com/PyO3/setuptools-rust">setuptools-rust</a>. You can find an example for setuptools-rust in <a href="examples/word-count">examples/word-count</a>, while pyo3-pack should work on your crate without any configuration.</p>
+<a class="header" href="#using-python-from-rust" id="using-python-from-rust"><h2>Using python from rust</h2></a>
 <p>Add <code>pyo3</code> this to your <code>Cargo.toml</code>:</p>
 <pre><code class="language-toml">[dependencies]
 pyo3 = &quot;0.5&quot;
@@ -220,11 +232,14 @@ fn main() -&gt; PyResult&lt;()&gt; {
 </code></pre></pre>
 <a class="header" href="#examples-and-tooling" id="examples-and-tooling"><h2>Examples and tooling</h2></a>
 <ul>
-<li><a href="https://github.com/PyO3/pyo3/tree/master/examples/word-count">examples/word-count</a> <em>Counting the occurences of a word in a text file</em></li>
+<li><a href="examples/word-count">examples/word-count</a> <em>Counting the occurrences of a word in a text file</em></li>
 <li><a href="https://github.com/mre/hyperjson">hyperjson</a> <em>A hyper-fast Python module for reading/writing JSON data using Rust's serde-json</em></li>
 <li><a href="https://github.com/rust-numpy/rust-numpy">rust-numpy</a> <em>Rust binding of NumPy C-API</em></li>
+<li><a href="https://github.com/PyO3/setuptools-rust/tree/master/html-py-ever">html-py-ever</a> <em>Using <a href="https://github.com/servo/html5ever">html5ever</a> through <a href="https://github.com/kuchiki-rs/kuchiki">kuchiki</a> to speed up html parsing and css-selecting.</em></li>
 <li><a href="https://github.com/PyO3/pyo3-built">pyo3-built</a> <em>Simple macro to expose metadata obtained with the <a href="https://crates.io/crates/built"><code>built</code></a> crate as a <a href="https://pyo3.github.io/pyo3/pyo3/struct.PyDict.html"><code>PyDict</code></a></em></li>
 <li><a href="https://github.com/ManifoldFR/point-process-rust/tree/master/pylib">point-process</a> <em>High level API for pointprocesses as a Python library</em></li>
+<li><a href="https://github.com/autopilot-rs/autopy">autopy</a> <em>A simple, cross-platform GUI automation library for Python and Rust.</em></li>
+<li><a href="https://github.com/ijl/orjson">orjson</a>  <em>Fast Python JSON library</em></li>
 </ul>
 
                     </main>

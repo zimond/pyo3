@@ -484,6 +484,12 @@
 <span id="484">484</span>
 <span id="485">485</span>
 <span id="486">486</span>
+<span id="487">487</span>
+<span id="488">488</span>
+<span id="489">489</span>
+<span id="490">490</span>
+<span id="491">491</span>
+<span id="492">492</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 
@@ -538,21 +544,27 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Example</span>
 <span class="doccomment">/// ```</span>
-<span class="doccomment">/// #[macro_use] extern crate pyo3;</span>
+<span class="doccomment">///extern crate pyo3;</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// use pyo3::Python;</span>
-<span class="doccomment">/// use pyo3::types::PyDict;</span>
+<span class="doccomment">///use pyo3::import_exception;</span>
+<span class="doccomment">///use pyo3::types::PyDict;</span>
+<span class="doccomment">///use pyo3::Python;</span>
+<span class="doccomment">///import_exception!(socket, gaierror);</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// import_exception!(socket, gaierror);</span>
+<span class="doccomment">///fn main() {</span>
+<span class="doccomment">///    let gil = Python::acquire_gil();</span>
+<span class="doccomment">///    let py = gil.python();</span>
+<span class="doccomment">///    let ctx = PyDict::new(py);</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// fn main() {</span>
-<span class="doccomment">///     let gil = Python::acquire_gil();</span>
-<span class="doccomment">///     let py = gil.python();</span>
-<span class="doccomment">///     let ctx = PyDict::new(py);</span>
+<span class="doccomment">///    ctx.set_item(&quot;gaierror&quot;, py.get_type::&lt;gaierror&gt;()).unwrap();</span>
+<span class="doccomment">///    py.run(</span>
+<span class="doccomment">///        &quot;import socket; assert gaierror is socket.gaierror&quot;,</span>
+<span class="doccomment">///        None,</span>
+<span class="doccomment">///        Some(ctx),</span>
+<span class="doccomment">///    )</span>
+<span class="doccomment">///    .unwrap();</span>
+<span class="doccomment">///}</span>
 <span class="doccomment">///</span>
-<span class="doccomment">///     ctx.set_item(&quot;gaierror&quot;, py.get_type::&lt;gaierror&gt;()).unwrap();</span>
-<span class="doccomment">///     py.run(&quot;import socket; assert gaierror is socket.gaierror&quot;, None, Some(ctx)).unwrap();</span>
-<span class="doccomment">/// }</span>
 <span class="doccomment">/// ```</span>
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">import_exception</span> {
@@ -560,9 +572,9 @@
         <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_camel_case_types</span>)]</span> <span class="comment">// E.g. `socket.herror`</span>
         <span class="kw">pub</span> <span class="kw">struct</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>;
 
-        <span class="macro">impl_exception_boilerplate</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>);
+        <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">impl_exception_boilerplate</span><span class="op">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>);
 
-        <span class="macro">import_exception_type_object</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">module</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>);
+        <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">import_exception_type_object</span><span class="op">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">module</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>);
     };
 }
 
