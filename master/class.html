@@ -587,11 +587,8 @@ as every cycle must contain at least one mutable reference.
 Example:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
-#![feature(specialization)]
-
 #fn main() {
 use pyo3::prelude::*;
-
 
 #[pyclass]
 struct ClassWithGCSupport {
@@ -631,8 +628,6 @@ It includes two methods <code>__iter__</code> and <code>__next__</code>:</p>
 <p>Example:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
-#![feature(specialization)]
-
 #fn main() {
 use pyo3::prelude::*;
 

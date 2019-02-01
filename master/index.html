@@ -172,8 +172,6 @@ features = [&quot;extension-module&quot;]
 <p><strong><code>src/lib.rs</code></strong></p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
-#![feature(specialization)]
-
 #fn main() {
 use pyo3::prelude::*;
 use pyo3::wrap_pyfunction;
@@ -207,9 +205,7 @@ rustflags = [
 pyo3 = &quot;0.5&quot;
 </code></pre>
 <p>Example program displaying the value of <code>sys.version</code>:</p>
-<pre><pre class="playpen"><code class="language-rust">#![feature(specialization)]
-
-use pyo3::prelude::*;
+<pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
 use pyo3::types::PyDict;
 
 fn main() -&gt; PyResult&lt;()&gt; {

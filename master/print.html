@@ -172,8 +172,6 @@ features = [&quot;extension-module&quot;]
 <p><strong><code>src/lib.rs</code></strong></p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
-#![feature(specialization)]
-
 #fn main() {
 use pyo3::prelude::*;
 use pyo3::wrap_pyfunction;
@@ -207,9 +205,7 @@ rustflags = [
 pyo3 = &quot;0.5&quot;
 </code></pre>
 <p>Example program displaying the value of <code>sys.version</code>:</p>
-<pre><pre class="playpen"><code class="language-rust">#![feature(specialization)]
-
-use pyo3::prelude::*;
+<pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
 use pyo3::types::PyDict;
 
 fn main() -&gt; PyResult&lt;()&gt; {
@@ -441,9 +437,7 @@ of <code>ToPyObject + 'static</code>. In case if <code>'static</code> constraint
 more complex arguments are required <a href="https://docs.rs/pyo3/0.2.7/trait.PyErrArguments.html"><code>PyErrArgument</code></a>
 trait can be implemented. In that case actual exception arguments creation get delayed
 until <code>Python</code> object is available.</p>
-<pre><code class="language-rust ignore">#![feature(specialization)]
-
-use std::net::TcpListener;
+<pre><code class="language-rust ignore">use std::net::TcpListener;
 use pyo3::{PyErr, PyResult, exc};
 
 impl std::convert::From&lt;std::io::Error&gt; for PyErr {
@@ -591,9 +585,7 @@ fn rust2py(py: Python, m: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
 to the module using the <code>add_wrapped_to_module!</code> macro, which takes the module
 as first parameter, the function name as second and an instance of <code>Python</code>
 as third.</p>
-<pre><pre class="playpen"><code class="language-rust">#![feature(specialization)]
-
-use pyo3::prelude::*;
+<pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
 use pyo3::wrap_pyfunction;
 
 #[pyfunction]
@@ -1094,11 +1086,8 @@ as every cycle must contain at least one mutable reference.
 Example:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
-#![feature(specialization)]
-
 #fn main() {
 use pyo3::prelude::*;
-
 
 #[pyclass]
 struct ClassWithGCSupport {
@@ -1138,8 +1127,6 @@ It includes two methods <code>__iter__</code> and <code>__next__</code>:</p>
 <p>Example:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
-#![feature(specialization)]
-
 #fn main() {
 use pyo3::prelude::*;
 
@@ -1286,8 +1273,6 @@ cargo build --target armv7-unknown-linux-gnueabihf
 <p><strong>pyo3</strong></p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
-#![feature(specialization)]
-
 #fn main() {
 use pyo3::prelude::*;
 use pyo3::PyRawObject;
