@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/types/complex.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>complex.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/types/complex.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>complex.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../..//index.html'><img src='../../../rust-logo.png' alt='logo' width='100'></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -303,6 +303,10 @@
 <span id="303">303</span>
 <span id="304">304</span>
 <span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
+<span id="309">309</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">instance</span>::<span class="ident">PyObjectWithGIL</span>;
@@ -422,13 +426,13 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;num-complex&quot;</span>)]</span>
 <span class="kw">mod</span> <span class="ident">complex_conversion</span> {
-    <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">num_complex</span>;
-    <span class="kw">use</span> <span class="self">self</span>::<span class="ident">num_complex</span>::<span class="ident">Complex</span>;
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class="ident">conversion</span>::{<span class="ident">FromPyObject</span>, <span class="ident">IntoPyObject</span>, <span class="ident">ToPyObject</span>};
-    <span class="kw">use</span> <span class="ident">err</span>::<span class="ident">PyErr</span>;
-    <span class="kw">use</span> <span class="ident">types</span>::<span class="ident">PyObjectRef</span>;
-    <span class="kw">use</span> <span class="ident">PyResult</span>;
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">conversion</span>::{<span class="ident">FromPyObject</span>, <span class="ident">IntoPyObject</span>, <span class="ident">ToPyObject</span>};
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">err</span>::<span class="ident">PyErr</span>;
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">PyObjectRef</span>;
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">PyResult</span>;
+    <span class="kw">use</span> <span class="ident">num_complex</span>::<span class="ident">Complex</span>;
+
     <span class="kw">impl</span> <span class="ident">PyComplex</span> {
         <span class="doccomment">/// Creates a new Python `PyComplex` object from num_complex::Complex.</span>
         <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_complex</span><span class="op">&lt;</span><span class="lifetime">&#39;py</span>, <span class="ident">F</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">c_double</span><span class="op">&gt;&gt;</span>(
@@ -459,6 +463,7 @@
                 }
             }
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>), <span class="ident">not</span>(<span class="ident">Py_3</span>)))]</span>
+            <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">float_cmp</span>)]</span> <span class="comment">// The comparison is for an error value</span>
             <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;source</span><span class="op">&gt;</span> <span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;source</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Complex</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">float</span><span class="op">&gt;</span> {
                 <span class="kw">fn</span> <span class="ident">extract</span>(<span class="ident">obj</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;source</span> <span class="ident">PyObjectRef</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">Complex</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">float</span><span class="op">&gt;&gt;</span> {
                     <span class="kw">unsafe</span> {
@@ -472,6 +477,7 @@
                 }
             }
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">Py_LIMITED_API</span>, <span class="ident">Py_3</span>))]</span>
+            <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">float_cmp</span>)]</span> <span class="comment">// The comparison is for an error value</span>
             <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;source</span><span class="op">&gt;</span> <span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;source</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Complex</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">float</span><span class="op">&gt;</span> {
                 <span class="kw">fn</span> <span class="ident">extract</span>(<span class="ident">obj</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;source</span> <span class="ident">PyObjectRef</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">Complex</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">float</span><span class="op">&gt;&gt;</span> {
                     <span class="kw">unsafe</span> {
@@ -520,6 +526,8 @@
 <span class="kw">mod</span> <span class="ident">test</span> {
     <span class="kw">use</span> <span class="kw">super</span>::<span class="ident">PyComplex</span>;
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::<span class="ident">Python</span>;
+    <span class="kw">use</span> <span class="ident">assert_approx_eq</span>::<span class="ident">assert_approx_eq</span>;
+
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_from_double</span>() {
         <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();

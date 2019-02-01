@@ -175,10 +175,8 @@ features = [&quot;extension-module&quot;]
 #![feature(specialization)]
 
 #fn main() {
-#[macro_use]
-extern crate pyo3;
-
 use pyo3::prelude::*;
+use pyo3::wrap_pyfunction;
 
 #[pyfunction]
 /// Formats the sum of two numbers as string
@@ -189,7 +187,7 @@ fn sum_as_string(a: usize, b: usize) -&gt; PyResult&lt;String&gt; {
 /// This module is a python module implemented in Rust.
 #[pymodule]
 fn string_sum(py: Python, m: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
-    m.add_wrapped(wrap_function!(sum_as_string))?;
+    m.add_wrapped(wrap_pyfunction!(sum_as_string))?;
 
     Ok(())
 }
@@ -210,8 +208,6 @@ pyo3 = &quot;0.5&quot;
 </code></pre>
 <p>Example program displaying the value of <code>sys.version</code>:</p>
 <pre><pre class="playpen"><code class="language-rust">#![feature(specialization)]
-
-extern crate pyo3;
 
 use pyo3::prelude::*;
 use pyo3::types::PyDict;
@@ -246,12 +242,11 @@ fn main() -&gt; PyResult&lt;()&gt; {
 <a class="header" href="#extract" id="extract"><h2><code>.extract()</code></h2></a>
 <p>The easiest way to convert a python object to a rust value is using <code>.extract()?</code>.</p>
 <a class="header" href="#topyobject-and-intopyobject-trait" id="topyobject-and-intopyobject-trait"><h2><code>ToPyObject</code> and <code>IntoPyObject</code> trait</h2></a>
-<p><a href="https://docs.rs/pyo3/0.5.2/trait.ToPyObject.html"><code>ToPyObject</code></a> trait is a conversion trait that allows various objects to be converted into <a href="https://docs.rs/pyo3/0.5.2/struct.PyObject.html"><code>PyObject</code></a>. <a href="https://docs.rs/pyo3/0.5.2/trait.IntoPyObject.html"><code>IntoPyObject</code></a> serves the same purpose except it consumes <code>self</code>.</p>
+<p><a href="https://docs.rs/pyo3/0.6.0-alpha.2/trait.ToPyObject.html"><code>ToPyObject</code></a> trait is a conversion trait that allows various objects to be converted into <a href="https://docs.rs/pyo3/0.6.0-alpha.2/struct.PyObject.html"><code>PyObject</code></a>. <a href="https://docs.rs/pyo3/0.6.0-alpha.2/trait.IntoPyObject.html"><code>IntoPyObject</code></a> serves the same purpose except it consumes <code>self</code>.</p>
 <a class="header" href="#intopytuple-trait" id="intopytuple-trait"><h2><code>IntoPyTuple</code> trait</h2></a>
-<p><a href="https://docs.rs/pyo3/0.5.2/trait.IntoPyTuple.html"><code>IntoPyTuple</code></a> trait is a conversion trait that allows various objects to be converted into <a href="https://docs.rs/pyo3/0.5.2/struct.PyTuple.html"><code>PyTuple</code></a> object.</p>
-<p>For example, <a href="https://docs.rs/pyo3/0.5.2/trait.IntoPyTuple.html"><code>IntoPyTuple</code></a> trait is implemented for <code>()</code> so that you can convert it into a empty <a href="https://docs.rs/pyo3/0.5.2/struct.PyTuple.html"><code>PyTuple</code></a></p>
-<pre><pre class="playpen"><code class="language-rust">extern crate pyo3;
-use pyo3::{Python, IntoPyTuple};
+<p><a href="https://docs.rs/pyo3/0.6.0-alpha.2/trait.IntoPyTuple.html"><code>IntoPyTuple</code></a> trait is a conversion trait that allows various objects to be converted into <a href="https://docs.rs/pyo3/0.6.0-alpha.2/struct.PyTuple.html"><code>PyTuple</code></a> object.</p>
+<p>For example, <a href="https://docs.rs/pyo3/0.6.0-alpha.2/trait.IntoPyTuple.html"><code>IntoPyTuple</code></a> trait is implemented for <code>()</code> so that you can convert it into a empty <a href="https://docs.rs/pyo3/0.6.0-alpha.2/struct.PyTuple.html"><code>PyTuple</code></a></p>
+<pre><pre class="playpen"><code class="language-rust">use pyo3::{Python, IntoPyTuple};
 
 fn main() {
     let gil = Python::acquire_gil();
@@ -262,25 +257,24 @@ fn main() {
 <a class="header" href="#frompyobject-and-reffrompyobject-trait" id="frompyobject-and-reffrompyobject-trait"><h2><code>FromPyObject</code> and <code>RefFromPyObject</code> trait</h2></a>
 <a class="header" href="#args-and-kwargs-for-python-object-call" id="args-and-kwargs-for-python-object-call"><h2><code>*args</code> and <code>**kwargs</code> for python object call</h2></a>
 <p>There are several way how to pass positional and keyword arguments to python object call.
-<a href="https://docs.rs/pyo3/0.5.2/trait.ObjectProtocol.html"><code>ObjectProtocol</code></a> trait
+<a href="https://docs.rs/pyo3/0.6.0-alpha.2/trait.ObjectProtocol.html"><code>ObjectProtocol</code></a> trait
 provides two methods:</p>
 <ul>
 <li><code>call</code> - call callable python object.</li>
 <li><code>call_method</code> - call specific method on the object.</li>
 </ul>
 <p>Both methods accept <code>args</code> and <code>kwargs</code> arguments. <code>args</code> argument is generate over
-<a href="https://docs.rs/pyo3/0.5.2/trait.IntoPyTuple.html"><code>IntoPyTuple</code></a> trait. So args could be <code>PyTuple</code> instance or
+<a href="https://docs.rs/pyo3/0.6.0-alpha.2/trait.IntoPyTuple.html"><code>IntoPyTuple</code></a> trait. So args could be <code>PyTuple</code> instance or
 rust tuple with up to 10 elements. Or <code>NoArgs</code> object which represents empty tuple object.</p>
-<pre><pre class="playpen"><code class="language-rust">extern crate pyo3;
-use pyo3::prelude::*;
+<pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
 
-# struct SomeObject;
-# impl SomeObject {
-#     fn new(py: Python) -&gt; PyObject {
-#           pyo3::PyDict::new(py).to_object(py)
-#     }
-# }
-#
+struct SomeObject;
+impl SomeObject {
+    fn new(py: Python) -&gt; PyObject {
+          pyo3::PyDict::new(py).to_object(py)
+    }
+}
+
 fn main() {
     # let arg1 = &quot;arg1&quot;;
     # let arg2 = &quot;arg2&quot;;
@@ -304,23 +298,24 @@ fn main() {
 }
 </code></pre></pre>
 <p><code>kwargs</code> can by <code>None</code> or <code>Some(&amp;PyDict)</code>. You can use the
-<a href="https://docs.rs/pyo3/0.5.2/trait.IntoPyDict.html"><code>IntoPyDict</code></a> trait to convert other dict-like containers, e.g. <code>HashMap</code>, <code>BTreeMap</code> as well as tuples with up to 10 elements and <code>Vec</code>s where each element is a two element tuple.</p>
-<pre><pre class="playpen"><code class="language-rust">extern crate pyo3;
-
+<a href="https://docs.rs/pyo3/0.6.0-alpha.2/trait.IntoPyDict.html"><code>IntoPyDict</code></a> trait to convert other dict-like containers, e.g. <code>HashMap</code>, <code>BTreeMap</code> as well as tuples with up to 10 elements and <code>Vec</code>s where each element is a two element tuple.</p>
+<pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
+use pyo3::types::{IntoPyDict, PyDict};
 use std::collections::HashMap;
-use pyo3::prelude::*;
 
-# struct SomeObject;
-# impl SomeObject {
-#     fn new(py: Python) -&gt; PyObject {
-#           pyo3::PyDict::new(py).to_object(py)
-#     }
-# }
+struct SomeObject;
+
+impl SomeObject {
+    fn new(py: Python) -&gt; PyObject {
+        PyDict::new(py).to_object(py)
+    }
+}
+
 fn main() {
-    # let key1 = &quot;key1&quot;;
-    # let val1 = 1;
-    # let key2 = &quot;key2&quot;;
-    # let val2 = 2;
+    let key1 = &quot;key1&quot;;
+    let val1 = 1;
+    let key2 = &quot;key2&quot;;
+    let val2 = 2;
 
     let gil = Python::acquire_gil();
     let py = gil.python();
@@ -330,16 +325,16 @@ fn main() {
     // call object with PyDict
     let kwargs = PyDict::new(py);
     kwargs.set_item(key1, val1);
-    obj.call(py, NoArgs, kwargs);
+    obj.call(py, NoArgs, Some(kwargs));
 
-    // pass arguments as rust tuple
-    let kwargs = ((key1, val1), (key2, val2));
-    obj.call(py, NoArgs, kwargs);
+    // pass arguments as Vec
+    let kwargs = vec![(key1, val1), (key2, val2)];
+    obj.call(py, NoArgs, Some(kwargs.into_py_dict(py)));
 
     // pass arguments as HashMap
     let mut kwargs = HashMap::&lt;&amp;str, i32&gt;::new();
     kwargs.insert(key1, 1);
-    obj.call(py, NoArgs, kwargs);
+    obj.call(py, NoArgs, Some(kwargs.into_py_dict(py)));
 }
 </code></pre></pre>
 <p>TODO</p>
@@ -349,7 +344,7 @@ fn main() {
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-#[macro_use] extern crate pyo3;
+use pyo3::import_exception;
 
 create_exception!(module, MyError, pyo3::exceptions::Exception);
 #}</code></pre></pre>
@@ -358,9 +353,8 @@ create_exception!(module, MyError, pyo3::exceptions::Exception);
 <li><code>MyError</code> is the name of the new exception type.</li>
 </ul>
 <p>For example:</p>
-<pre><pre class="playpen"><code class="language-rust">#[macro_use] extern crate pyo3;
-
-use pyo3::Python;
+<pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
+use pyo3::create_exception;
 use pyo3::types::PyDict;
 use pyo3::exceptions::Exception;
 
@@ -379,9 +373,7 @@ fn main() {
 </code></pre></pre>
 <a class="header" href="#raise-an-exception" id="raise-an-exception"><h2>Raise an exception</h2></a>
 <p>To raise an exception, first you need to obtain an exception type and construct a new <a href="https://docs.rs/pyo3/0.2.7/struct.PyErr.html"><code>PyErr</code></a>, then call <a href="https://docs.rs/pyo3/0.2.7/struct.PyErr.html#method.restore"><code>PyErr::restore()</code></a> method to write the exception back to the Python interpreter's global state.</p>
-<pre><pre class="playpen"><code class="language-rust">extern crate pyo3;
-
-use pyo3::{Python, PyErr, exc};
+<pre><pre class="playpen"><code class="language-rust">use pyo3::{Python, PyErr, exc};
 
 fn main() {
     let gil = Python::acquire_gil();
@@ -401,7 +393,6 @@ have rust type as well.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 # use pyo3::prelude::*;
 # fn check_for_error() -&gt; bool {false}
 fn my_func(arg: PyObject) -&gt; PyResult&lt;()&gt; {
@@ -415,9 +406,7 @@ fn my_func(arg: PyObject) -&gt; PyResult&lt;()&gt; {
 <a class="header" href="#check-exception-type" id="check-exception-type"><h2>Check exception type</h2></a>
 <p>Python has an <a href="https://docs.python.org/3/library/functions.html#isinstance"><code>isinstance</code></a> method to check object type,
 in <code>PyO3</code> there is a <a href="https://docs.rs/pyo3/0.2.7/struct.Python.html#method.is_instance"><code>Python::is_instance()</code></a> method which does the same thing.</p>
-<pre><pre class="playpen"><code class="language-rust">extern crate pyo3;
-
-use pyo3::{Python, PyBool, PyList};
+<pre><pre class="playpen"><code class="language-rust">use pyo3::{Python, PyBool, PyList};
 
 fn main() {
     let gil = Python::acquire_gil();
@@ -430,8 +419,7 @@ fn main() {
 </code></pre></pre>
 <p><a href="https://docs.rs/pyo3/0.2.7/struct.Python.html#method.is_instance"><code>Python::is_instance()</code></a> calls the underlying <a href="https://docs.rs/pyo3/0.2.7/struct.PyType.html#method.is_instance"><code>PyType::is_instance</code></a> method to do the actual work.</p>
 <p>To check the type of an exception, you can simply do:</p>
-<pre><pre class="playpen"><code class="language-rust"># extern crate pyo3;
-# use pyo3::prelude::*;
+<pre><pre class="playpen"><code class="language-rust"># use pyo3::prelude::*;
 # fn main() {
 # let gil = Python::acquire_gil();
 # let py = gil.python();
@@ -454,7 +442,6 @@ more complex arguments are required <a href="https://docs.rs/pyo3/0.2.7/trait.Py
 trait can be implemented. In that case actual exception arguments creation get delayed
 until <code>Python</code> object is available.</p>
 <pre><code class="language-rust ignore">#![feature(specialization)]
-extern crate pyo3;
 
 use std::net::TcpListener;
 use pyo3::{PyErr, PyResult, exc};
@@ -476,7 +463,6 @@ types so <code>try!</code> macro or <code>?</code> operator can be used.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 use pyo3::prelude::*;
 
 fn parse_int(s: String) -&gt; PyResult&lt;usize&gt; {
@@ -491,8 +477,8 @@ for that exception.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-#[macro_use] extern crate pyo3;
 use pyo3::prelude::*;
+use pyo3::import_exception;
 
 import_exception!(io, UnsupportedOperation);
 
@@ -513,10 +499,7 @@ fn tell(file: PyObject) -&gt; PyResult&lt;u64&gt; {
 several standard library modules.</p>
 <a class="header" href="#python-module" id="python-module"><h1>Python Module</h1></a>
 <p>As shown in the Getting Started chapter, you can create a module as follows:</p>
-<pre><pre class="playpen"><code class="language-rust">#![feature(proc_macro)]
-
-extern crate pyo3;
-use pyo3::{PyResult, Python, PyModule};
+<pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
 
 // add bindings to the generated python module
 // N.B: names: &quot;librust2py&quot; must be the name of the `.so` or `.pyd` file
@@ -564,20 +547,20 @@ fn subfunction() -&gt; String {
 
 #[pymodule]
 fn submodule(_py: Python, module: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
-    module.add_wrapped(wrap_function!(subfunction))?;
+    module.add_wrapped(wrap_pyfunction!(subfunction))?;
     Ok(())
 }
 
 #[pymodule]
 fn supermodule(_py: Python, module: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
-    module.add_wrapped(wrap_module!(submodule))?;
+    module.add_wrapped(wrap_pymodule!(submodule))?;
     Ok(())
 }
 
 fn nested_call() {
     let gil = GILGuard::acquire();
     let py = gil.python();
-    let supermodule = wrap_module!(supermodule)(py);
+    let supermodule = wrap_pymodule!(supermodule)(py);
     ctx.set_item(&quot;supermodule&quot;, supermodule);
 
     py.run(&quot;assert supermodule.submodule.subfuntion() == 'Subfunction'&quot;, None, Some(&amp;ctx)).unwrap();
@@ -587,11 +570,7 @@ fn nested_call() {
 <p>PyO3 supports two ways to define a function in python. Both require registering
 the function to a <a href="./module.html">module</a></p>
 <p>One way is defining the function in the module definition.</p>
-<pre><pre class="playpen"><code class="language-rust">#![feature(proc_macro)]
-
-extern crate pyo3;
-use pyo3::prelude::*;
-
+<pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
 
 #[pymodule]
 fn rust2py(py: Python, m: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
@@ -614,9 +593,8 @@ as first parameter, the function name as second and an instance of <code>Python<
 as third.</p>
 <pre><pre class="playpen"><code class="language-rust">#![feature(specialization)]
 
-#[macro_use]
-extern crate pyo3;
 use pyo3::prelude::*;
+use pyo3::wrap_pyfunction;
 
 #[pyfunction]
 fn double(x: usize) -&gt; usize {
@@ -625,7 +603,7 @@ fn double(x: usize) -&gt; usize {
 
 #[pymodule]
 fn module_with_functions(py: Python, m: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
-    m.add_wrapped(wrap_function!(double)).unwrap();
+    m.add_wrapped(wrap_pyfunction!(double)).unwrap();
 
     Ok(())
 }
@@ -664,7 +642,7 @@ Type:      builtin_function_or_method
 <a class="header" href="#calling-a-python-function-in-rust" id="calling-a-python-function-in-rust"><h3>Calling a python function in rust</h3></a>
 <p>You can use <code>ObjectProtocol::is_callable</code> to check if you got a callable, which is true for functions (including lambdas), methods and objects with a <code>__call__</code> method. You can call the object with <code>ObjectProtocol::call</code> with the args as first parameter and the kwargs (or <code>NoArgs</code>) as second parameter. There are also <code>ObjectProtocol::call0</code> with no args and <code>ObjectProtocol::call1</code> with only the args.</p>
 <a class="header" href="#calling-rust-fns-in-python" id="calling-rust-fns-in-python"><h3>Calling rust <code>Fn</code>s in python</h3></a>
-<p>If you have a static function, you can expose it with <code>#[pyfunction]</code> and use <code>wrap_function!</code> to get the corresponding <code>PyObject</code>. For dynamic functions, e.g. lambda and functions that were passed as arguments, you must put them in some kind of owned container, e.g. a box. (Long-Term a special container similar to wasm-bindgen's <code>Closure</code> should take care of that). You can than use a <code>#[pyclass]</code> struct with that container as field as a way to pass the function over the ffi-barrier. You can even make that class callable with <code>__call__</code> so it looks like a function in python code.</p>
+<p>If you have a static function, you can expose it with <code>#[pyfunction]</code> and use <code>wrap_pyfunction!</code> to get the corresponding <code>PyObject</code>. For dynamic functions, e.g. lambda and functions that were passed as arguments, you must put them in some kind of owned container, e.g. a box. (Long-Term a special container similar to wasm-bindgen's <code>Closure</code> should take care of that). You can than use a <code>#[pyclass]</code> struct with that container as field as a way to pass the function over the ffi-barrier. You can even make that class callable with <code>__call__</code> so it looks like a function in python code.</p>
 <a class="header" href="#python-class" id="python-class"><h1>Python Class</h1></a>
 <a class="header" href="#define-new-class" id="define-new-class"><h2>Define new class</h2></a>
 <p>To define python custom class, rust struct needs to be annotated with <code>#[pyclass]</code> attribute.</p>
@@ -672,7 +650,6 @@ Type:      builtin_function_or_method
 # #![allow(unused_variables)]
 #fn main() {
 # #![feature(specialization)]
-# extern crate pyo3;
 # use pyo3::prelude::*;
 
 #[pyclass]
@@ -706,7 +683,6 @@ attribute. Only the python <code>__new__</code> method can be specified, <code>_
 #fn main() {
 # #![feature(specialization)]
 #
-# extern crate pyo3;
 # use pyo3::prelude::*;
 # use pyo3::PyRawObject;
 
@@ -748,7 +724,6 @@ with value of custom class struct. Subclass must call parent's <code>__new__</co
 # #![allow(unused_variables)]
 #fn main() {
 # #![feature(specialization)]
-# extern crate pyo3;
 # use pyo3::prelude::*;
 # use pyo3::PyRawObject;
 #[pyclass]
@@ -796,7 +771,6 @@ attributes. i.e.</p>
 # #![allow(unused_variables)]
 #fn main() {
 # #![feature(specialization)]
-# extern crate pyo3;
 # use pyo3::prelude::*;
 # #[pyclass]
 # struct MyClass {
@@ -821,7 +795,6 @@ rust's special keywords like <code>type</code>.</p>
 # #![allow(unused_variables)]
 #fn main() {
 # #![feature(specialization)]
-# extern crate pyo3;
 # use pyo3::prelude::*;
 # #[pyclass]
 # struct MyClass {
@@ -850,7 +823,6 @@ If parameter is specified, it is used and property name. i.e.</p>
 # #![allow(unused_variables)]
 #fn main() {
 # #![feature(specialization)]
-# extern crate pyo3;
 # use pyo3::prelude::*;
 # #[pyclass]
 # struct MyClass {
@@ -878,7 +850,6 @@ impl MyClass {
 # #![allow(unused_variables)]
 #fn main() {
 # #![feature(specialization)]
-# extern crate pyo3;
 # use pyo3::prelude::*;
 #[pyclass]
 struct MyClass {
@@ -896,7 +867,6 @@ class method static methods, etc.</p>
 # #![allow(unused_variables)]
 #fn main() {
 # #![feature(specialization)]
-# extern crate pyo3;
 # use pyo3::prelude::*;
 # #[pyclass]
 # struct MyClass {
@@ -924,7 +894,6 @@ get injected by method wrapper. i.e</p>
 # #![allow(unused_variables)]
 #fn main() {
 # #![feature(specialization)]
-# extern crate pyo3;
 # use pyo3::prelude::*;
 # #[pyclass]
 # struct MyClass {
@@ -947,7 +916,6 @@ with<code>#[classmethod]</code> attribute.</p>
 # #![allow(unused_variables)]
 #fn main() {
 # #![feature(specialization)]
-# extern crate pyo3;
 # use pyo3::prelude::*;
 # #[pyclass]
 # struct MyClass {
@@ -979,7 +947,6 @@ for some <code>T</code> that implements <code>IntoPyObject</code>.</p>
 # #![allow(unused_variables)]
 #fn main() {
 # #![feature(specialization)]
-# extern crate pyo3;
 # use pyo3::prelude::*;
 # #[pyclass]
 # struct MyClass {
@@ -1002,7 +969,6 @@ with <code>#[call]</code> attribute. Arguments of the method are specified same 
 # #![allow(unused_variables)]
 #fn main() {
 # #![feature(specialization)]
-# extern crate pyo3;
 # use pyo3::prelude::*;
 # #[pyclass]
 # struct MyClass {
@@ -1045,7 +1011,6 @@ code unmodified.</li>
 # #![allow(unused_variables)]
 #fn main() {
 # #![feature(specialization)]
-# extern crate pyo3;
 # use pyo3::prelude::*;
 #
 # #[pyclass]
@@ -1069,7 +1034,7 @@ of them. To provide specific python object behavior you need to implement specif
 for your struct. Important note, each protocol implementation block has to be annotated
 with <code>#[pyproto]</code> attribute.</p>
 <a class="header" href="#basic-object-customization" id="basic-object-customization"><h3>Basic object customization</h3></a>
-<p><a href="https://docs.rs/pyo3/0.5.2/class/basic/trait.PyObjectProtocol.html"><code>PyObjectProtocol</code></a> trait provide several basic customizations.</p>
+<p><a href="https://docs.rs/pyo3/0.6.0-alpha.2/class/basic/trait.PyObjectProtocol.html"><code>PyObjectProtocol</code></a> trait provide several basic customizations.</p>
 <a class="header" href="#attribute-access" id="attribute-access"><h4>Attribute access</h4></a>
 <p>To customize object attribute access define following methods:</p>
 <ul>
@@ -1134,7 +1099,7 @@ even on Python 2.7 where the Python spelling was <code>__nonzero__</code>.</p>
 <p>If your type owns references to other python objects, you will need to
 integrate with Python's garbage collector so that the GC is aware of
 those references.
-To do this, implement <a href="https://docs.rs/pyo3/0.5.2/class/gc/trait.PyGCProtocol.html"><code>PyGCProtocol</code></a> trait for your struct.
+To do this, implement <a href="https://docs.rs/pyo3/0.6.0-alpha.2/class/gc/trait.PyGCProtocol.html"><code>PyGCProtocol</code></a> trait for your struct.
 It includes two methods <code>__traverse__</code> and <code>__clear__</code>.
 These correspond to the slots <code>tp_traverse</code> and <code>tp_clear</code> in the Python C API.
 <code>__traverse__</code> must call <code>visit.call()</code> for each reference to another python object.
@@ -1145,9 +1110,8 @@ Example:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #![feature(specialization)]
-#fn main() {
-extern crate pyo3;
 
+#fn main() {
 use pyo3::prelude::*;
 
 
@@ -1179,7 +1143,7 @@ i.e. <code>#[pyclass(gc)]</code>. In that case instances of custom class partici
 collector, and it is possible to track them with <code>gc</code> module methods.</p>
 <a class="header" href="#iterator-types" id="iterator-types"><h3>Iterator Types</h3></a>
 <p>Iterators can be defined using the
-<a href="https://docs.rs/pyo3/0.5.2/class/iter/trait.PyIterProtocol.html"><code>PyIterProtocol</code></a> trait.
+<a href="https://docs.rs/pyo3/0.6.0-alpha.2/class/iter/trait.PyIterProtocol.html"><code>PyIterProtocol</code></a> trait.
 It includes two methods <code>__iter__</code> and <code>__next__</code>:</p>
 <ul>
 <li><code>fn __iter__(&amp;mut self) -&gt; PyResult&lt;impl IntoPyObject&gt;</code></li>
@@ -1192,8 +1156,6 @@ It includes two methods <code>__iter__</code> and <code>__next__</code>:</p>
 #![feature(specialization)]
 
 #fn main() {
-extern crate pyo3;
-
 use pyo3::prelude::*;
 
 #[pyclass]
@@ -1337,8 +1299,6 @@ cargo build --target armv7-unknown-linux-gnueabihf
 #![feature(specialization)]
 
 #fn main() {
-extern crate pyo3;
-
 use pyo3::prelude::*;
 use pyo3::PyRawObject;
 

@@ -141,12 +141,11 @@
 <a class="header" href="#extract" id="extract"><h2><code>.extract()</code></h2></a>
 <p>The easiest way to convert a python object to a rust value is using <code>.extract()?</code>.</p>
 <a class="header" href="#topyobject-and-intopyobject-trait" id="topyobject-and-intopyobject-trait"><h2><code>ToPyObject</code> and <code>IntoPyObject</code> trait</h2></a>
-<p><a href="https://docs.rs/pyo3/0.5.2/trait.ToPyObject.html"><code>ToPyObject</code></a> trait is a conversion trait that allows various objects to be converted into <a href="https://docs.rs/pyo3/0.5.2/struct.PyObject.html"><code>PyObject</code></a>. <a href="https://docs.rs/pyo3/0.5.2/trait.IntoPyObject.html"><code>IntoPyObject</code></a> serves the same purpose except it consumes <code>self</code>.</p>
+<p><a href="https://docs.rs/pyo3/0.6.0-alpha.2/trait.ToPyObject.html"><code>ToPyObject</code></a> trait is a conversion trait that allows various objects to be converted into <a href="https://docs.rs/pyo3/0.6.0-alpha.2/struct.PyObject.html"><code>PyObject</code></a>. <a href="https://docs.rs/pyo3/0.6.0-alpha.2/trait.IntoPyObject.html"><code>IntoPyObject</code></a> serves the same purpose except it consumes <code>self</code>.</p>
 <a class="header" href="#intopytuple-trait" id="intopytuple-trait"><h2><code>IntoPyTuple</code> trait</h2></a>
-<p><a href="https://docs.rs/pyo3/0.5.2/trait.IntoPyTuple.html"><code>IntoPyTuple</code></a> trait is a conversion trait that allows various objects to be converted into <a href="https://docs.rs/pyo3/0.5.2/struct.PyTuple.html"><code>PyTuple</code></a> object.</p>
-<p>For example, <a href="https://docs.rs/pyo3/0.5.2/trait.IntoPyTuple.html"><code>IntoPyTuple</code></a> trait is implemented for <code>()</code> so that you can convert it into a empty <a href="https://docs.rs/pyo3/0.5.2/struct.PyTuple.html"><code>PyTuple</code></a></p>
-<pre><pre class="playpen"><code class="language-rust">extern crate pyo3;
-use pyo3::{Python, IntoPyTuple};
+<p><a href="https://docs.rs/pyo3/0.6.0-alpha.2/trait.IntoPyTuple.html"><code>IntoPyTuple</code></a> trait is a conversion trait that allows various objects to be converted into <a href="https://docs.rs/pyo3/0.6.0-alpha.2/struct.PyTuple.html"><code>PyTuple</code></a> object.</p>
+<p>For example, <a href="https://docs.rs/pyo3/0.6.0-alpha.2/trait.IntoPyTuple.html"><code>IntoPyTuple</code></a> trait is implemented for <code>()</code> so that you can convert it into a empty <a href="https://docs.rs/pyo3/0.6.0-alpha.2/struct.PyTuple.html"><code>PyTuple</code></a></p>
+<pre><pre class="playpen"><code class="language-rust">use pyo3::{Python, IntoPyTuple};
 
 fn main() {
     let gil = Python::acquire_gil();
@@ -157,25 +156,24 @@ fn main() {
 <a class="header" href="#frompyobject-and-reffrompyobject-trait" id="frompyobject-and-reffrompyobject-trait"><h2><code>FromPyObject</code> and <code>RefFromPyObject</code> trait</h2></a>
 <a class="header" href="#args-and-kwargs-for-python-object-call" id="args-and-kwargs-for-python-object-call"><h2><code>*args</code> and <code>**kwargs</code> for python object call</h2></a>
 <p>There are several way how to pass positional and keyword arguments to python object call.
-<a href="https://docs.rs/pyo3/0.5.2/trait.ObjectProtocol.html"><code>ObjectProtocol</code></a> trait
+<a href="https://docs.rs/pyo3/0.6.0-alpha.2/trait.ObjectProtocol.html"><code>ObjectProtocol</code></a> trait
 provides two methods:</p>
 <ul>
 <li><code>call</code> - call callable python object.</li>
 <li><code>call_method</code> - call specific method on the object.</li>
 </ul>
 <p>Both methods accept <code>args</code> and <code>kwargs</code> arguments. <code>args</code> argument is generate over
-<a href="https://docs.rs/pyo3/0.5.2/trait.IntoPyTuple.html"><code>IntoPyTuple</code></a> trait. So args could be <code>PyTuple</code> instance or
+<a href="https://docs.rs/pyo3/0.6.0-alpha.2/trait.IntoPyTuple.html"><code>IntoPyTuple</code></a> trait. So args could be <code>PyTuple</code> instance or
 rust tuple with up to 10 elements. Or <code>NoArgs</code> object which represents empty tuple object.</p>
-<pre><pre class="playpen"><code class="language-rust">extern crate pyo3;
-use pyo3::prelude::*;
+<pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
 
-# struct SomeObject;
-# impl SomeObject {
-#     fn new(py: Python) -&gt; PyObject {
-#           pyo3::PyDict::new(py).to_object(py)
-#     }
-# }
-#
+struct SomeObject;
+impl SomeObject {
+    fn new(py: Python) -&gt; PyObject {
+          pyo3::PyDict::new(py).to_object(py)
+    }
+}
+
 fn main() {
     # let arg1 = &quot;arg1&quot;;
     # let arg2 = &quot;arg2&quot;;
@@ -199,23 +197,24 @@ fn main() {
 }
 </code></pre></pre>
 <p><code>kwargs</code> can by <code>None</code> or <code>Some(&amp;PyDict)</code>. You can use the
-<a href="https://docs.rs/pyo3/0.5.2/trait.IntoPyDict.html"><code>IntoPyDict</code></a> trait to convert other dict-like containers, e.g. <code>HashMap</code>, <code>BTreeMap</code> as well as tuples with up to 10 elements and <code>Vec</code>s where each element is a two element tuple.</p>
-<pre><pre class="playpen"><code class="language-rust">extern crate pyo3;
-
+<a href="https://docs.rs/pyo3/0.6.0-alpha.2/trait.IntoPyDict.html"><code>IntoPyDict</code></a> trait to convert other dict-like containers, e.g. <code>HashMap</code>, <code>BTreeMap</code> as well as tuples with up to 10 elements and <code>Vec</code>s where each element is a two element tuple.</p>
+<pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
+use pyo3::types::{IntoPyDict, PyDict};
 use std::collections::HashMap;
-use pyo3::prelude::*;
 
-# struct SomeObject;
-# impl SomeObject {
-#     fn new(py: Python) -&gt; PyObject {
-#           pyo3::PyDict::new(py).to_object(py)
-#     }
-# }
+struct SomeObject;
+
+impl SomeObject {
+    fn new(py: Python) -&gt; PyObject {
+        PyDict::new(py).to_object(py)
+    }
+}
+
 fn main() {
-    # let key1 = &quot;key1&quot;;
-    # let val1 = 1;
-    # let key2 = &quot;key2&quot;;
-    # let val2 = 2;
+    let key1 = &quot;key1&quot;;
+    let val1 = 1;
+    let key2 = &quot;key2&quot;;
+    let val2 = 2;
 
     let gil = Python::acquire_gil();
     let py = gil.python();
@@ -225,16 +224,16 @@ fn main() {
     // call object with PyDict
     let kwargs = PyDict::new(py);
     kwargs.set_item(key1, val1);
-    obj.call(py, NoArgs, kwargs);
+    obj.call(py, NoArgs, Some(kwargs));
 
-    // pass arguments as rust tuple
-    let kwargs = ((key1, val1), (key2, val2));
-    obj.call(py, NoArgs, kwargs);
+    // pass arguments as Vec
+    let kwargs = vec![(key1, val1), (key2, val2)];
+    obj.call(py, NoArgs, Some(kwargs.into_py_dict(py)));
 
     // pass arguments as HashMap
     let mut kwargs = HashMap::&lt;&amp;str, i32&gt;::new();
     kwargs.insert(key1, 1);
-    obj.call(py, NoArgs, kwargs);
+    obj.call(py, NoArgs, Some(kwargs.into_py_dict(py)));
 }
 </code></pre></pre>
 <p>TODO</p>

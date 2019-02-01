@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `pyo3` crate."><meta name="keywords" content="rust, rustlang, rust-lang, pyo3"><title>pyo3 - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><p class='location'>Crate pyo3</p><div class="sidebar-elems"><a id='all-types' href='all.html'><p>See all pyo3's items</p></a><div class="block items"><ul><li><a href="#reexports">Re-exports</a></li><li><a href="#modules">Modules</a></li><li><a href="#macros">Macros</a></li><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li><li><a href="#traits">Traits</a></li><li><a href="#functions">Functions</a></li><li><a href="#types">Type Definitions</a></li></ul></div><p class='location'></p><script>window.sidebarCurrent = {name: 'pyo3', ty: 'mod', relpath: '../'};</script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/pyo3/lib.rs.html#1-239' title='goto source code'>[src]</a></span><span class='in-band'>Crate <a class="mod" href=''>pyo3</a></span></h1><div class='docblock'><p>Rust bindings to the Python interpreter.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `pyo3` crate."><meta name="keywords" content="rust, rustlang, rust-lang, pyo3"><title>pyo3 - Rust</title><link rel="stylesheet" type="text/css" href="../normalize.css"><link rel="stylesheet" type="text/css" href="../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../dark.css"><link rel="stylesheet" type="text/css" href="../light.css" id="themeStyle"><script src="../storage.js"></script><noscript><link rel="stylesheet" href="../noscript.css"></noscript><link rel="shortcut icon" href="../favicon.ico"><style type="text/css">#crate-search{background-image:url("../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='..//index.html'><img src='../rust-logo.png' alt='logo' width='100'></a><p class='location'>Crate pyo3</p><div class="sidebar-elems"><a id='all-types' href='all.html'><p>See all pyo3's items</p></a><div class="block items"><ul><li><a href="#reexports">Re-exports</a></li><li><a href="#modules">Modules</a></li><li><a href="#macros">Macros</a></li><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li><li><a href="#traits">Traits</a></li><li><a href="#functions">Functions</a></li><li><a href="#types">Type Definitions</a></li></ul></div><p class='location'></p><script>window.sidebarCurrent = {name: 'pyo3', ty: 'mod', relpath: '../'};</script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../settings.html"><img src="../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../src/pyo3/lib.rs.html#1-240' title='goto source code'>[src]</a></span><span class='in-band'>Crate <a class="mod" href=''>pyo3</a></span></h1><div class='docblock'><p>Rust bindings to the Python interpreter.</p>
+<p>Look at <a href="https://pyo3.rs/">the guide</a> for a detailed introduction.</p>
 <h1 id="ownership-and-lifetimes" class="section-header"><a href="#ownership-and-lifetimes">Ownership and Lifetimes</a></h1>
 <p>In Python, all objects are implicitly reference counted.
 In rust, we will use the <code>PyObject</code> type to represent a reference to a Python object.</p>
@@ -17,11 +18,61 @@ and have to pass it into all operations that call into the Python runtime.</p>
 This is an alias for the type <code>Result&lt;..., PyErr&gt;</code>.</p>
 <p>A <code>PyErr</code> represents a Python exception. Errors within the <code>PyO3</code> library are
 also exposed as Python exceptions.</p>
-<h1 id="example" class="section-header"><a href="#example">Example</a></h1>
+<h1 id="example" class="section-header"><a href="#example">Example</a></h1><h2 id="using-rust-from-python" class="section-header"><a href="#using-rust-from-python">Using rust from python</a></h2>
+<p>Pyo3 can be used to generate a native python module.</p>
+<p><strong><code>Cargo.toml</code></strong></p>
+<pre><code class="language-toml">[package]
+name = &quot;string-sum&quot;
+version = &quot;0.1.0&quot;
+edition = &quot;2018&quot;
+
+[lib]
+name = &quot;string_sum&quot;
+crate-type = [&quot;cdylib&quot;]
+
+[dependencies.pyo3]
+version = &quot;0.6.0-alpha.2&quot;
+features = [&quot;extension-module&quot;]
+</code></pre>
+<p><strong><code>src/lib.rs</code></strong></p>
+
 <div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="attribute">#![<span class="ident">feature</span>(<span class="ident">specialization</span>)]</span>
 
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">pyo3</span>;
+<span class="kw">use</span> <span class="ident">pyo3</span>::<span class="ident">prelude</span>::<span class="kw-2">*</span>;
+<span class="kw">use</span> <span class="ident">pyo3</span>::<span class="ident">wrap_pyfunction</span>;
+
+<span class="attribute">#[<span class="ident">pyfunction</span>]</span>
+<span class="doccomment">/// Formats the sum of two numbers as string</span>
+<span class="kw">fn</span> <span class="ident">sum_as_string</span>(<span class="ident">a</span>: <span class="ident">usize</span>, <span class="ident">b</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+    <span class="prelude-val">Ok</span>((<span class="ident">a</span> <span class="op">+</span> <span class="ident">b</span>).<span class="ident">to_string</span>())
+}
+
+<span class="doccomment">/// This module is a python module implemented in Rust.</span>
+<span class="attribute">#[<span class="ident">pymodule</span>]</span>
+<span class="kw">fn</span> <span class="ident">string_sum</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">m</span>: <span class="kw-2">&amp;</span><span class="ident">PyModule</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="ident">m</span>.<span class="ident">add_wrapped</span>(<span class="macro">wrap_pyfunction</span><span class="macro">!</span>(<span class="ident">sum_as_string</span>))<span class="question-mark">?</span>;
+
+    <span class="prelude-val">Ok</span>(())
+}</pre></div>
+<p>On windows and linux, you can build normally with <code>cargo build --release</code>. On macOS, you need to set additional linker arguments. One option is to compile with <code>cargo rustc --release -- -C link-arg=-undefined -C link-arg=dynamic_lookup</code>, the other is to create a <code>.cargo/config</code> with the following content:</p>
+<pre><code class="language-toml">[target.x86_64-apple-darwin]
+rustflags = [
+  &quot;-C&quot;, &quot;link-arg=-undefined&quot;,
+  &quot;-C&quot;, &quot;link-arg=dynamic_lookup&quot;,
+]
+</code></pre>
+<p>For developing, you can copy and rename the shared library from the target folder: On macOS, rename <code>libstring_sum.dylib</code> to <code>string_sum.so</code>, on windows <code>libstring_sum.dll</code> to <code>string_sum.pyd</code> and on linux <code>libstring_sum.so</code> to <code>string_sum.so</code>. Then open a python shell in the same folder and you'll be able to <code>import string_sum</code>.</p>
+<p>To build, test and publish your crate as python module, you can use <a href="https://github.com/PyO3/pyo3-pack">pyo3-pack</a> or <a href="https://github.com/PyO3/setuptools-rust">setuptools-rust</a>. You can find an example for setuptools-rust in <a href="examples/word-count">examples/word-count</a>, while pyo3-pack should work on your crate without any configuration.</p>
+<h2 id="using-python-from-rust" class="section-header"><a href="#using-python-from-rust">Using python from rust</a></h2>
+<p>Add <code>pyo3</code> this to your <code>Cargo.toml</code>:</p>
+<pre><code class="language-toml">[dependencies]
+pyo3 = &quot;0.6.0-alpha.2&quot;
+</code></pre>
+<p>Example program displaying the value of <code>sys.version</code>:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered">
+<span class="attribute">#![<span class="ident">feature</span>(<span class="ident">specialization</span>)]</span>
 
 <span class="kw">use</span> <span class="ident">pyo3</span>::<span class="ident">prelude</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">pyo3</span>::<span class="ident">types</span>::<span class="ident">PyDict</span>;
@@ -40,61 +91,6 @@ also exposed as Python exceptions.</p>
     <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;Hello {}, I&#39;m Python {}&quot;</span>, <span class="ident">user</span>, <span class="ident">version</span>);
     <span class="prelude-val">Ok</span>(())
 }</pre></div>
-<h1 id="python-extension" class="section-header"><a href="#python-extension">Python extension</a></h1>
-<p>To allow Python to load the rust code as a Python extension
-module, you need an initialization function with <code>Fn(Python, &amp;PyModule) -&gt; PyResult&lt;()&gt;</code>
-that is annotates with <code>#[pymodule]</code>. By default the function name will become the module name,
-but you can override that with <code>#[pymodule(name)]</code>.</p>
-<p>To creates a Python callable object that invokes a Rust function, specify rust
-function and decorate it with <code>#[pyfn()]</code> attribute. <code>pyfn()</code> accepts three parameters.</p>
-<ol>
-<li><code>m</code>: The module name.</li>
-<li>name of function visible to Python code.</li>
-<li>comma separated arguments, i.e. param=&quot;None&quot;, &quot;*&quot;, param3=&quot;55&quot;</li>
-</ol>
-<h1 id="example-1" class="section-header"><a href="#example-1">Example</a></h1>
-<div class="example-wrap"><pre class="rust rust-example-rendered">
-<span class="attribute">#![<span class="ident">feature</span>(<span class="ident">specialization</span>)]</span>
-
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">pyo3</span>;
-<span class="kw">use</span> <span class="ident">pyo3</span>::<span class="ident">prelude</span>::<span class="kw-2">*</span>;
-
-<span class="comment">// Add bindings to the generated python module</span>
-<span class="comment">// N.B: names: &quot;librust2py&quot; must be the name of the `.so` or `.pyd` file</span>
-<span class="doccomment">/// This module is implemented in Rust.</span>
-<span class="attribute">#[<span class="ident">pymodule</span>]</span>
-<span class="kw">fn</span> <span class="ident">rust2py</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">m</span>: <span class="kw-2">&amp;</span><span class="ident">PyModule</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-
-    <span class="attribute">#[<span class="ident">pyfn</span>(<span class="ident">m</span>, <span class="string">&quot;sum_as_string&quot;</span>)]</span>
-    <span class="comment">// ``#[pyfn()]` converts the arguments from Python objects to Rust values</span>
-    <span class="comment">// and the Rust return value back into a Python object.</span>
-    <span class="kw">fn</span> <span class="ident">sum_as_string_py</span>(<span class="ident">a</span>:<span class="ident">i64</span>, <span class="ident">b</span>:<span class="ident">i64</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
-       <span class="kw">let</span> <span class="ident">out</span> <span class="op">=</span> <span class="ident">sum_as_string</span>(<span class="ident">a</span>, <span class="ident">b</span>);
-       <span class="prelude-val">Ok</span>(<span class="ident">out</span>)
-    }
-
-    <span class="prelude-val">Ok</span>(())
-}
-
-<span class="comment">// The logic can be implemented as a normal rust function</span>
-<span class="kw">fn</span> <span class="ident">sum_as_string</span>(<span class="ident">a</span>:<span class="ident">i64</span>, <span class="ident">b</span>:<span class="ident">i64</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
-    <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">a</span> <span class="op">+</span> <span class="ident">b</span>).<span class="ident">to_string</span>()
-}
-</pre></div>
-<p>In your <code>Cargo.toml</code>, use the <code>extension-module</code> feature for the <code>pyo3</code> dependency:</p>
-<pre><code class="language-cargo">[dependencies.pyo3]
-version = &quot;*&quot;
-features = [&quot;extension-module&quot;]
-</code></pre>
-<p>On windows and linux, you can build normally with <code>cargo build --release</code>. On Mac Os, you need to set additional linker arguments. One option is to compile with <code>cargo rustc --release -- -C link-arg=-undefined -C link-arg=dynamic_lookup</code>, the other is to create a <code>.cargo/config</code> with the following content:</p>
-<pre><code class="language-toml">[target.x86_64-apple-darwin]
-rustflags = [
-  &quot;-C&quot;, &quot;link-arg=-undefined&quot;,
-  &quot;-C&quot;, &quot;link-arg=dynamic_lookup&quot;,
-]
-</code></pre>
-<p>Also on macOS, you will need to rename the output from *.dylib to *.so. On Windows, you will need to rename the output from *.dll to *.pyd.</p>
-<p><a href="https://github.com/PyO3/setuptools-rust"><code>setuptools-rust</code></a> can be used to generate a python package and includes the commands above by default. See <a href="examples/word-count">examples/word-count</a> and the associated setup.py.</p>
 </div><h2 id='reexports' class='section-header'><a href="#reexports">Re-exports</a></h2>
 <table><tr><td><code>pub use crate::<a class="mod" href="../pyo3/class/index.html" title="mod pyo3::class">class</a>::*;</code></td></tr><tr><td><code>pub use crate::python::<a class="trait" href="../pyo3/python/trait.IntoPyPointer.html" title="trait pyo3::python::IntoPyPointer">IntoPyPointer</a>;</code></td></tr><tr><td><code>pub use crate::python::<a class="struct" href="../pyo3/python/struct.Python.html" title="struct pyo3::python::Python">Python</a>;</code></td></tr><tr><td><code>pub use crate::python::<a class="trait" href="../pyo3/python/trait.ToPyPointer.html" title="trait pyo3::python::ToPyPointer">ToPyPointer</a>;</code></td></tr><tr><td><code>pub use crate::typeob::<a class="trait" href="../pyo3/typeob/trait.PyObjectAlloc.html" title="trait pyo3::typeob::PyObjectAlloc">PyObjectAlloc</a>;</code></td></tr><tr><td><code>pub use crate::typeob::<a class="struct" href="../pyo3/typeob/struct.PyRawObject.html" title="struct pyo3::typeob::PyRawObject">PyRawObject</a>;</code></td></tr><tr><td><code>pub use crate::typeob::<a class="trait" href="../pyo3/typeob/trait.PyTypeInfo.html" title="trait pyo3::typeob::PyTypeInfo">PyTypeInfo</a>;</code></td></tr><tr><td><code>pub use crate::types::<a class="mod" href="../pyo3/types/exceptions/index.html" title="mod pyo3::types::exceptions">exceptions</a>;</code></td></tr></table><h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
 <table><tr class='module-item'><td><a class="mod" href="buffer/index.html" title='pyo3::buffer mod'>buffer</a></td><td class='docblock-short'><p><code>PyBuffer</code> implementation</p>
@@ -115,8 +111,8 @@ rust code.</p>
 code.</p>
 </td></tr><tr class='module-item'><td><a class="macro" href="macro.int_convert_bignum.html" title='pyo3::int_convert_bignum macro'>int_convert_bignum</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="macro" href="macro.int_fits_larger_int.html" title='pyo3::int_fits_larger_int macro'>int_fits_larger_int</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="macro" href="macro.pyobject_downcast.html" title='pyo3::pyobject_downcast macro'>pyobject_downcast</a></td><td class='docblock-short'><p>Implements a typesafe conversions throught <a href="../pyo3/prelude/trait.FromPyObject.html" title="FromPyObject">FromPyObject</a>, given a typecheck function as second
 parameter</p>
-</td></tr><tr class='module-item'><td><a class="macro" href="macro.pyobject_native_type.html" title='pyo3::pyobject_native_type macro'>pyobject_native_type</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="macro" href="macro.pyobject_native_type_convert.html" title='pyo3::pyobject_native_type_convert macro'>pyobject_native_type_convert</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="macro" href="macro.pyobject_native_type_named.html" title='pyo3::pyobject_native_type_named macro'>pyobject_native_type_named</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="macro" href="macro.wrap_function.html" title='pyo3::wrap_function macro'>wrap_function</a></td><td class='docblock-short'><p>Returns a function that takes a <a href="../pyo3/python/struct.Python.html" title="Python">Python</a> instance and returns a python function.</p>
-</td></tr><tr class='module-item'><td><a class="macro" href="macro.wrap_module.html" title='pyo3::wrap_module macro'>wrap_module</a></td><td class='docblock-short'><p>Returns a function that takes a <a href="../pyo3/python/struct.Python.html" title="Python">Python</a> instance and returns a python module.</p>
+</td></tr><tr class='module-item'><td><a class="macro" href="macro.pyobject_native_type.html" title='pyo3::pyobject_native_type macro'>pyobject_native_type</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="macro" href="macro.pyobject_native_type_convert.html" title='pyo3::pyobject_native_type_convert macro'>pyobject_native_type_convert</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="macro" href="macro.pyobject_native_type_named.html" title='pyo3::pyobject_native_type_named macro'>pyobject_native_type_named</a></td><td class='docblock-short'></td></tr><tr class='module-item'><td><a class="macro" href="macro.wrap_pyfunction.html" title='pyo3::wrap_pyfunction macro'>wrap_pyfunction</a></td><td class='docblock-short'><p>Returns a function that takes a <a href="../pyo3/python/struct.Python.html" title="Python">Python</a> instance and returns a python function.</p>
+</td></tr><tr class='module-item'><td><a class="macro" href="macro.wrap_pymodule.html" title='pyo3::wrap_pymodule macro'>wrap_pymodule</a></td><td class='docblock-short'><p>Returns a function that takes a <a href="../pyo3/python/struct.Python.html" title="Python">Python</a> instance and returns a python module.</p>
 </td></tr></table><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
 <table><tr class='module-item'><td><a class="struct" href="struct.GILGuard.html" title='pyo3::GILGuard struct'>GILGuard</a></td><td class='docblock-short'><p>RAII type that represents the Global Interpreter Lock acquisition.</p>
 </td></tr><tr class='module-item'><td><a class="struct" href="struct.NoArgs.html" title='pyo3::NoArgs struct'>NoArgs</a></td><td class='docblock-short'><p>An empty struct that represents the empty argument list.

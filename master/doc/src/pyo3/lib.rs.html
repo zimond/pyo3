@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../..//index.html'><img src='../../rust-logo.png' alt='logo' width='100'></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form js-only"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -237,12 +237,16 @@
 <span id="237">237</span>
 <span id="238">238</span>
 <span id="239">239</span>
+<span id="240">240</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="attribute">#![<span class="ident">feature</span>(<span class="ident">specialization</span>)]</span>
 
 <span class="doccomment">//! Rust bindings to the Python interpreter.</span>
 <span class="doccomment">//!</span>
+<span class="doccomment">//! Look at [the guide](https://pyo3.rs/) for a detailed introduction.</span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//! # Ownership and Lifetimes</span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//! In Python, all objects are implicitly reference counted.</span>
 <span class="doccomment">//! In rust, we will use the `PyObject` type to represent a reference to a Python object.</span>
 <span class="doccomment">//!</span>
@@ -268,10 +272,77 @@
 <span class="doccomment">//!</span>
 <span class="doccomment">//! # Example</span>
 <span class="doccomment">//!</span>
+<span class="doccomment">//! ## Using rust from python</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Pyo3 can be used to generate a native python module.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! **`Cargo.toml`**</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```toml</span>
+<span class="doccomment">//! [package]</span>
+<span class="doccomment">//! name = &quot;string-sum&quot;</span>
+<span class="doccomment">//! version = &quot;0.1.0&quot;</span>
+<span class="doccomment">//! edition = &quot;2018&quot;</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! [lib]</span>
+<span class="doccomment">//! name = &quot;string_sum&quot;</span>
+<span class="doccomment">//! crate-type = [&quot;cdylib&quot;]</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! [dependencies.pyo3]</span>
+<span class="doccomment">//! version = &quot;0.6.0-alpha.2&quot;</span>
+<span class="doccomment">//! features = [&quot;extension-module&quot;]</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! **`src/lib.rs`**</span>
+<span class="doccomment">//!</span>
 <span class="doccomment">//! ```rust</span>
 <span class="doccomment">//! #![feature(specialization)]</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! extern crate pyo3;</span>
+<span class="doccomment">//! use pyo3::prelude::*;</span>
+<span class="doccomment">//! use pyo3::wrap_pyfunction;</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! #[pyfunction]</span>
+<span class="doccomment">//! /// Formats the sum of two numbers as string</span>
+<span class="doccomment">//! fn sum_as_string(a: usize, b: usize) -&gt; PyResult&lt;String&gt; {</span>
+<span class="doccomment">//!     Ok((a + b).to_string())</span>
+<span class="doccomment">//! }</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! /// This module is a python module implemented in Rust.</span>
+<span class="doccomment">//! #[pymodule]</span>
+<span class="doccomment">//! fn string_sum(py: Python, m: &amp;PyModule) -&gt; PyResult&lt;()&gt; {</span>
+<span class="doccomment">//!     m.add_wrapped(wrap_pyfunction!(sum_as_string))?;</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//!     Ok(())</span>
+<span class="doccomment">//! }</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! On windows and linux, you can build normally with `cargo build --release`. On macOS, you need to set additional linker arguments. One option is to compile with `cargo rustc --release -- -C link-arg=-undefined -C link-arg=dynamic_lookup`, the other is to create a `.cargo/config` with the following content:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```toml</span>
+<span class="doccomment">//! [target.x86_64-apple-darwin]</span>
+<span class="doccomment">//! rustflags = [</span>
+<span class="doccomment">//!   &quot;-C&quot;, &quot;link-arg=-undefined&quot;,</span>
+<span class="doccomment">//!   &quot;-C&quot;, &quot;link-arg=dynamic_lookup&quot;,</span>
+<span class="doccomment">//! ]</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! For developing, you can copy and rename the shared library from the target folder: On macOS, rename `libstring_sum.dylib` to `string_sum.so`, on windows `libstring_sum.dll` to `string_sum.pyd` and on linux `libstring_sum.so` to `string_sum.so`. Then open a python shell in the same folder and you&#39;ll be able to `import string_sum`.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! To build, test and publish your crate as python module, you can use [pyo3-pack](https://github.com/PyO3/pyo3-pack) or [setuptools-rust](https://github.com/PyO3/setuptools-rust). You can find an example for setuptools-rust in [examples/word-count](examples/word-count), while pyo3-pack should work on your crate without any configuration.</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ## Using python from rust</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Add `pyo3` this to your `Cargo.toml`:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```toml</span>
+<span class="doccomment">//! [dependencies]</span>
+<span class="doccomment">//! pyo3 = &quot;0.6.0-alpha.2&quot;</span>
+<span class="doccomment">//! ```</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! Example program displaying the value of `sys.version`:</span>
+<span class="doccomment">//!</span>
+<span class="doccomment">//! ```rust</span>
+<span class="doccomment">//! #![feature(specialization)]</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! use pyo3::prelude::*;</span>
 <span class="doccomment">//! use pyo3::types::PyDict;</span>
@@ -291,91 +362,15 @@
 <span class="doccomment">//!     Ok(())</span>
 <span class="doccomment">//! }</span>
 <span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # Python extension</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! To allow Python to load the rust code as a Python extension</span>
-<span class="doccomment">//! module, you need an initialization function with `Fn(Python, &amp;PyModule) -&gt; PyResult&lt;()&gt;`</span>
-<span class="doccomment">//! that is annotates with `#[pymodule]`. By default the function name will become the module name,</span>
-<span class="doccomment">//! but you can override that with `#[pymodule(name)]`.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! To creates a Python callable object that invokes a Rust function, specify rust</span>
-<span class="doccomment">//! function and decorate it with `#[pyfn()]` attribute. `pyfn()` accepts three parameters.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! 1. `m`: The module name.</span>
-<span class="doccomment">//! 2. name of function visible to Python code.</span>
-<span class="doccomment">//! 3. comma separated arguments, i.e. param=&quot;None&quot;, &quot;*&quot;, param3=&quot;55&quot;</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # Example</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```rust</span>
-<span class="doccomment">//! #![feature(specialization)]</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! extern crate pyo3;</span>
-<span class="doccomment">//! use pyo3::prelude::*;</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! // Add bindings to the generated python module</span>
-<span class="doccomment">//! // N.B: names: &quot;librust2py&quot; must be the name of the `.so` or `.pyd` file</span>
-<span class="doccomment">//! /// This module is implemented in Rust.</span>
-<span class="doccomment">//! #[pymodule]</span>
-<span class="doccomment">//! fn rust2py(py: Python, m: &amp;PyModule) -&gt; PyResult&lt;()&gt; {</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!     #[pyfn(m, &quot;sum_as_string&quot;)]</span>
-<span class="doccomment">//!     // ``#[pyfn()]` converts the arguments from Python objects to Rust values</span>
-<span class="doccomment">//!     // and the Rust return value back into a Python object.</span>
-<span class="doccomment">//!     fn sum_as_string_py(a:i64, b:i64) -&gt; PyResult&lt;String&gt; {</span>
-<span class="doccomment">//!        let out = sum_as_string(a, b);</span>
-<span class="doccomment">//!        Ok(out)</span>
-<span class="doccomment">//!     }</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//!     Ok(())</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! // The logic can be implemented as a normal rust function</span>
-<span class="doccomment">//! fn sum_as_string(a:i64, b:i64) -&gt; String {</span>
-<span class="doccomment">//!     format!(&quot;{}&quot;, a + b).to_string()</span>
-<span class="doccomment">//! }</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! # fn main() {}</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! In your `Cargo.toml`, use the `extension-module` feature for the `pyo3` dependency:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```cargo</span>
-<span class="doccomment">//! [dependencies.pyo3]</span>
-<span class="doccomment">//! version = &quot;*&quot;</span>
-<span class="doccomment">//! features = [&quot;extension-module&quot;]</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! On windows and linux, you can build normally with `cargo build --release`. On Mac Os, you need to set additional linker arguments. One option is to compile with `cargo rustc --release -- -C link-arg=-undefined -C link-arg=dynamic_lookup`, the other is to create a `.cargo/config` with the following content:</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! ```toml</span>
-<span class="doccomment">//! [target.x86_64-apple-darwin]</span>
-<span class="doccomment">//! rustflags = [</span>
-<span class="doccomment">//!   &quot;-C&quot;, &quot;link-arg=-undefined&quot;,</span>
-<span class="doccomment">//!   &quot;-C&quot;, &quot;link-arg=dynamic_lookup&quot;,</span>
-<span class="doccomment">//! ]</span>
-<span class="doccomment">//! ```</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! Also on macOS, you will need to rename the output from \*.dylib to \*.so. On Windows, you will need to rename the output from \*.dll to \*.pyd.</span>
-<span class="doccomment">//!</span>
-<span class="doccomment">//! [`setuptools-rust`](https://github.com/PyO3/setuptools-rust) can be used to generate a python package and includes the commands above by default. See [examples/word-count](examples/word-count) and the associated setup.py.</span>
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="attribute">#[<span class="ident">macro_use</span>]</span>
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">assert_approx_eq</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-<span class="attribute">#[<span class="ident">macro_use</span>]</span>
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">indoc</span>;
-<span class="comment">// We need those types in the macro exports</span>
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="kw">pub</span> <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">libc</span>;
-<span class="comment">// We need that reexport for wrap_function</span>
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="kw">pub</span> <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">mashup</span>;
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">pyo3cls</span>;
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">spin</span>;
+<span class="comment">//pub extern crate libc;</span>
+<span class="comment">//pub extern crate mashup;</span>
+<span class="comment">//extern crate pyo3cls;</span>
+<span class="comment">//extern crate num_traits;</span>
+<span class="comment">//extern crate spin;</span>
+<span class="comment">//extern crate indoc;</span>
+<span class="comment">//#[macro_use]</span>
+<span class="comment">//extern crate assert_approx_eq;</span>
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">class</span>::<span class="kw-2">*</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">conversion</span>::{
@@ -391,6 +386,13 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">pythonrun</span>::{<span class="ident">init_once</span>, <span class="ident">prepare_freethreaded_python</span>, <span class="ident">GILGuard</span>, <span class="ident">GILPool</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">typeob</span>::{<span class="ident">PyObjectAlloc</span>, <span class="ident">PyRawObject</span>, <span class="ident">PyTypeInfo</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">exceptions</span>;
+
+<span class="comment">// We need those types in the macro exports</span>
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">libc</span>;
+<span class="comment">// We need that reexport for wrap_function</span>
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">mashup</span>;
 
 <span class="doccomment">/// Rust FFI declarations for Python</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">ffi</span>;
@@ -443,7 +445,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// Use this together with `#[pyfunction]` and [types::PyModule::add_wrapped].</span>
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">wrap_function</span> {
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">wrap_pyfunction</span> {
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">function_name</span>:<span class="ident">ident</span>) <span class="op">=&gt;</span> {{
         <span class="comment">// Get the mashup macro and its helpers into scope</span>
         <span class="kw">use</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">mashup</span>::<span class="kw-2">*</span>;
@@ -464,7 +466,7 @@
 <span class="doccomment">/// Use this together with `#[pymodule]` and [types::PyModule::add_wrapped].</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">Py_3</span>)]</span>
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
-<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">wrap_module</span> {
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">wrap_pymodule</span> {
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">module_name</span>:<span class="ident">ident</span>) <span class="op">=&gt;</span> {{
         <span class="kw">use</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">mashup</span>::<span class="kw-2">*</span>;
 

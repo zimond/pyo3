@@ -140,11 +140,7 @@
 <p>PyO3 supports two ways to define a function in python. Both require registering
 the function to a <a href="./module.html">module</a></p>
 <p>One way is defining the function in the module definition.</p>
-<pre><pre class="playpen"><code class="language-rust">#![feature(proc_macro)]
-
-extern crate pyo3;
-use pyo3::prelude::*;
-
+<pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
 
 #[pymodule]
 fn rust2py(py: Python, m: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
@@ -167,9 +163,8 @@ as first parameter, the function name as second and an instance of <code>Python<
 as third.</p>
 <pre><pre class="playpen"><code class="language-rust">#![feature(specialization)]
 
-#[macro_use]
-extern crate pyo3;
 use pyo3::prelude::*;
+use pyo3::wrap_pyfunction;
 
 #[pyfunction]
 fn double(x: usize) -&gt; usize {
@@ -178,7 +173,7 @@ fn double(x: usize) -&gt; usize {
 
 #[pymodule]
 fn module_with_functions(py: Python, m: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
-    m.add_wrapped(wrap_function!(double)).unwrap();
+    m.add_wrapped(wrap_pyfunction!(double)).unwrap();
 
     Ok(())
 }
@@ -217,7 +212,7 @@ Type:      builtin_function_or_method
 <a class="header" href="#calling-a-python-function-in-rust" id="calling-a-python-function-in-rust"><h3>Calling a python function in rust</h3></a>
 <p>You can use <code>ObjectProtocol::is_callable</code> to check if you got a callable, which is true for functions (including lambdas), methods and objects with a <code>__call__</code> method. You can call the object with <code>ObjectProtocol::call</code> with the args as first parameter and the kwargs (or <code>NoArgs</code>) as second parameter. There are also <code>ObjectProtocol::call0</code> with no args and <code>ObjectProtocol::call1</code> with only the args.</p>
 <a class="header" href="#calling-rust-fns-in-python" id="calling-rust-fns-in-python"><h3>Calling rust <code>Fn</code>s in python</h3></a>
-<p>If you have a static function, you can expose it with <code>#[pyfunction]</code> and use <code>wrap_function!</code> to get the corresponding <code>PyObject</code>. For dynamic functions, e.g. lambda and functions that were passed as arguments, you must put them in some kind of owned container, e.g. a box. (Long-Term a special container similar to wasm-bindgen's <code>Closure</code> should take care of that). You can than use a <code>#[pyclass]</code> struct with that container as field as a way to pass the function over the ffi-barrier. You can even make that class callable with <code>__call__</code> so it looks like a function in python code.</p>
+<p>If you have a static function, you can expose it with <code>#[pyfunction]</code> and use <code>wrap_pyfunction!</code> to get the corresponding <code>PyObject</code>. For dynamic functions, e.g. lambda and functions that were passed as arguments, you must put them in some kind of owned container, e.g. a box. (Long-Term a special container similar to wasm-bindgen's <code>Closure</code> should take care of that). You can than use a <code>#[pyclass]</code> struct with that container as field as a way to pass the function over the ffi-barrier. You can even make that class callable with <code>__call__</code> so it looks like a function in python code.</p>
 
                     </main>
 

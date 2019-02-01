@@ -138,10 +138,7 @@
                     <main>
                         <a class="header" href="#python-module" id="python-module"><h1>Python Module</h1></a>
 <p>As shown in the Getting Started chapter, you can create a module as follows:</p>
-<pre><pre class="playpen"><code class="language-rust">#![feature(proc_macro)]
-
-extern crate pyo3;
-use pyo3::{PyResult, Python, PyModule};
+<pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
 
 // add bindings to the generated python module
 // N.B: names: &quot;librust2py&quot; must be the name of the `.so` or `.pyd` file
@@ -189,20 +186,20 @@ fn subfunction() -&gt; String {
 
 #[pymodule]
 fn submodule(_py: Python, module: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
-    module.add_wrapped(wrap_function!(subfunction))?;
+    module.add_wrapped(wrap_pyfunction!(subfunction))?;
     Ok(())
 }
 
 #[pymodule]
 fn supermodule(_py: Python, module: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
-    module.add_wrapped(wrap_module!(submodule))?;
+    module.add_wrapped(wrap_pymodule!(submodule))?;
     Ok(())
 }
 
 fn nested_call() {
     let gil = GILGuard::acquire();
     let py = gil.python();
-    let supermodule = wrap_module!(supermodule)(py);
+    let supermodule = wrap_pymodule!(supermodule)(py);
     ctx.set_item(&quot;supermodule&quot;, supermodule);
 
     py.run(&quot;assert supermodule.submodule.subfuntion() == 'Subfunction'&quot;, None, Some(&amp;ctx)).unwrap();
