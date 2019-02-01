@@ -177,21 +177,6 @@
 <span id="177">177</span>
 <span id="178">178</span>
 <span id="179">179</span>
-<span id="180">180</span>
-<span id="181">181</span>
-<span id="182">182</span>
-<span id="183">183</span>
-<span id="184">184</span>
-<span id="185">185</span>
-<span id="186">186</span>
-<span id="187">187</span>
-<span id="188">188</span>
-<span id="189">189</span>
-<span id="190">190</span>
-<span id="191">191</span>
-<span id="192">192</span>
-<span id="193">193</span>
-<span id="194">194</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 <span class="comment">//</span>
@@ -204,9 +189,8 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">object</span>::<span class="ident">PyObject</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">objectprotocol</span>::<span class="ident">ObjectProtocol</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::{<span class="ident">Python</span>, <span class="ident">ToPyPointer</span>};
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">typeob</span>::{<span class="ident">initialize_type</span>, <span class="ident">PyTypeInfo</span>};
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">exceptions</span>, <span class="ident">PyDict</span>, <span class="ident">PyObjectRef</span>, <span class="ident">PyType</span>};
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">PyObjectAlloc</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">typeob</span>::<span class="ident">PyTypeCreate</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">exceptions</span>, <span class="ident">PyDict</span>, <span class="ident">PyObjectRef</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ffi</span>::{<span class="ident">CStr</span>, <span class="ident">CString</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">raw</span>::<span class="ident">c_char</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">str</span>;
@@ -345,23 +329,9 @@
     <span class="doccomment">/// and adds the type to this module.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_class</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span>
     <span class="kw">where</span>
-        <span class="ident">T</span>: <span class="ident">PyTypeInfo</span> <span class="op">+</span> <span class="ident">PyObjectAlloc</span>,
+        <span class="ident">T</span>: <span class="ident">PyTypeCreate</span>,
     {
-        <span class="kw">let</span> <span class="ident">ty</span> <span class="op">=</span> <span class="kw">unsafe</span> {
-            <span class="kw">let</span> <span class="ident">ty</span> <span class="op">=</span> <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">PyTypeInfo</span><span class="op">&gt;</span>::<span class="ident">type_object</span>();
-
-            <span class="kw">if</span> ((<span class="kw-2">*</span><span class="ident">ty</span>).<span class="ident">tp_flags</span> <span class="op">&amp;</span> <span class="ident">ffi</span>::<span class="ident">Py_TPFLAGS_READY</span>) <span class="op">!=</span> <span class="number">0</span> {
-                <span class="ident">PyType</span>::<span class="ident">new</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>()
-            } <span class="kw">else</span> {
-                <span class="comment">// automatically initialize the class</span>
-                <span class="ident">initialize_type</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="self">self</span>.<span class="ident">py</span>(), <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">name</span>()<span class="question-mark">?</span>)).<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> {
-                    <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;An error occurred while initializing class {}&quot;</span>, <span class="ident">T</span>::<span class="ident">NAME</span>)
-                });
-                <span class="ident">PyType</span>::<span class="ident">new</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>()
-            }
-        };
-
-        <span class="self">self</span>.<span class="ident">setattr</span>(<span class="ident">T</span>::<span class="ident">NAME</span>, <span class="ident">ty</span>)
+        <span class="self">self</span>.<span class="ident">setattr</span>(<span class="ident">T</span>::<span class="ident">NAME</span>, <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">PyTypeCreate</span><span class="op">&gt;</span>::<span class="ident">type_object</span>())
     }
 
     <span class="doccomment">/// Adds a function or a (sub)module to a module, using the functions __name__ as name.</span>

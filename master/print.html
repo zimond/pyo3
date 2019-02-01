@@ -649,7 +649,6 @@ Type:      builtin_function_or_method
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(specialization)]
 # use pyo3::prelude::*;
 
 #[pyclass]
@@ -681,11 +680,8 @@ attribute. Only the python <code>__new__</code> method can be specified, <code>_
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(specialization)]
-#
 # use pyo3::prelude::*;
 # use pyo3::PyRawObject;
-
 #[pyclass]
 struct MyClass {
    num: i32,
@@ -723,7 +719,6 @@ with value of custom class struct. Subclass must call parent's <code>__new__</co
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(specialization)]
 # use pyo3::prelude::*;
 # use pyo3::PyRawObject;
 #[pyclass]
@@ -770,7 +765,6 @@ attributes. i.e.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(specialization)]
 # use pyo3::prelude::*;
 # #[pyclass]
 # struct MyClass {
@@ -794,7 +788,6 @@ rust's special keywords like <code>type</code>.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(specialization)]
 # use pyo3::prelude::*;
 # #[pyclass]
 # struct MyClass {
@@ -822,7 +815,6 @@ If parameter is specified, it is used and property name. i.e.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(specialization)]
 # use pyo3::prelude::*;
 # #[pyclass]
 # struct MyClass {
@@ -849,7 +841,6 @@ impl MyClass {
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(specialization)]
 # use pyo3::prelude::*;
 #[pyclass]
 struct MyClass {
@@ -866,7 +857,6 @@ class method static methods, etc.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(specialization)]
 # use pyo3::prelude::*;
 # #[pyclass]
 # struct MyClass {
@@ -893,7 +883,6 @@ get injected by method wrapper. i.e</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(specialization)]
 # use pyo3::prelude::*;
 # #[pyclass]
 # struct MyClass {
@@ -915,7 +904,6 @@ with<code>#[classmethod]</code> attribute.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(specialization)]
 # use pyo3::prelude::*;
 # #[pyclass]
 # struct MyClass {
@@ -946,7 +934,6 @@ for some <code>T</code> that implements <code>IntoPyObject</code>.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(specialization)]
 # use pyo3::prelude::*;
 # #[pyclass]
 # struct MyClass {
@@ -968,7 +955,6 @@ with <code>#[call]</code> attribute. Arguments of the method are specified same 
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(specialization)]
 # use pyo3::prelude::*;
 # #[pyclass]
 # struct MyClass {
@@ -1010,7 +996,6 @@ code unmodified.</li>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# #![feature(specialization)]
 # use pyo3::prelude::*;
 #
 # #[pyclass]
@@ -1174,6 +1159,11 @@ impl PyIterProtocol for MyIterator {
     }
 }
 #}</code></pre></pre>
+<a class="header" href="#manually-implementing-pyclass" id="manually-implementing-pyclass"><h2>Manually implementing pyclass</h2></a>
+<p>TODO: Which traits to implement (basically <code>PyTypeCreate: PyObjectAlloc + PyTypeInfo + PyMethodsProtocol + Sized</code>) and what they mean.</p>
+<a class="header" href="#how-methods-are-implemented" id="how-methods-are-implemented"><h2>How methods are implemented</h2></a>
+<p>Users should be able to define a <code>#[pyclass]</code> with or without <code>#[pymethods]</code>, while pyo3 needs a trait with a function that returns all methods. Since it's impossible make the code generation in pyclass dependent on whether there is an impl block, we'd need to make to implement the trait on <code>#[pyclass]</code> and override the implementation in <code>#[pymethods]</code>, which is to my best knowledge only possible with the specialization feature, which is can't be used on stable.</p>
+<p>To escape this we use <a href="https://github.com/dtolnay/inventory">inventory</a>, which allows us to collect <code>impl</code>s from arbitrary source code by exploiting some binary trick. See <a href="https://github.com/dtolnay/inventory#how-it-works">inventory: how it works</a> and <code>pyo3_derive_backend::py_class::impl_inventory</code> for more details.</p>
 <a class="header" href="#parallelism" id="parallelism"><h1>Parallelism</h1></a>
 <p>CPython has an infamous GIL(Global Interpreter Lock) prevents developers
 getting true parallelism. With <code>pyo3</code> you can release GIL when executing
