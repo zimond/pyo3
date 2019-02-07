@@ -166,18 +166,19 @@ provides two methods:</p>
 <a href="https://docs.rs/pyo3/0.6.0-alpha.2/trait.IntoPyTuple.html"><code>IntoPyTuple</code></a> trait. So args could be <code>PyTuple</code> instance or
 rust tuple with up to 10 elements. Or <code>NoArgs</code> object which represents empty tuple object.</p>
 <pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
+use pyo3::types::{PyDict, PyTuple};
 
 struct SomeObject;
 impl SomeObject {
     fn new(py: Python) -&gt; PyObject {
-          pyo3::PyDict::new(py).to_object(py)
+        PyDict::new(py).to_object(py)
     }
 }
 
 fn main() {
-    # let arg1 = &quot;arg1&quot;;
-    # let arg2 = &quot;arg2&quot;;
-    # let arg3 = &quot;arg3&quot;;
+    let arg1 = &quot;arg1&quot;;
+    let arg2 = &quot;arg2&quot;;
+    let arg3 = &quot;arg3&quot;;
 
     let gil = Python::acquire_gil();
     let py = gil.python();
