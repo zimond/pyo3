@@ -651,6 +651,72 @@ struct MyClass {
 }
 #}</code></pre></pre>
 <p>The above example generates implementations for <code>PyTypeInfo</code> and <code>PyTypeObject</code> for <code>MyClass</code>.</p>
+<a class="header" href="#get-python-objects-from-pyclass" id="get-python-objects-from-pyclass"><h2>Get Python objects from <code>pyclass</code></h2></a>
+<p>You can use <code>pyclass</code>es like normal rust structs.</p>
+<p>However, if instantiate noramlly, you can't treat <code>pyclass</code>es as Python objects.</p>
+<p>To get a Python object which includes <code>pyclass</code>, we have to use some special methods.</p>
+<a class="header" href="#pyref" id="pyref"><h3><code>PyRef</code></h3></a>
+<p><code>PyRef</code> is a special reference, which ensures that the reffrered struct is a part of
+a Python object, and you are also holding the GIL.</p>
+<p>You can get an instance of <code>PyRef</code> by <code>PyRef::new</code>, which does 3 things:</p>
+<ol>
+<li>Allocate a Python object in the Python heap</li>
+<li>Copies the rust struct into the Python object</li>
+<li>Returns a reference of it</li>
+</ol>
+<p>You can use <code>PyRef</code> just like <code>&amp;T</code>, because it implements <code>Deref&lt;Target=T&gt;</code>.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+# use pyo3::prelude::*;
+#[pyclass]
+struct MyClass {
+   num: i32,
+   debug: bool,
+}
+let gil = Python::acquire_gil();
+let py = gil.python();
+let obj = PyRef::new(py, || MyClass { num: 3, debug: true }).unwrap();
+assert_eq!(obj.num, 3);
+let dict = PyDict::new();
+// You can treat a `PyRef` as a Python object
+dict.set_item(&quot;obj&quot;, obj)).unwrap();
+#}</code></pre></pre>
+<a class="header" href="#pyrefmut" id="pyrefmut"><h3><code>PyRefMut</code></h3></a>
+<p><code>PyRefMut</code> is a mutable version of <code>PyRef</code>.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+# use pyo3::prelude::*;
+#[pyclass]
+struct MyClass {
+   num: i32,
+   debug: bool,
+}
+let gil = Python::acquire_gil();
+let py = gil.python();
+let mut obj = PyRefMut::new(py, || MyClass { num: 3, debug: true }).unwrap();
+obj.num = 5;
+#}</code></pre></pre>
+<a class="header" href="#py" id="py"><h3><code>Py</code></h3></a>
+<p><code>Py</code> is a object wrapper which stores an object longer than the GIL lifetime.</p>
+<p>You can use it to avoid lifetime problems.</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+# use pyo3::prelude::*;
+#[pyclass]
+struct MyClass {
+   num: i32,
+}
+fn return_myclass() -&gt; Py&lt;MyClass&gt; {
+    let gil = Python::acquire_gil();
+    Py::new(|| MyClass { num: 1 })
+}
+let gil = Python::acquire_gil();
+let obj = return_myclass();
+assert_eq!(obj.as_ref(gil.python()).num, 1);
+#}</code></pre></pre>
 <a class="header" href="#customizing-the-class" id="customizing-the-class"><h2>Customizing the class</h2></a>
 <p>The <code>#[pyclass]</code> macro accepts following parameters:</p>
 <ul>

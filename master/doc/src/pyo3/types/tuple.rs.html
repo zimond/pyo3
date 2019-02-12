@@ -446,7 +446,7 @@
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">index</span> <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">slice</span>.<span class="ident">len</span>() {
             <span class="kw">let</span> <span class="ident">item</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">slice</span>[<span class="self">self</span>.<span class="ident">index</span>].<span class="ident">as_ref</span>(<span class="self">self</span>.<span class="ident">py</span>);
             <span class="self">self</span>.<span class="ident">index</span> <span class="op">+=</span> <span class="number">1</span>;
-            <span class="prelude-val">Some</span>(<span class="ident">item</span>)
+            <span class="prelude-val">Some</span>(<span class="ident">item</span>.<span class="ident">into</span>())
         } <span class="kw">else</span> {
             <span class="prelude-val">None</span>
         }
@@ -464,7 +464,7 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">IntoPyTuple</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">PyTuple</span> {
     <span class="kw">fn</span> <span class="ident">into_tuple</span>(<span class="self">self</span>, <span class="ident">_py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">Py</span><span class="op">&lt;</span><span class="ident">PyTuple</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">into</span>()
+        <span class="kw">unsafe</span> { <span class="ident">Py</span>::<span class="ident">from_borrowed_ptr</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>()) }
     }
 }
 

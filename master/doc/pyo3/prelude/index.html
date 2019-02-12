@@ -13,6 +13,9 @@ Corresponds to the empty tuple <code>()</code> in Python.</p>
 </td></tr><tr class='module-item'><td><a class="struct" href="struct.PyErr.html" title='pyo3::prelude::PyErr struct'>PyErr</a></td><td class='docblock-short'><p>Represents a Python exception that was raised.</p>
 </td></tr><tr class='module-item'><td><a class="struct" href="struct.PyModule.html" title='pyo3::prelude::PyModule struct'>PyModule</a></td><td class='docblock-short'><p>Represents a Python <code>module</code> object.</p>
 </td></tr><tr class='module-item'><td><a class="struct" href="struct.PyObject.html" title='pyo3::prelude::PyObject struct'>PyObject</a></td><td class='docblock-short'><p>A python object</p>
+</td></tr><tr class='module-item'><td><a class="struct" href="struct.PyRef.html" title='pyo3::prelude::PyRef struct'>PyRef</a></td><td class='docblock-short'><p>A special reference of type <code>T</code>. <code>PyRef&lt;T&gt;</code> refers a instance of T, which exists in the Python
+heap as a part of a Python object.</p>
+</td></tr><tr class='module-item'><td><a class="struct" href="struct.PyRefMut.html" title='pyo3::prelude::PyRefMut struct'>PyRefMut</a></td><td class='docblock-short'><p>Mutable version of <a href="struct.PyRef.html"><code>PyRef</code></a>.</p>
 </td></tr></table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
 <table><tr class='module-item'><td><a class="trait" href="trait.AsPyRef.html" title='pyo3::prelude::AsPyRef trait'>AsPyRef</a></td><td class='docblock-short'><p>Trait implements object reference extraction from python managed pointer.</p>
 </td></tr><tr class='module-item'><td><a class="trait" href="trait.FromPyObject.html" title='pyo3::prelude::FromPyObject trait'>FromPyObject</a></td><td class='docblock-short'><p><code>FromPyObject</code> is implemented by various types that can be extracted from
