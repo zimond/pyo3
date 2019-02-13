@@ -168,7 +168,7 @@ struct MyClass {
 impl MyClass {
     #[new]
     fn __new__(obj: &amp;PyRawObject, num: u32) -&gt; PyResult&lt;()&gt; {
-        obj.init(|| {
+        obj.init({
             MyClass {
                 num,
             }
