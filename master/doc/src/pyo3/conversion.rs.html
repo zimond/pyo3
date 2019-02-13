@@ -381,7 +381,6 @@
 <span id="381">381</span>
 <span id="382">382</span>
 <span id="383">383</span>
-<span id="384">384</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 
@@ -389,11 +388,10 @@
 
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">err</span>::{<span class="ident">PyDowncastError</span>, <span class="ident">PyResult</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">instance</span>::<span class="ident">Py</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">object</span>::<span class="ident">PyObject</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::{<span class="ident">IntoPyPointer</span>, <span class="ident">Python</span>, <span class="ident">ToPyPointer</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">typeob</span>::<span class="ident">PyTypeInfo</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">PyObjectRef</span>, <span class="ident">PyTuple</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">PyObjectRef</span>;
 
 <span class="doccomment">/// Conversion trait that allows various objects to be converted into `PyObject`</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">ToPyObject</span> {
@@ -438,17 +436,17 @@
     }
 }
 
+<span class="doccomment">/// Similar to [std::convert::Into], just that it requires a gil token and there&#39;s</span>
+<span class="doccomment">/// currently no corresponding [std::convert::From] part.</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">IntoPy</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>: <span class="ident">Sized</span> {
+    <span class="kw">fn</span> <span class="ident">into_py</span>(<span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">T</span>;
+}
+
 <span class="doccomment">/// Conversion trait that allows various objects to be converted into `PyObject`</span>
 <span class="doccomment">/// by consuming original object.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">IntoPyObject</span> {
     <span class="doccomment">/// Converts self into a Python object. (Consumes self)</span>
     <span class="kw">fn</span> <span class="ident">into_object</span>(<span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyObject</span>;
-}
-
-<span class="doccomment">/// Conversion trait that allows various objects to be converted into `PyTuple` object.</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">IntoPyTuple</span> {
-    <span class="doccomment">/// Converts self into a PyTuple object.</span>
-    <span class="kw">fn</span> <span class="ident">into_tuple</span>(<span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">Py</span><span class="op">&lt;</span><span class="ident">PyTuple</span><span class="op">&gt;</span>;
 }
 
 <span class="doccomment">/// `FromPyObject` is implemented by various types that can be extracted from</span>

@@ -51,7 +51,7 @@
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">conversion</span>::{<span class="ident">IntoPyObject</span>, <span class="ident">IntoPyTuple</span>, <span class="ident">ToPyObject</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">conversion</span>::{<span class="ident">IntoPy</span>, <span class="ident">IntoPyObject</span>, <span class="ident">ToPyObject</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">instance</span>::<span class="ident">Py</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">object</span>::<span class="ident">PyObject</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::<span class="ident">Python</span>;
@@ -73,15 +73,15 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">NoArgs</span>;
 
 <span class="doccomment">/// Converts `NoArgs` to an empty Python tuple.</span>
-<span class="kw">impl</span> <span class="ident">IntoPyTuple</span> <span class="kw">for</span> <span class="ident">NoArgs</span> {
-    <span class="kw">fn</span> <span class="ident">into_tuple</span>(<span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">Py</span><span class="op">&lt;</span><span class="ident">PyTuple</span><span class="op">&gt;</span> {
+<span class="kw">impl</span> <span class="ident">IntoPy</span><span class="op">&lt;</span><span class="ident">Py</span><span class="op">&lt;</span><span class="ident">PyTuple</span><span class="op">&gt;&gt;</span> <span class="kw">for</span> <span class="ident">NoArgs</span> {
+    <span class="kw">fn</span> <span class="ident">into_py</span>(<span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">Py</span><span class="op">&lt;</span><span class="ident">PyTuple</span><span class="op">&gt;</span> {
         <span class="ident">PyTuple</span>::<span class="ident">empty</span>(<span class="ident">py</span>)
     }
 }
 
 <span class="doccomment">/// Converts `()` to an empty Python tuple.</span>
-<span class="kw">impl</span> <span class="ident">IntoPyTuple</span> <span class="kw">for</span> () {
-    <span class="kw">fn</span> <span class="ident">into_tuple</span>(<span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">Py</span><span class="op">&lt;</span><span class="ident">PyTuple</span><span class="op">&gt;</span> {
+<span class="kw">impl</span> <span class="ident">IntoPy</span><span class="op">&lt;</span><span class="ident">Py</span><span class="op">&lt;</span><span class="ident">PyTuple</span><span class="op">&gt;&gt;</span> <span class="kw">for</span> () {
+    <span class="kw">fn</span> <span class="ident">into_py</span>(<span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">Py</span><span class="op">&lt;</span><span class="ident">PyTuple</span><span class="op">&gt;</span> {
         <span class="ident">PyTuple</span>::<span class="ident">empty</span>(<span class="ident">py</span>)
     }
 }

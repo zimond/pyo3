@@ -126,9 +126,10 @@ heap as a part of a Python object.</p>
 <table><tr class='module-item'><td><a class="trait" href="trait.AsPyRef.html" title='pyo3::AsPyRef trait'>AsPyRef</a></td><td class='docblock-short'><p>Trait implements object reference extraction from python managed pointer.</p>
 </td></tr><tr class='module-item'><td><a class="trait" href="trait.FromPyObject.html" title='pyo3::FromPyObject trait'>FromPyObject</a></td><td class='docblock-short'><p><code>FromPyObject</code> is implemented by various types that can be extracted from
 a Python object reference.</p>
+</td></tr><tr class='module-item'><td><a class="trait" href="trait.IntoPy.html" title='pyo3::IntoPy trait'>IntoPy</a></td><td class='docblock-short'><p>Similar to <a href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="std::convert::Into">std::convert::Into</a>, just that it requires a gil token and there's
+currently no corresponding <a href="https://doc.rust-lang.org/nightly/core/convert/trait.From.html" title="std::convert::From">std::convert::From</a> part.</p>
 </td></tr><tr class='module-item'><td><a class="trait" href="trait.IntoPyObject.html" title='pyo3::IntoPyObject trait'>IntoPyObject</a></td><td class='docblock-short'><p>Conversion trait that allows various objects to be converted into <code>PyObject</code>
 by consuming original object.</p>
-</td></tr><tr class='module-item'><td><a class="trait" href="trait.IntoPyTuple.html" title='pyo3::IntoPyTuple trait'>IntoPyTuple</a></td><td class='docblock-short'><p>Conversion trait that allows various objects to be converted into <code>PyTuple</code> object.</p>
 </td></tr><tr class='module-item'><td><a class="trait" href="trait.ObjectProtocol.html" title='pyo3::ObjectProtocol trait'>ObjectProtocol</a></td><td class='docblock-short'><p>Python object model helper methods</p>
 </td></tr><tr class='module-item'><td><a class="trait" href="trait.PyErrArguments.html" title='pyo3::PyErrArguments trait'>PyErrArguments</a></td><td class='docblock-short'><p>Helper conversion trait that allows to use custom arguments for exception constructor.</p>
 </td></tr><tr class='module-item'><td><a class="trait" href="trait.PyObjectWithGIL.html" title='pyo3::PyObjectWithGIL trait'>PyObjectWithGIL</a></td><td class='docblock-short'><p>Any instance that is managed Python can have access to <code>gil</code>.</p>
