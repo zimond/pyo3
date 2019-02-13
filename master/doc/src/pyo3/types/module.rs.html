@@ -181,6 +181,7 @@
 <span id="181">181</span>
 <span id="182">182</span>
 <span id="183">183</span>
+<span id="184">184</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 <span class="comment">//</span>
@@ -194,6 +195,7 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">objectprotocol</span>::<span class="ident">ObjectProtocol</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::{<span class="ident">Python</span>, <span class="ident">ToPyPointer</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">typeob</span>::<span class="ident">PyTypeCreate</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">typeob</span>::<span class="ident">PyTypeObject</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">PyTuple</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">exceptions</span>, <span class="ident">PyDict</span>, <span class="ident">PyObjectRef</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">Py</span>;
@@ -339,7 +341,7 @@
     <span class="kw">where</span>
         <span class="ident">T</span>: <span class="ident">PyTypeCreate</span>,
     {
-        <span class="self">self</span>.<span class="ident">setattr</span>(<span class="ident">T</span>::<span class="ident">NAME</span>, <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">PyTypeCreate</span><span class="op">&gt;</span>::<span class="ident">type_object</span>())
+        <span class="self">self</span>.<span class="ident">setattr</span>(<span class="ident">T</span>::<span class="ident">NAME</span>, <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">PyTypeObject</span><span class="op">&gt;</span>::<span class="ident">type_object</span>())
     }
 
     <span class="doccomment">/// Adds a function or a (sub)module to a module, using the functions __name__ as name.</span>
