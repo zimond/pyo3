@@ -568,12 +568,6 @@
 <span id="568">568</span>
 <span id="569">569</span>
 <span id="570">570</span>
-<span id="571">571</span>
-<span id="572">572</span>
-<span id="573">573</span>
-<span id="574">574</span>
-<span id="575">575</span>
-<span id="576">576</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 
@@ -660,7 +654,7 @@
 <span class="doccomment">/// impl MyClass {</span>
 <span class="doccomment">///    #[new]</span>
 <span class="doccomment">///    fn __new__(obj: &amp;PyRawObject) -&gt; PyResult&lt;()&gt; {</span>
-<span class="doccomment">///        obj.init(MyClass { })</span>
+<span class="doccomment">///        Ok(obj.init(MyClass { }))</span>
 <span class="doccomment">///    }</span>
 <span class="doccomment">/// }</span>
 <span class="doccomment">/// ```</span>
@@ -716,16 +710,12 @@
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">init</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">value</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">T</span>: <span class="ident">PyTypeInfo</span>,
-    {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">init</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">PyTypeInfo</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">value</span>: <span class="ident">T</span>) {
         <span class="kw">unsafe</span> {
             <span class="comment">// The `as *mut u8` part is required because the offset is in bytes</span>
             <span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> (<span class="self">self</span>.<span class="ident">ptr</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u8</span>).<span class="ident">offset</span>(<span class="ident">T</span>::<span class="ident">OFFSET</span>) <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">T</span>;
             <span class="ident">std</span>::<span class="ident">ptr</span>::<span class="ident">write</span>(<span class="ident">ptr</span>, <span class="ident">value</span>);
         }
-        <span class="prelude-val">Ok</span>(())
     }
 
     <span class="doccomment">/// Type object</span>
@@ -772,12 +762,10 @@
 <span class="doccomment">/// All native types and all `#[pyclass]` types use the default functions, while</span>
 <span class="doccomment">/// [PyObjectWithFreeList](crate::freelist::PyObjectWithFreeList) gets a special version.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyObjectAlloc</span>: <span class="ident">PyTypeInfo</span> <span class="op">+</span> <span class="ident">Sized</span> {
-    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">alloc</span>(<span class="ident">_py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span><span class="op">&gt;</span> {
+    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">alloc</span>(<span class="ident">_py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span> {
         <span class="kw">let</span> <span class="ident">tp_ptr</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">type_object</span>();
         <span class="kw">let</span> <span class="ident">alloc</span> <span class="op">=</span> (<span class="kw-2">*</span><span class="ident">tp_ptr</span>).<span class="ident">tp_alloc</span>.<span class="ident">unwrap_or</span>(<span class="ident">ffi</span>::<span class="ident">PyType_GenericAlloc</span>);
-        <span class="kw">let</span> <span class="ident">obj</span> <span class="op">=</span> <span class="ident">alloc</span>(<span class="ident">tp_ptr</span>, <span class="number">0</span>);
-
-        <span class="prelude-val">Ok</span>(<span class="ident">obj</span>)
+        <span class="ident">alloc</span>(<span class="ident">tp_ptr</span>, <span class="number">0</span>)
     }
 
     <span class="doccomment">/// Calls the rust destructor for the object and frees the memory</span>
@@ -863,7 +851,7 @@
         <span class="self">Self</span>::<span class="ident">init_type</span>();
 
         <span class="kw">unsafe</span> {
-            <span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">alloc</span>(<span class="ident">py</span>)<span class="question-mark">?</span>;
+            <span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">alloc</span>(<span class="ident">py</span>);
             <span class="ident">PyRawObject</span>::<span class="ident">new_with_ptr</span>(
                 <span class="ident">py</span>,
                 <span class="ident">ptr</span>,

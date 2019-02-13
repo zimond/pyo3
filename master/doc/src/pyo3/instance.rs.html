@@ -501,33 +501,6 @@
 <span id="501">501</span>
 <span id="502">502</span>
 <span id="503">503</span>
-<span id="504">504</span>
-<span id="505">505</span>
-<span id="506">506</span>
-<span id="507">507</span>
-<span id="508">508</span>
-<span id="509">509</span>
-<span id="510">510</span>
-<span id="511">511</span>
-<span id="512">512</span>
-<span id="513">513</span>
-<span id="514">514</span>
-<span id="515">515</span>
-<span id="516">516</span>
-<span id="517">517</span>
-<span id="518">518</span>
-<span id="519">519</span>
-<span id="520">520</span>
-<span id="521">521</span>
-<span id="522">522</span>
-<span id="523">523</span>
-<span id="524">524</span>
-<span id="525">525</span>
-<span id="526">526</span>
-<span id="527">527</span>
-<span id="528">528</span>
-<span id="529">529</span>
-<span id="530">530</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">conversion</span>::{<span class="ident">FromPyObject</span>, <span class="ident">IntoPyObject</span>, <span class="ident">ToPyObject</span>};
@@ -602,7 +575,7 @@
 {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">value</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">PyRef</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;&gt;</span> {
         <span class="kw">let</span> <span class="ident">obj</span> <span class="op">=</span> <span class="ident">T</span>::<span class="ident">create</span>(<span class="ident">py</span>)<span class="question-mark">?</span>;
-        <span class="ident">obj</span>.<span class="ident">init</span>(<span class="ident">value</span>)<span class="question-mark">?</span>;
+        <span class="ident">obj</span>.<span class="ident">init</span>(<span class="ident">value</span>);
         <span class="kw">let</span> <span class="ident">ref_</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">py</span>.<span class="ident">from_owned_ptr</span>(<span class="ident">obj</span>.<span class="ident">into_ptr</span>()) };
         <span class="prelude-val">Ok</span>(<span class="ident">PyRef</span>::<span class="ident">from_ref</span>(<span class="ident">ref_</span>))
     }
@@ -665,7 +638,7 @@
 {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">value</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">PyRefMut</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;&gt;</span> {
         <span class="kw">let</span> <span class="ident">obj</span> <span class="op">=</span> <span class="ident">T</span>::<span class="ident">create</span>(<span class="ident">py</span>)<span class="question-mark">?</span>;
-        <span class="ident">obj</span>.<span class="ident">init</span>(<span class="ident">value</span>)<span class="question-mark">?</span>;
+        <span class="ident">obj</span>.<span class="ident">init</span>(<span class="ident">value</span>);
         <span class="kw">let</span> <span class="ident">ref_</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">py</span>.<span class="ident">mut_from_owned_ptr</span>(<span class="ident">obj</span>.<span class="ident">into_ptr</span>()) };
         <span class="prelude-val">Ok</span>(<span class="ident">PyRefMut</span>::<span class="ident">from_mut</span>(<span class="ident">ref_</span>))
     }
@@ -788,14 +761,29 @@
 }
 
 <span class="doccomment">/// Safe wrapper around unsafe `*mut ffi::PyObject` pointer with specified type information.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// `Py&lt;T&gt;` is thread-safe, because any python related operations require a Python&lt;&#39;p&gt; token.</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="attribute">#[<span class="ident">repr</span>(<span class="ident">transparent</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Py</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">NonNull</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">PyObject</span><span class="op">&gt;</span>, <span class="ident">std</span>::<span class="ident">marker</span>::<span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>);
 
-<span class="comment">// `Py&lt;T&gt;` is thread-safe, because any python related operations require a Python&lt;&#39;p&gt; token.</span>
 <span class="kw">unsafe</span> <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Send</span> <span class="kw">for</span> <span class="ident">Py</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {}
 
 <span class="kw">unsafe</span> <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Sync</span> <span class="kw">for</span> <span class="ident">Py</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Py</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
+<span class="kw">where</span>
+    <span class="ident">T</span>: <span class="ident">PyTypeCreate</span> <span class="op">+</span> <span class="ident">PyTypeObject</span>,
+{
+    <span class="doccomment">/// Create new instance of T and move it under python management</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">value</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">Py</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;&gt;</span> {
+        <span class="kw">let</span> <span class="ident">ob</span> <span class="op">=</span> <span class="ident">T</span>::<span class="ident">create</span>(<span class="ident">py</span>)<span class="question-mark">?</span>;
+        <span class="ident">ob</span>.<span class="ident">init</span>(<span class="ident">value</span>);
+
+        <span class="kw">let</span> <span class="ident">ob</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">Py</span>::<span class="ident">from_owned_ptr</span>(<span class="ident">ob</span>.<span class="ident">into_ptr</span>()) };
+        <span class="prelude-val">Ok</span>(<span class="ident">ob</span>)
+    }
+}
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Py</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Creates a `Py&lt;T&gt;` instance for the given FFI pointer.</span>
@@ -866,48 +854,6 @@
         <span class="kw">let</span> <span class="ident">pointer</span> <span class="op">=</span> <span class="self">self</span>.<span class="number">0</span>;
         <span class="ident">mem</span>::<span class="ident">forget</span>(<span class="self">self</span>);
         <span class="ident">pointer</span>
-    }
-}
-
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">Py</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
-<span class="kw">where</span>
-    <span class="ident">T</span>: <span class="ident">PyTypeCreate</span>,
-{
-    <span class="doccomment">/// Create new instance of T and move it under python management</span>
-    <span class="doccomment">/// Returns `Py&lt;T&gt;`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">value</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">Py</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">T</span>: <span class="ident">PyTypeObject</span> <span class="op">+</span> <span class="ident">PyTypeInfo</span>,
-    {
-        <span class="kw">let</span> <span class="ident">ob</span> <span class="op">=</span> <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">PyTypeCreate</span><span class="op">&gt;</span>::<span class="ident">create</span>(<span class="ident">py</span>)<span class="question-mark">?</span>;
-        <span class="ident">ob</span>.<span class="ident">init</span>(<span class="ident">value</span>)<span class="question-mark">?</span>;
-
-        <span class="kw">let</span> <span class="ident">ob</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">Py</span>::<span class="ident">from_owned_ptr</span>(<span class="ident">ob</span>.<span class="ident">into_ptr</span>()) };
-        <span class="prelude-val">Ok</span>(<span class="ident">ob</span>)
-    }
-
-    <span class="doccomment">/// Create new instance of `T` and move it under python management.</span>
-    <span class="doccomment">/// Returns references to `T`</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_ref</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">value</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">T</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">T</span>: <span class="ident">PyTypeObject</span> <span class="op">+</span> <span class="ident">PyTypeInfo</span>,
-    {
-        <span class="kw">let</span> <span class="ident">ob</span> <span class="op">=</span> <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">PyTypeCreate</span><span class="op">&gt;</span>::<span class="ident">create</span>(<span class="ident">py</span>)<span class="question-mark">?</span>;
-        <span class="ident">ob</span>.<span class="ident">init</span>(<span class="ident">value</span>)<span class="question-mark">?</span>;
-
-        <span class="kw">unsafe</span> { <span class="prelude-val">Ok</span>(<span class="ident">py</span>.<span class="ident">from_owned_ptr</span>(<span class="ident">ob</span>.<span class="ident">into_ptr</span>())) }
-    }
-
-    <span class="doccomment">/// Create new instance of `T` and move it under python management.</span>
-    <span class="doccomment">/// Returns mutable references to `T`</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_mut</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">value</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">T</span><span class="op">&gt;</span>
-    <span class="kw">where</span>
-        <span class="ident">T</span>: <span class="ident">PyTypeObject</span> <span class="op">+</span> <span class="ident">PyTypeInfo</span>,
-    {
-        <span class="kw">let</span> <span class="ident">ob</span> <span class="op">=</span> <span class="op">&lt;</span><span class="ident">T</span> <span class="kw">as</span> <span class="ident">PyTypeCreate</span><span class="op">&gt;</span>::<span class="ident">create</span>(<span class="ident">py</span>)<span class="question-mark">?</span>;
-        <span class="ident">ob</span>.<span class="ident">init</span>(<span class="ident">value</span>)<span class="question-mark">?</span>;
-
-        <span class="kw">unsafe</span> { <span class="prelude-val">Ok</span>(<span class="ident">py</span>.<span class="ident">mut_from_owned_ptr</span>(<span class="ident">ob</span>.<span class="ident">into_ptr</span>())) }
     }
 }
 
