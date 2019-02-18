@@ -557,7 +557,7 @@
 <span class="doccomment">/// let gil = Python::acquire_gil();</span>
 <span class="doccomment">/// let py = gil.python();</span>
 <span class="doccomment">/// let obj = PyRef::new(gil.python(), Point { x: 3, y: 4 }).unwrap();</span>
-<span class="doccomment">/// let d = vec![(&quot;p&quot;, obj)].into_py_dict(py);</span>
+<span class="doccomment">/// let d = [(&quot;p&quot;, obj)].into_py_dict(py);</span>
 <span class="doccomment">/// py.run(&quot;assert p.length() == 12&quot;, None, Some(d)).unwrap();</span>
 <span class="doccomment">/// ```</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
