@@ -376,11 +376,6 @@
 <span id="376">376</span>
 <span id="377">377</span>
 <span id="378">378</span>
-<span id="379">379</span>
-<span id="380">380</span>
-<span id="381">381</span>
-<span id="382">382</span>
-<span id="383">383</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 
@@ -723,29 +718,24 @@
     }
 }
 
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="doccomment">/// This trait wraps a T: IntoPyObject into PyResult&lt;T&gt; while PyResult&lt;T&gt; remains PyResult&lt;T&gt;.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// This is necessaty because proc macros run before typechecking and can&#39;t decide</span>
+<span class="doccomment">/// This is necessary because proc macros run before typechecking and can&#39;t decide</span>
 <span class="doccomment">/// whether a return type is a (possibly aliased) PyResult or not. It is also quite handy because</span>
 <span class="doccomment">/// the codegen is currently built on the assumption that all functions return a PyResult.</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">ReturnTypeIntoPyResult</span> {
-    <span class="kw">type</span> <span class="ident">Inner</span>;
-
-    <span class="kw">fn</span> <span class="ident">return_type_into_py_result</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Inner</span><span class="op">&gt;</span>;
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">IntoPyResult</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">into_py_result</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>;
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">IntoPyObject</span><span class="op">&gt;</span> <span class="ident">ReturnTypeIntoPyResult</span> <span class="kw">for</span> <span class="ident">T</span> {
-    <span class="kw">type</span> <span class="ident">Inner</span> <span class="op">=</span> <span class="ident">T</span>;
-
-    <span class="kw">fn</span> <span class="ident">return_type_into_py_result</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Inner</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">IntoPyObject</span><span class="op">&gt;</span> <span class="ident">IntoPyResult</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">T</span> {
+    <span class="kw">fn</span> <span class="ident">into_py_result</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="self">self</span>)
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">IntoPyObject</span><span class="op">&gt;</span> <span class="ident">ReturnTypeIntoPyResult</span> <span class="kw">for</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">type</span> <span class="ident">Inner</span> <span class="op">=</span> <span class="ident">T</span>;
-
-    <span class="kw">fn</span> <span class="ident">return_type_into_py_result</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Inner</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">IntoPyObject</span><span class="op">&gt;</span> <span class="ident">IntoPyResult</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">into_py_result</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
         <span class="self">self</span>
     }
 }

@@ -892,7 +892,7 @@ impl MyClass {
 # use pyo3::prelude::*;
 #[pyclass]
 struct MyClass {
-  #[prop(get, set)]
+  #[pyo3(get, set)]
   num: i32
 }
 #}</code></pre></pre>

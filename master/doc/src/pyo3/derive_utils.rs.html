@@ -214,11 +214,11 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">Python</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ptr</span>;
 
-<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="doccomment">/// Description of a python parameter; used for `parse_args()`.</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ParamDescription</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ParamDescription</span> {
     <span class="doccomment">/// The name of the parameter.</span>
-    <span class="kw">pub</span> <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span>,
+    <span class="kw">pub</span> <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>,
     <span class="doccomment">/// Whether the parameter is optional.</span>
     <span class="kw">pub</span> <span class="ident">is_optional</span>: <span class="ident">bool</span>,
     <span class="doccomment">/// Whether the parameter is optional.</span>
