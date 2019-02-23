@@ -342,26 +342,20 @@
 <span id="342">342</span>
 <span id="343">343</span>
 <span id="344">344</span>
-<span id="345">345</span>
-<span id="346">346</span>
-<span id="347">347</span>
-<span id="348">348</span>
-<span id="349">349</span>
-<span id="350">350</span>
-<span id="351">351</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">conversion</span>::{
-    <span class="ident">FromPyObject</span>, <span class="ident">IntoPy</span>, <span class="ident">IntoPyObject</span>, <span class="ident">PyTryFrom</span>, <span class="ident">ToBorrowedObject</span>, <span class="ident">ToPyObject</span>,
-};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">err</span>::{<span class="ident">PyDowncastError</span>, <span class="ident">PyErr</span>, <span class="ident">PyResult</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">instance</span>::{<span class="ident">AsPyRef</span>, <span class="ident">PyObjectWithGIL</span>, <span class="ident">PyRef</span>, <span class="ident">PyRefMut</span>};
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::{<span class="ident">IntoPyPointer</span>, <span class="ident">Python</span>, <span class="ident">ToPyPointer</span>};
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">pythonrun</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">gil</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">instance</span>::{<span class="ident">AsPyRef</span>, <span class="ident">PyNativeType</span>, <span class="ident">PyRef</span>, <span class="ident">PyRefMut</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">PyDict</span>, <span class="ident">PyObjectRef</span>, <span class="ident">PyTuple</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">Py</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">Python</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ToPyPointer</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::{
+    <span class="ident">FromPyObject</span>, <span class="ident">IntoPy</span>, <span class="ident">IntoPyObject</span>, <span class="ident">IntoPyPointer</span>, <span class="ident">PyTryFrom</span>, <span class="ident">ToBorrowedObject</span>, <span class="ident">ToPyObject</span>,
+};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ptr</span>::<span class="ident">NonNull</span>;
 
 <span class="doccomment">/// A python object</span>
@@ -554,7 +548,7 @@
     <span class="doccomment">/// Calls the object without arguments.</span>
     <span class="doccomment">/// This is equivalent to the Python expression: &#39;self()&#39;</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">call0</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">call</span>(<span class="ident">py</span>, <span class="ident">PyTuple</span>::<span class="ident">empty</span>(<span class="ident">py</span>), <span class="prelude-val">None</span>)
+        <span class="self">self</span>.<span class="ident">call</span>(<span class="ident">py</span>, (), <span class="prelude-val">None</span>)
     }
 
     <span class="doccomment">/// Calls the object.</span>
@@ -590,7 +584,7 @@
     <span class="doccomment">/// Calls a method on the object.</span>
     <span class="doccomment">/// This is equivalent to the Python expression: &#39;self.name()&#39;</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">call_method0</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">call_method</span>(<span class="ident">py</span>, <span class="ident">name</span>, <span class="ident">PyTuple</span>::<span class="ident">empty</span>(<span class="ident">py</span>), <span class="prelude-val">None</span>)
+        <span class="self">self</span>.<span class="ident">call_method</span>(<span class="ident">py</span>, <span class="ident">name</span>, (), <span class="prelude-val">None</span>)
     }
 
     <span class="doccomment">/// Calls a method on the object.</span>
@@ -624,14 +618,6 @@
 }
 
 <span class="kw">impl</span> <span class="ident">ToPyPointer</span> <span class="kw">for</span> <span class="ident">PyObject</span> {
-    <span class="doccomment">/// Gets the underlying FFI pointer, returns a borrowed pointer.</span>
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">as_ptr</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span> {
-        <span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>()
-    }
-}
-
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">ToPyPointer</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">PyObject</span> {
     <span class="doccomment">/// Gets the underlying FFI pointer, returns a borrowed pointer.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">as_ptr</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span> {
@@ -677,16 +663,16 @@
 <span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">PyObject</span> {
     <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
         <span class="kw">unsafe</span> {
-            <span class="ident">pythonrun</span>::<span class="ident">register_pointer</span>(<span class="self">self</span>.<span class="number">0</span>);
+            <span class="ident">gil</span>::<span class="ident">register_pointer</span>(<span class="self">self</span>.<span class="number">0</span>);
         }
     }
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">test</span> {
-    <span class="kw">use</span> <span class="kw">super</span>::<span class="ident">PyObject</span>;
-    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::<span class="ident">Python</span>;
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">PyDict</span>;
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">PyObject</span>;
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">Python</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_call_for_non_existing_method</span>() {

@@ -140,8 +140,8 @@
 <span class="doccomment">//! Free allocation list</span>
 
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::<span class="ident">Python</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">typeob</span>::{<span class="ident">pytype_drop</span>, <span class="ident">PyObjectAlloc</span>, <span class="ident">PyTypeInfo</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">type_object</span>::{<span class="ident">pytype_drop</span>, <span class="ident">PyObjectAlloc</span>, <span class="ident">PyTypeInfo</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">Python</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">mem</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">raw</span>::<span class="ident">c_void</span>;
 

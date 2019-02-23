@@ -248,7 +248,7 @@ provides two methods:</p>
 <li><code>call</code> - call callable python object.</li>
 <li><code>call_method</code> - call specific method on the object.</li>
 </ul>
-<p>Both methods accept <code>args</code> and <code>kwargs</code> arguments. The <code>NoArgs</code> object represents an empty tuple object.</p>
+<p>Both methods accept <code>args</code> and <code>kwargs</code> arguments.</p>
 <pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
 use pyo3::types::{PyDict, PyTuple};
 
@@ -309,16 +309,16 @@ fn main() {
     // call object with PyDict
     let kwargs = PyDict::new(py);
     kwargs.set_item(key1, val1);
-    obj.call(py, NoArgs, Some(kwargs));
+    obj.call(py, (), Some(kwargs));
 
     // pass arguments as Vec
     let kwargs = vec![(key1, val1), (key2, val2)];
-    obj.call(py, NoArgs, Some(kwargs.into_py_dict(py)));
+    obj.call(py, (), Some(kwargs.into_py_dict(py)));
 
     // pass arguments as HashMap
     let mut kwargs = HashMap::&lt;&amp;str, i32&gt;::new();
     kwargs.insert(key1, 1);
-    obj.call(py, NoArgs, Some(kwargs.into_py_dict(py)));
+    obj.call(py, (), Some(kwargs.into_py_dict(py)));
 }
 </code></pre></pre>
 <a class="header" href="#intopyt" id="intopyt"><h2><code>IntoPy&lt;T&gt;</code></h2></a>
@@ -409,7 +409,7 @@ fn main() {
 # fn main() {
 # let gil = Python::acquire_gil();
 # let py = gil.python();
-# let err = exceptions::TypeError::py_err(NoArgs);
+# let err = exceptions::TypeError::py_err(());
 err.is_instance::&lt;exceptions::TypeError&gt;(py);
 # }
 </code></pre></pre>
@@ -417,7 +417,7 @@ err.is_instance::&lt;exceptions::TypeError&gt;(py);
 <p>The vast majority of operations in this library will return <a href="https://docs.rs/pyo3/0.2.7/type.PyResult.html"><code>PyResult&lt;T&gt;</code></a>.
 This is an alias for the type <code>Result&lt;T, PyErr&gt;</code>.</p>
 <p>A <a href="https://docs.rs/pyo3/0.2.7/struct.PyErr.html"><code>PyErr</code></a> represents a Python exception.
-Errors within the <code>PyO3</code> library are also exposed as Python exceptions.</p>
+Errors within the <code>Pyo3</code> library are also exposed as Python exceptions.</p>
 <p>PyO3 library handles python exception in two stages. During first stage <code>PyErr</code> instance get
 created. At this stage python GIL is not required. During second stage, actual python
 exception instance get crated and set to python interpreter.</p>
@@ -622,7 +622,7 @@ Type:      builtin_function_or_method
 <a class="header" href="#closures" id="closures"><h2>Closures</h2></a>
 <p>Currently, there are no conversions between <code>Fn</code>s in rust and callables in python. This would definitely be possible and very useful, so contributions are welcome. In the meantime, you can do the following:</p>
 <a class="header" href="#calling-a-python-function-in-rust" id="calling-a-python-function-in-rust"><h3>Calling a python function in rust</h3></a>
-<p>You can use <code>ObjectProtocol::is_callable</code> to check if you got a callable, which is true for functions (including lambdas), methods and objects with a <code>__call__</code> method. You can call the object with <code>ObjectProtocol::call</code> with the args as first parameter and the kwargs (or <code>NoArgs</code>) as second parameter. There are also <code>ObjectProtocol::call0</code> with no args and <code>ObjectProtocol::call1</code> with only the args.</p>
+<p>You can use <code>ObjectProtocol::is_callable</code> to check if you got a callable, which is true for functions (including lambdas), methods and objects with a <code>__call__</code> method. You can call the object with <code>ObjectProtocol::call</code> with the args as first parameter and the kwargs (or <code>None</code>) as second parameter. There are also <code>ObjectProtocol::call0</code> with no args and <code>ObjectProtocol::call1</code> with only the args.</p>
 <a class="header" href="#calling-rust-fns-in-python" id="calling-rust-fns-in-python"><h3>Calling rust <code>Fn</code>s in python</h3></a>
 <p>If you have a static function, you can expose it with <code>#[pyfunction]</code> and use <code>wrap_pyfunction!</code> to get the corresponding <code>PyObject</code>. For dynamic functions, e.g. lambda and functions that were passed as arguments, you must put them in some kind of owned container, e.g. a box. (Long-Term a special container similar to wasm-bindgen's <code>Closure</code> should take care of that). You can than use a <code>#[pyclass]</code> struct with that container as field as a way to pass the function over the ffi-barrier. You can even make that class callable with <code>__call__</code> so it looks like a function in python code.</p>
 <a class="header" href="#python-class" id="python-class"><h1>Python Class</h1></a>
@@ -739,12 +739,12 @@ struct MyClass {
 impl MyClass {
 
      #[new]
-     fn __new__(obj: &amp;PyRawObject, num: i32) -&gt; PyResult&lt;()&gt; {
+     fn new(obj: &amp;PyRawObject, num: i32) {
          obj.init({
              MyClass {
                  num,
              }
-         })
+         });
      }
 }
 #}</code></pre></pre>
@@ -777,8 +777,8 @@ struct BaseClass {
 #[pymethods]
 impl BaseClass {
    #[new]
-   fn __new__(obj: &amp;PyRawObject) -&gt; PyResult&lt;()&gt; {
-       Ok(obj.init(BaseClass{ val1: 10 }))
+   fn new(obj: &amp;PyRawObject) {
+       obj.init(BaseClass{ val1: 10 });
    }
 
    pub fn method(&amp;self) -&gt; PyResult&lt;()&gt; {
@@ -794,9 +794,9 @@ struct SubClass {
 #[pymethods]
 impl SubClass {
    #[new]
-   fn __new__(obj: &amp;PyRawObject) -&gt; PyResult&lt;()&gt; {
+   fn new(obj: &amp;PyRawObject) {
        obj.init(SubClass{ val2: 10 });
-       BaseClass::__new__(obj)
+       BaseClass::new(obj);
    }
 
    fn method2(&amp;self) -&gt; PyResult&lt;()&gt; {
@@ -1267,6 +1267,12 @@ then we can run <code>pytest tests</code> to benchmark them.</p>
 <pre><code class="language-bash">cargo rustc --profile=check -- -Z unstable-options --pretty=expanded -Z trace-macros &gt; expanded.rs; rustfmt expanded.rs
 </code></pre>
 <p>See <a href="https://github.com/dtolnay/cargo-expand">cargo expand</a> for a more elaborate version of those commands.</p>
+<a class="header" href="#running-with-valgrind" id="running-with-valgrind"><h2>Running with Valgrind</h2></a>
+<p>Valgrind is a tool to detect memory managment bugs such as memory leaks.</p>
+<p>You first need to installa debug build of python, otherwise valgrind won't produce usable results. In ubuntu there's e.g. a <code>python3-dbg</code> package.</p>
+<p>Activate an environment with the debug interpreter and recompile. If you're on linux, use <code>ldd</code> with the name of you're binary and check that you're linking e.g. <code>libpython3.6dm.so.1.0</code> instead of <code>libpython3.6m.so.1.0</code>.</p>
+<p><a href="https://raw.githubusercontent.com/python/cpython/master/Misc/valgrind-python.supp">Download the suppressions file for cpython</a>.</p>
+<p>Run valgrind with <code>valgrind --suppressions=valgrind-python.supp ./my-command --with-options</code></p>
 <a class="header" href="#building-and-distribution" id="building-and-distribution"><h1>Building and Distribution</h1></a>
 <a class="header" href="#python-version" id="python-version"><h2>Python version</h2></a>
 <p>pyo3 uses a build script to determine the python version and set the correct linker arguments. By default it uses the <code>python3</code> executable. With the <code>python2</code> feature it uses the <code>python2</code> executable. You can override the python interpreter by setting <code>PYTHON_SYS_EXECUTABLE</code>.</p>
@@ -1343,12 +1349,12 @@ struct MyClass {
 #[pymethods]
 impl MyClass {
     #[new]
-    fn __new__(obj: &amp;PyRawObject, num: u32) -&gt; PyResult&lt;()&gt; {
+    fn new(obj: &amp;PyRawObject, num: u32) {
         obj.init({
             MyClass {
                 num,
             }
-        })
+        });
     }
 
     fn half(&amp;self) -&gt; PyResult&lt;u32&gt; {

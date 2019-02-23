@@ -151,7 +151,7 @@ provides two methods:</p>
 <li><code>call</code> - call callable python object.</li>
 <li><code>call_method</code> - call specific method on the object.</li>
 </ul>
-<p>Both methods accept <code>args</code> and <code>kwargs</code> arguments. The <code>NoArgs</code> object represents an empty tuple object.</p>
+<p>Both methods accept <code>args</code> and <code>kwargs</code> arguments.</p>
 <pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
 use pyo3::types::{PyDict, PyTuple};
 
@@ -212,16 +212,16 @@ fn main() {
     // call object with PyDict
     let kwargs = PyDict::new(py);
     kwargs.set_item(key1, val1);
-    obj.call(py, NoArgs, Some(kwargs));
+    obj.call(py, (), Some(kwargs));
 
     // pass arguments as Vec
     let kwargs = vec![(key1, val1), (key2, val2)];
-    obj.call(py, NoArgs, Some(kwargs.into_py_dict(py)));
+    obj.call(py, (), Some(kwargs.into_py_dict(py)));
 
     // pass arguments as HashMap
     let mut kwargs = HashMap::&lt;&amp;str, i32&gt;::new();
     kwargs.insert(key1, 1);
-    obj.call(py, NoArgs, Some(kwargs.into_py_dict(py)));
+    obj.call(py, (), Some(kwargs.into_py_dict(py)));
 }
 </code></pre></pre>
 <a class="header" href="#intopyt" id="intopyt"><h2><code>IntoPy&lt;T&gt;</code></h2></a>

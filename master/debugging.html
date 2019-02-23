@@ -146,6 +146,12 @@
 <pre><code class="language-bash">cargo rustc --profile=check -- -Z unstable-options --pretty=expanded -Z trace-macros &gt; expanded.rs; rustfmt expanded.rs
 </code></pre>
 <p>See <a href="https://github.com/dtolnay/cargo-expand">cargo expand</a> for a more elaborate version of those commands.</p>
+<a class="header" href="#running-with-valgrind" id="running-with-valgrind"><h2>Running with Valgrind</h2></a>
+<p>Valgrind is a tool to detect memory managment bugs such as memory leaks.</p>
+<p>You first need to installa debug build of python, otherwise valgrind won't produce usable results. In ubuntu there's e.g. a <code>python3-dbg</code> package.</p>
+<p>Activate an environment with the debug interpreter and recompile. If you're on linux, use <code>ldd</code> with the name of you're binary and check that you're linking e.g. <code>libpython3.6dm.so.1.0</code> instead of <code>libpython3.6m.so.1.0</code>.</p>
+<p><a href="https://raw.githubusercontent.com/python/cpython/master/Misc/valgrind-python.supp">Download the suppressions file for cpython</a>.</p>
+<p>Run valgrind with <code>valgrind --suppressions=valgrind-python.supp ./my-command --with-options</code></p>
 
                     </main>
 

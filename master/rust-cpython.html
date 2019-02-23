@@ -167,12 +167,12 @@ struct MyClass {
 #[pymethods]
 impl MyClass {
     #[new]
-    fn __new__(obj: &amp;PyRawObject, num: u32) -&gt; PyResult&lt;()&gt; {
+    fn new(obj: &amp;PyRawObject, num: u32) {
         obj.init({
             MyClass {
                 num,
             }
-        })
+        });
     }
 
     fn half(&amp;self) -&gt; PyResult&lt;u32&gt; {

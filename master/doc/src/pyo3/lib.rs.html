@@ -223,17 +223,6 @@
 <span id="223">223</span>
 <span id="224">224</span>
 <span id="225">225</span>
-<span id="226">226</span>
-<span id="227">227</span>
-<span id="228">228</span>
-<span id="229">229</span>
-<span id="230">230</span>
-<span id="231">231</span>
-<span id="232">232</span>
-<span id="233">233</span>
-<span id="234">234</span>
-<span id="235">235</span>
-<span id="236">236</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="attribute">#![<span class="ident">feature</span>(<span class="ident">specialization</span>)]</span>
 
@@ -355,29 +344,18 @@
 <span class="doccomment">//! }</span>
 <span class="doccomment">//! ```</span>
 
-<span class="comment">//pub extern crate libc;</span>
-<span class="comment">//pub extern crate mashup;</span>
-<span class="comment">//extern crate pyo3cls;</span>
-<span class="comment">//extern crate num_traits;</span>
-<span class="comment">//extern crate spin;</span>
-<span class="comment">//extern crate indoc;</span>
-<span class="comment">//#[macro_use]</span>
-<span class="comment">//extern crate assert_approx_eq;</span>
-
 <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">class</span>::<span class="kw-2">*</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">conversion</span>::{
-    <span class="ident">FromPyObject</span>, <span class="ident">IntoPy</span>, <span class="ident">IntoPyObject</span>, <span class="ident">IntoPyResult</span>, <span class="ident">PyTryFrom</span>, <span class="ident">PyTryInto</span>, <span class="ident">ToBorrowedObject</span>,
-    <span class="ident">ToPyObject</span>,
+    <span class="ident">FromPy</span>, <span class="ident">FromPyObject</span>, <span class="ident">IntoPy</span>, <span class="ident">IntoPyObject</span>, <span class="ident">IntoPyPointer</span>, <span class="ident">PyTryFrom</span>, <span class="ident">PyTryInto</span>,
+    <span class="ident">ToBorrowedObject</span>, <span class="ident">ToPyObject</span>, <span class="ident">ToPyPointer</span>,
 };
 <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">err</span>::{<span class="ident">PyDowncastError</span>, <span class="ident">PyErr</span>, <span class="ident">PyErrArguments</span>, <span class="ident">PyErrValue</span>, <span class="ident">PyResult</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">instance</span>::{<span class="ident">AsPyRef</span>, <span class="ident">Py</span>, <span class="ident">PyNativeType</span>, <span class="ident">PyObjectWithGIL</span>, <span class="ident">PyRef</span>, <span class="ident">PyRefMut</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">noargs</span>::<span class="ident">NoArgs</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">gil</span>::{<span class="ident">init_once</span>, <span class="ident">GILGuard</span>, <span class="ident">GILPool</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">instance</span>::{<span class="ident">AsPyRef</span>, <span class="ident">ManagedPyRef</span>, <span class="ident">Py</span>, <span class="ident">PyNativeType</span>, <span class="ident">PyRef</span>, <span class="ident">PyRefMut</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">object</span>::<span class="ident">PyObject</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">objectprotocol</span>::<span class="ident">ObjectProtocol</span>;
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::{<span class="ident">IntoPyPointer</span>, <span class="ident">Python</span>, <span class="ident">ToPyPointer</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">pythonrun</span>::{<span class="ident">init_once</span>, <span class="ident">prepare_freethreaded_python</span>, <span class="ident">GILGuard</span>, <span class="ident">GILPool</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">typeob</span>::{<span class="ident">PyObjectAlloc</span>, <span class="ident">PyRawObject</span>, <span class="ident">PyTypeInfo</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">exceptions</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::{<span class="ident">prepare_freethreaded_python</span>, <span class="ident">Python</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">type_object</span>::{<span class="ident">PyObjectAlloc</span>, <span class="ident">PyRawObject</span>, <span class="ident">PyTypeInfo</span>};
 
 <span class="comment">// We need that reexport for wrap_function</span>
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
@@ -386,7 +364,7 @@
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">inventory</span>;
 
-<span class="doccomment">/// Rust FFI declarations for Python</span>
+<span class="doccomment">/// Raw ffi declarations for the c interface of python</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">ffi</span>;
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">Py_3</span>))]</span>
@@ -412,15 +390,15 @@
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">derive_utils</span>;
 <span class="kw">mod</span> <span class="ident">err</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">exceptions</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">freelist</span>;
+<span class="kw">mod</span> <span class="ident">gil</span>;
 <span class="kw">mod</span> <span class="ident">instance</span>;
-<span class="kw">mod</span> <span class="ident">noargs</span>;
 <span class="kw">mod</span> <span class="ident">object</span>;
 <span class="kw">mod</span> <span class="ident">objectprotocol</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">prelude</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">python</span>;
-<span class="kw">mod</span> <span class="ident">pythonrun</span>;
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">typeob</span>;
+<span class="kw">mod</span> <span class="ident">python</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">type_object</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">types</span>;
 
 <span class="doccomment">/// The proc macros, which are also part of the prelude</span>
