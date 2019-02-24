@@ -646,9 +646,9 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">type_object</span>::<span class="ident">PyTypeCreate</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">type_object</span>::{<span class="ident">PyTypeInfo</span>, <span class="ident">PyTypeObject</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">PyObjectRef</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">AsPyPointer</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">IntoPyPointer</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">Python</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ToPyPointer</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">FromPyObject</span>, <span class="ident">IntoPyObject</span>, <span class="ident">ToPyObject</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">marker</span>::<span class="ident">PhantomData</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">mem</span>;
@@ -667,7 +667,7 @@
 <span class="doccomment">/// A special reference of type `T`. `PyRef&lt;T&gt;` refers a instance of T, which exists in the Python</span>
 <span class="doccomment">/// heap as a part of a Python object.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// We can&#39;t implement `ToPyPointer` or `ToPyObject` for `pyclass`es, because they&#39;re not Python</span>
+<span class="doccomment">/// We can&#39;t implement `AsPyPointer` or `ToPyObject` for `pyclass`es, because they&#39;re not Python</span>
 <span class="doccomment">/// objects until copied to the Python heap. So, instead of treating `&amp;pyclass`es as Python objects,</span>
 <span class="doccomment">/// we need to use special reference types `PyRef` and `PyRefMut`.</span>
 <span class="doccomment">///</span>
@@ -714,7 +714,7 @@
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span>: <span class="ident">PyTypeInfo</span><span class="op">&gt;</span> <span class="ident">ToPyPointer</span> <span class="kw">for</span> <span class="ident">PyRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span>: <span class="ident">PyTypeInfo</span><span class="op">&gt;</span> <span class="ident">AsPyPointer</span> <span class="kw">for</span> <span class="ident">PyRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">as_ptr</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span> {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr_dispatch</span>()
     }
@@ -777,7 +777,7 @@
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span>: <span class="ident">PyTypeInfo</span><span class="op">&gt;</span> <span class="ident">ToPyPointer</span> <span class="kw">for</span> <span class="ident">PyRefMut</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span>: <span class="ident">PyTypeInfo</span><span class="op">&gt;</span> <span class="ident">AsPyPointer</span> <span class="kw">for</span> <span class="ident">PyRefMut</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">as_ptr</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span> {
         (<span class="self">self</span>.<span class="number">0</span> <span class="kw">as</span> <span class="kw-2">&amp;</span><span class="ident">T</span>).<span class="ident">as_ptr_dispatch</span>()
     }
@@ -989,7 +989,7 @@
 }
 
 <span class="doccomment">/// Specialization workaround</span>
-<span class="kw">trait</span> <span class="ident">AsPyRefDispatch</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">PyTypeInfo</span><span class="op">&gt;</span>: <span class="ident">ToPyPointer</span> {
+<span class="kw">trait</span> <span class="ident">AsPyRefDispatch</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">PyTypeInfo</span><span class="op">&gt;</span>: <span class="ident">AsPyPointer</span> {
     <span class="kw">fn</span> <span class="ident">as_ref_dispatch</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">T</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> (<span class="self">self</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u8</span>).<span class="ident">offset</span>(<span class="ident">T</span>::<span class="ident">OFFSET</span>) <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">T</span>;
@@ -1045,7 +1045,7 @@
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">ToPyPointer</span> <span class="kw">for</span> <span class="ident">Py</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">AsPyPointer</span> <span class="kw">for</span> <span class="ident">Py</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Gets the underlying FFI pointer, returns a borrowed pointer.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">fn</span> <span class="ident">as_ptr</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span> {
@@ -1107,7 +1107,7 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">T</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">PyObject</span>
 <span class="kw">where</span>
-    <span class="ident">T</span>: <span class="ident">ToPyPointer</span>,
+    <span class="ident">T</span>: <span class="ident">AsPyPointer</span>,
 {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">ob</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="kw">unsafe</span> { <span class="ident">Py</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>::<span class="ident">from_borrowed_ptr</span>(<span class="ident">ob</span>.<span class="ident">as_ptr</span>()) }.<span class="ident">into</span>()
@@ -1116,7 +1116,7 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">T</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">PyObject</span>
 <span class="kw">where</span>
-    <span class="ident">T</span>: <span class="ident">ToPyPointer</span>,
+    <span class="ident">T</span>: <span class="ident">AsPyPointer</span>,
 {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">ob</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="kw">unsafe</span> { <span class="ident">Py</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>::<span class="ident">from_borrowed_ptr</span>(<span class="ident">ob</span>.<span class="ident">as_ptr</span>()) }.<span class="ident">into</span>()
@@ -1125,7 +1125,7 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Py</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">T</span>: <span class="ident">ToPyPointer</span>,
+    <span class="ident">T</span>: <span class="ident">AsPyPointer</span>,
     <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">T</span>: <span class="lifetime">&#39;a</span> <span class="op">+</span> <span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>,
 {
     <span class="doccomment">/// Extracts `Self` from the source `PyObject`.</span>
@@ -1141,8 +1141,8 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// Many methods want to take anything that can be converted into a python object. This type</span>
 <span class="doccomment">/// takes care of both types types that are already python object (i.e. implement</span>
-<span class="doccomment">/// [ToPyPointer]) and those that don&#39;t (i.e. [ToPyObject] types).</span>
-<span class="doccomment">/// For the [ToPyPointer] types, we just use the borrowed pointer, which is a lot faster</span>
+<span class="doccomment">/// [AsPyPointer]) and those that don&#39;t (i.e. [ToPyObject] types).</span>
+<span class="doccomment">/// For the [AsPyPointer] types, we just use the borrowed pointer, which is a lot faster</span>
 <span class="doccomment">/// and simpler than creating a new extra object. The remaning [ToPyObject] types are</span>
 <span class="doccomment">/// converted to python objects, the owned pointer is stored and decref&#39;d on drop.</span>
 <span class="doccomment">///</span>
@@ -1150,7 +1150,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// ```</span>
 <span class="doccomment">/// use pyo3::ffi;</span>
-<span class="doccomment">/// use pyo3::{ToPyObject, ToPyPointer, PyNativeType, ManagedPyRef};</span>
+<span class="doccomment">/// use pyo3::{ToPyObject, AsPyPointer, PyNativeType, ManagedPyRef};</span>
 <span class="doccomment">/// use pyo3::types::{PyDict, PyObjectRef};</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// pub fn get_dict_item&lt;&#39;p&gt;(dict: &amp;&#39;p PyDict, key: &amp;impl ToPyObject) -&gt; Option&lt;&amp;&#39;p PyObjectRef&gt; {</span>
@@ -1175,7 +1175,7 @@
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span>, <span class="ident">T</span>: <span class="ident">ToPyObject</span><span class="op">&gt;</span> <span class="ident">ToPyPointer</span> <span class="kw">for</span> <span class="ident">ManagedPyRef</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span>, <span class="ident">T</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span>, <span class="ident">T</span>: <span class="ident">ToPyObject</span><span class="op">&gt;</span> <span class="ident">AsPyPointer</span> <span class="kw">for</span> <span class="ident">ManagedPyRef</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span>, <span class="ident">T</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">as_ptr</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span> {
         <span class="self">self</span>.<span class="ident">data</span>
     }
@@ -1212,8 +1212,8 @@
 
 <span class="doccomment">/// Case 2: It&#39;s an object on the python heap, we&#39;re just storing a borrowed pointer.</span>
 <span class="doccomment">/// The object we&#39;re getting is an owned pointer, it might have it&#39;s own drop impl.</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">ToPyObject</span> <span class="op">+</span> <span class="ident">ToPyPointer</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">ManagedPyRefDispatch</span> <span class="kw">for</span> <span class="ident">T</span> {
-    <span class="doccomment">/// Use ToPyPointer to copy the pointer and store it as borrowed pointer</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">ToPyObject</span> <span class="op">+</span> <span class="ident">AsPyPointer</span> <span class="op">+</span> <span class="question-mark">?</span><span class="ident">Sized</span><span class="op">&gt;</span> <span class="ident">ManagedPyRefDispatch</span> <span class="kw">for</span> <span class="ident">T</span> {
+    <span class="doccomment">/// Use AsPyPointer to copy the pointer and store it as borrowed pointer</span>
     <span class="kw">fn</span> <span class="ident">to_managed_py_ref</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">ManagedPyRef</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span>, <span class="self">Self</span><span class="op">&gt;</span> {
         <span class="ident">ManagedPyRef</span> {
             <span class="ident">data</span>: <span class="self">self</span>.<span class="ident">as_ptr</span>(),
@@ -1238,7 +1238,7 @@
 <span class="kw">mod</span> <span class="ident">test</span> {
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>;
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">PyDict</span>;
-    <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">ManagedPyRef</span>, <span class="ident">Python</span>, <span class="ident">ToPyPointer</span>};
+    <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">AsPyPointer</span>, <span class="ident">ManagedPyRef</span>, <span class="ident">Python</span>};
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">borrowed_py_ref_with_to_pointer</span>() {

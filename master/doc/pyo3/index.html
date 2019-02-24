@@ -124,7 +124,8 @@ heap as a part of a Python object.</p>
 </td></tr></table><h2 id='enums' class='section-header'><a href="#enums">Enums</a></h2>
 <table><tr class='module-item'><td><a class="enum" href="enum.PyErrValue.html" title='pyo3::PyErrValue enum'>PyErrValue</a></td><td class='docblock-short'><p>Represents a <code>PyErr</code> value</p>
 </td></tr></table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
-<table><tr class='module-item'><td><a class="trait" href="trait.AsPyRef.html" title='pyo3::AsPyRef trait'>AsPyRef</a></td><td class='docblock-short'><p>Trait implements object reference extraction from python managed pointer.</p>
+<table><tr class='module-item'><td><a class="trait" href="trait.AsPyPointer.html" title='pyo3::AsPyPointer trait'>AsPyPointer</a></td><td class='docblock-short'><p>This trait represents that, <strong>we can do zero-cost conversion from the object to FFI pointer</strong>.</p>
+</td></tr><tr class='module-item'><td><a class="trait" href="trait.AsPyRef.html" title='pyo3::AsPyRef trait'>AsPyRef</a></td><td class='docblock-short'><p>Trait implements object reference extraction from python managed pointer.</p>
 </td></tr><tr class='module-item'><td><a class="trait" href="trait.FromPy.html" title='pyo3::FromPy trait'>FromPy</a></td><td class='docblock-short'><p>Similar to <a href="https://doc.rust-lang.org/nightly/core/convert/trait.From.html" title="std::convert::From">std::convert::From</a>, just that it requires a gil token.</p>
 </td></tr><tr class='module-item'><td><a class="trait" href="trait.FromPyObject.html" title='pyo3::FromPyObject trait'>FromPyObject</a></td><td class='docblock-short'><p><code>FromPyObject</code> is implemented by various types that can be extracted from
 a Python object reference.</p>
@@ -141,10 +142,9 @@ This trait is similar to <code>std::convert::TryFrom</code></p>
 This trait is similar to <code>std::convert::TryInto</code></p>
 </td></tr><tr class='module-item'><td><a class="trait" href="trait.ToBorrowedObject.html" title='pyo3::ToBorrowedObject trait'>ToBorrowedObject</a></td><td class='docblock-short'><p>This trait has two implementations: The slow one is implemented for
 all <a href="../pyo3/prelude/trait.ToPyObject.html" title="ToPyObject">ToPyObject</a> and creates a new object using <a href="../pyo3/prelude/trait.ToPyObject.html#tymethod.to_object" title="ToPyObject::to_object">ToPyObject::to_object</a>,
-while the fast one is only implemented for ToPyPointer (we know
-that every ToPyPointer is also ToPyObject) and uses <a href="../pyo3/trait.ToPyPointer.html#tymethod.as_ptr" title="ToPyPointer::as_ptr()">ToPyPointer::as_ptr()</a></p>
+while the fast one is only implemented for AsPyPointer (we know
+that every AsPyPointer is also ToPyObject) and uses <a href="../pyo3/trait.AsPyPointer.html#tymethod.as_ptr" title="AsPyPointer::as_ptr()">AsPyPointer::as_ptr()</a></p>
 </td></tr><tr class='module-item'><td><a class="trait" href="trait.ToPyObject.html" title='pyo3::ToPyObject trait'>ToPyObject</a></td><td class='docblock-short'><p>Conversion trait that allows various objects to be converted into <code>PyObject</code></p>
-</td></tr><tr class='module-item'><td><a class="trait" href="trait.ToPyPointer.html" title='pyo3::ToPyPointer trait'>ToPyPointer</a></td><td class='docblock-short'><p>This trait allows retrieving the underlying FFI pointer from Python objects.</p>
 </td></tr></table><h2 id='functions' class='section-header'><a href="#functions">Functions</a></h2>
 <table><tr class='module-item'><td><a class="fn" href="fn.prepare_freethreaded_python.html" title='pyo3::prepare_freethreaded_python fn'>prepare_freethreaded_python</a></td><td class='docblock-short'><p>Prepares the use of Python in a free-threaded context.</p>
 </td></tr></table><h2 id='types' class='section-header'><a href="#types">Type Definitions</a></h2>
