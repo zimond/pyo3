@@ -628,13 +628,6 @@
 <span id="628">628</span>
 <span id="629">629</span>
 <span id="630">630</span>
-<span id="631">631</span>
-<span id="632">632</span>
-<span id="633">633</span>
-<span id="634">634</span>
-<span id="635">635</span>
-<span id="636">636</span>
-<span id="637">637</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">err</span>::{<span class="ident">PyErr</span>, <span class="ident">PyResult</span>};
@@ -660,8 +653,10 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// pyo3 is designed in a way that that all references to those types are bound to the GIL,</span>
 <span class="doccomment">/// which is why you can get a token from all references of those types.</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyNativeType</span>: <span class="ident">Sized</span> {
-    <span class="kw">fn</span> <span class="ident">py</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Python</span>;
+<span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">trait</span> <span class="ident">PyNativeType</span>: <span class="ident">Sized</span> {
+    <span class="kw">fn</span> <span class="ident">py</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Python</span> {
+        <span class="kw">unsafe</span> { <span class="ident">Python</span>::<span class="ident">assume_gil_acquired</span>() }
+    }
 }
 
 <span class="doccomment">/// A special reference of type `T`. `PyRef&lt;T&gt;` refers a instance of T, which exists in the Python</span>
@@ -696,6 +691,13 @@
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PyRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span>: <span class="ident">PyTypeInfo</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">T</span>, <span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">Rc</span><span class="op">&lt;</span>()<span class="op">&gt;&gt;</span>);
 
+<span class="kw">fn</span> <span class="ident">ref_to_ptr</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">t</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>
+<span class="kw">where</span>
+    <span class="ident">T</span>: <span class="ident">PyTypeInfo</span>,
+{
+    <span class="kw">unsafe</span> { (<span class="ident">t</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="kw">_</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u8</span>).<span class="ident">offset</span>(<span class="op">-</span><span class="ident">T</span>::<span class="ident">OFFSET</span>) <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="kw">_</span> }
+}
+
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span>: <span class="ident">PyTypeInfo</span><span class="op">&gt;</span> <span class="ident">PyRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> {
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">from_ref</span>(<span class="ident">r</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">PyRef</span>(<span class="ident">r</span>, <span class="ident">PhantomData</span>)
@@ -716,7 +718,7 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span>: <span class="ident">PyTypeInfo</span><span class="op">&gt;</span> <span class="ident">AsPyPointer</span> <span class="kw">for</span> <span class="ident">PyRef</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">as_ptr</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span> {
-        <span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr_dispatch</span>()
+        <span class="ident">ref_to_ptr</span>(<span class="self">self</span>.<span class="number">0</span>)
     }
 }
 
@@ -779,7 +781,7 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span>: <span class="ident">PyTypeInfo</span><span class="op">&gt;</span> <span class="ident">AsPyPointer</span> <span class="kw">for</span> <span class="ident">PyRefMut</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">as_ptr</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span> {
-        (<span class="self">self</span>.<span class="number">0</span> <span class="kw">as</span> <span class="kw-2">&amp;</span><span class="ident">T</span>).<span class="ident">as_ptr_dispatch</span>()
+        <span class="ident">ref_to_ptr</span>(<span class="self">self</span>.<span class="number">0</span>)
     }
 }
 
@@ -817,22 +819,6 @@
 {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">pref</span>: <span class="ident">PyRefMut</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">PyObjectRef</span> {
         <span class="kw">unsafe</span> { <span class="kw-2">&amp;</span><span class="kw-2">*</span>(<span class="ident">pref</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">PyObjectRef</span>) }
-    }
-}
-
-<span class="doccomment">/// Specialization workaround</span>
-<span class="kw">trait</span> <span class="ident">PyRefDispatch</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">PyTypeInfo</span><span class="op">&gt;</span> {
-    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">cast_ptr_alignment</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">as_ptr_dispatch</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span> {
-        <span class="kw">unsafe</span> { (<span class="self">self</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="kw">_</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u8</span>).<span class="ident">offset</span>(<span class="op">-</span><span class="ident">T</span>::<span class="ident">OFFSET</span>) <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="kw">_</span> }
-    }
-}
-
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">PyTypeInfo</span><span class="op">&gt;</span> <span class="ident">PyRefDispatch</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">T</span> {}
-
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">PyTypeInfo</span> <span class="op">+</span> <span class="ident">PyNativeType</span><span class="op">&gt;</span> <span class="ident">PyRefDispatch</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">T</span> {
-    <span class="kw">fn</span> <span class="ident">as_ptr_dispatch</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span> {
-        <span class="self">self</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="kw">_</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="kw">_</span>
     }
 }
 
@@ -993,13 +979,13 @@
     <span class="kw">fn</span> <span class="ident">as_ref_dispatch</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">T</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> (<span class="self">self</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u8</span>).<span class="ident">offset</span>(<span class="ident">T</span>::<span class="ident">OFFSET</span>) <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">T</span>;
-            <span class="ident">ptr</span>.<span class="ident">as_ref</span>().<span class="ident">unwrap</span>()
+            <span class="ident">ptr</span>.<span class="ident">as_ref</span>().<span class="ident">expect</span>(<span class="string">&quot;Py has a null pointer&quot;</span>)
         }
     }
     <span class="kw">fn</span> <span class="ident">as_mut_dispatch</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">_py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">T</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> (<span class="self">self</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u8</span>).<span class="ident">offset</span>(<span class="ident">T</span>::<span class="ident">OFFSET</span>) <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">T</span>;
-            <span class="ident">ptr</span>.<span class="ident">as_mut</span>().<span class="ident">unwrap</span>()
+            <span class="ident">ptr</span>.<span class="ident">as_mut</span>().<span class="ident">expect</span>(<span class="string">&quot;Py has a null pointer&quot;</span>)
         }
     }
 }
