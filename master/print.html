@@ -330,7 +330,7 @@ fn main() {
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-use pyo3::import_exception;
+use pyo3::create_exception;
 
 create_exception!(module, MyError, pyo3::exceptions::Exception);
 #}</code></pre></pre>
@@ -359,7 +359,8 @@ fn main() {
 </code></pre></pre>
 <a class="header" href="#raise-an-exception" id="raise-an-exception"><h2>Raise an exception</h2></a>
 <p>To raise an exception, first you need to obtain an exception type and construct a new <a href="https://docs.rs/pyo3/0.2.7/struct.PyErr.html"><code>PyErr</code></a>, then call <a href="https://docs.rs/pyo3/0.2.7/struct.PyErr.html#method.restore"><code>PyErr::restore()</code></a> method to write the exception back to the Python interpreter's global state.</p>
-<pre><pre class="playpen"><code class="language-rust">use pyo3::{Python, PyErr, exc};
+<pre><pre class="playpen"><code class="language-rust">use pyo3::{Python, PyErr};
+use pyo3::exceptions;
 
 fn main() {
     let gil = Python::acquire_gil();
@@ -379,6 +380,7 @@ have rust type as well.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
+# use pyo3::exceptions;
 # use pyo3::prelude::*;
 # fn check_for_error() -&gt; bool {false}
 fn my_func(arg: PyObject) -&gt; PyResult&lt;()&gt; {
@@ -392,7 +394,8 @@ fn my_func(arg: PyObject) -&gt; PyResult&lt;()&gt; {
 <a class="header" href="#check-exception-type" id="check-exception-type"><h2>Check exception type</h2></a>
 <p>Python has an <a href="https://docs.python.org/3/library/functions.html#isinstance"><code>isinstance</code></a> method to check object type,
 in <code>PyO3</code> there is a <a href="https://docs.rs/pyo3/0.2.7/struct.Python.html#method.is_instance"><code>Python::is_instance()</code></a> method which does the same thing.</p>
-<pre><pre class="playpen"><code class="language-rust">use pyo3::{Python, PyBool, PyList};
+<pre><pre class="playpen"><code class="language-rust">use pyo3::Python;
+use pyo3::types::{PyBool, PyList};
 
 fn main() {
     let gil = Python::acquire_gil();
@@ -405,7 +408,8 @@ fn main() {
 </code></pre></pre>
 <p><a href="https://docs.rs/pyo3/0.2.7/struct.Python.html#method.is_instance"><code>Python::is_instance()</code></a> calls the underlying <a href="https://docs.rs/pyo3/0.2.7/struct.PyType.html#method.is_instance"><code>PyType::is_instance</code></a> method to do the actual work.</p>
 <p>To check the type of an exception, you can simply do:</p>
-<pre><pre class="playpen"><code class="language-rust"># use pyo3::prelude::*;
+<pre><pre class="playpen"><code class="language-rust"># use pyo3::exceptions;
+# use pyo3::prelude::*;
 # fn main() {
 # let gil = Python::acquire_gil();
 # let py = gil.python();
@@ -473,7 +477,7 @@ fn tell(file: PyObject) -&gt; PyResult&lt;u64&gt; {
     let py = gil.python();
 
     match file.call_method0(py, &quot;tell&quot;) {
-        Err(_) =&gt; Err(UnsupportedOperation::new(&quot;not supported: tell&quot;)),
+        Err(_) =&gt; Err(UnsupportedOperation::py_err(&quot;not supported: tell&quot;)),
         Ok(x) =&gt; x.extract::&lt;u64&gt;(py),
     }    
 }
@@ -524,27 +528,36 @@ print(rust2py.__doc__)
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
+use pyo3::prelude::*;
+use pyo3::{wrap_pyfunction, wrap_pymodule};
+use pyo3::types::PyDict;
+
 #[pyfunction]
+#[cfg(Py_3)]
 fn subfunction() -&gt; String {
     &quot;Subfunction&quot;.to_string()
 }
 
 #[pymodule]
+#[cfg(Py_3)]
 fn submodule(_py: Python, module: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
     module.add_wrapped(wrap_pyfunction!(subfunction))?;
     Ok(())
 }
 
 #[pymodule]
+#[cfg(Py_3)]
 fn supermodule(_py: Python, module: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
     module.add_wrapped(wrap_pymodule!(submodule))?;
     Ok(())
 }
 
+#[cfg(Py_3)]
 fn nested_call() {
     let gil = GILGuard::acquire();
     let py = gil.python();
     let supermodule = wrap_pymodule!(supermodule)(py);
+    let ctx = PyDict::new(py);
     ctx.set_item(&quot;supermodule&quot;, supermodule);
 
     py.run(&quot;assert supermodule.submodule.subfuntion() == 'Subfunction'&quot;, None, Some(&amp;ctx)).unwrap();
@@ -604,6 +617,8 @@ of the doc-string.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
+use pyo3::prelude::*;
+
 /// add(a, b, /)
 /// --
 ///
@@ -658,6 +673,7 @@ a Python object, and you are also holding the GIL.</p>
 # #![allow(unused_variables)]
 #fn main() {
 # use pyo3::prelude::*;
+# use pyo3::types::PyDict;
 #[pyclass]
 struct MyClass {
    num: i32,
@@ -700,7 +716,8 @@ struct MyClass {
 }
 fn return_myclass() -&gt; Py&lt;MyClass&gt; {
     let gil = Python::acquire_gil();
-    Py::new(|| MyClass { num: 1 })
+    let py = gil.python();
+    Py::new(py, MyClass { num: 1 }).unwrap()
 }
 let gil = Python::acquire_gil();
 let obj = return_myclass();
@@ -762,8 +779,8 @@ a derived class declared in Python.</li>
 <a class="header" href="#inheritance" id="inheritance"><h2>Inheritance</h2></a>
 <p>By default <code>PyObject</code> is used as default base class. To override default base class
 <code>base</code> parameter for <code>class</code> needs to be used. Value is full path to base class.
-<code>__new__</code> method accepts <code>PyRawObject</code> object. <code>obj</code> instance must be initialized
-with value of custom class struct. Subclass must call parent's <code>__new__</code> method.</p>
+<code>new</code> method accepts <code>PyRawObject</code> object. <code>obj</code> instance must be initialized
+with value of custom class struct. Subclass must call parent's <code>new</code> method.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -953,6 +970,7 @@ with<code>#[classmethod]</code> attribute.</p>
 # #![allow(unused_variables)]
 #fn main() {
 # use pyo3::prelude::*;
+# use pyo3::types::PyType;
 # #[pyclass]
 # struct MyClass {
 #    num: i32,
@@ -1146,6 +1164,8 @@ Example:</p>
 # #![allow(unused_variables)]
 #fn main() {
 use pyo3::prelude::*;
+use pyo3::PyTraverseError;
+use pyo3::gc::{PyGCProtocol, PyVisit};
 
 #[pyclass]
 struct ClassWithGCSupport {
@@ -1164,7 +1184,9 @@ impl PyGCProtocol for ClassWithGCSupport {
     fn __clear__(&amp;mut self) {
         if let Some(obj) = self.obj.take() {
           // Release reference, this decrements ref counter.
-          self.py().release(obj);
+          let gil = GILGuard::acquire();
+          let py = gil.python();
+          py.release(obj);
         }
     }
 }
@@ -1196,11 +1218,11 @@ struct MyIterator {
 
 #[pyproto]
 impl PyIterProtocol for MyIterator {
-    fn __iter__(&amp;mut self) -&gt; PyResult&lt;PyObject&gt; {
-        Ok(self.into())
+    fn __iter__(slf: PyRefMut&lt;Self&gt;) -&gt; PyResult&lt;Py&lt;MyIterator&gt;&gt; {
+        Ok(slf.into())
     }
-    fn __next__(&amp;mut self) -&gt; PyResult&lt;Option&lt;PyObject&gt;&gt; {
-        Ok(self.iter.next())
+    fn __next__(mut slf: PyRefMut&lt;Self&gt;) -&gt; PyResult&lt;Option&lt;PyObject&gt;&gt; {
+        Ok(slf.iter.next())
     }
 }
 #}</code></pre></pre>

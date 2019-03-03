@@ -169,6 +169,7 @@ a Python object, and you are also holding the GIL.</p>
 # #![allow(unused_variables)]
 #fn main() {
 # use pyo3::prelude::*;
+# use pyo3::types::PyDict;
 #[pyclass]
 struct MyClass {
    num: i32,
@@ -211,7 +212,8 @@ struct MyClass {
 }
 fn return_myclass() -&gt; Py&lt;MyClass&gt; {
     let gil = Python::acquire_gil();
-    Py::new(|| MyClass { num: 1 })
+    let py = gil.python();
+    Py::new(py, MyClass { num: 1 }).unwrap()
 }
 let gil = Python::acquire_gil();
 let obj = return_myclass();
@@ -273,8 +275,8 @@ a derived class declared in Python.</li>
 <a class="header" href="#inheritance" id="inheritance"><h2>Inheritance</h2></a>
 <p>By default <code>PyObject</code> is used as default base class. To override default base class
 <code>base</code> parameter for <code>class</code> needs to be used. Value is full path to base class.
-<code>__new__</code> method accepts <code>PyRawObject</code> object. <code>obj</code> instance must be initialized
-with value of custom class struct. Subclass must call parent's <code>__new__</code> method.</p>
+<code>new</code> method accepts <code>PyRawObject</code> object. <code>obj</code> instance must be initialized
+with value of custom class struct. Subclass must call parent's <code>new</code> method.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -464,6 +466,7 @@ with<code>#[classmethod]</code> attribute.</p>
 # #![allow(unused_variables)]
 #fn main() {
 # use pyo3::prelude::*;
+# use pyo3::types::PyType;
 # #[pyclass]
 # struct MyClass {
 #    num: i32,
@@ -657,6 +660,8 @@ Example:</p>
 # #![allow(unused_variables)]
 #fn main() {
 use pyo3::prelude::*;
+use pyo3::PyTraverseError;
+use pyo3::gc::{PyGCProtocol, PyVisit};
 
 #[pyclass]
 struct ClassWithGCSupport {
@@ -675,7 +680,9 @@ impl PyGCProtocol for ClassWithGCSupport {
     fn __clear__(&amp;mut self) {
         if let Some(obj) = self.obj.take() {
           // Release reference, this decrements ref counter.
-          self.py().release(obj);
+          let gil = GILGuard::acquire();
+          let py = gil.python();
+          py.release(obj);
         }
     }
 }
@@ -707,11 +714,11 @@ struct MyIterator {
 
 #[pyproto]
 impl PyIterProtocol for MyIterator {
-    fn __iter__(&amp;mut self) -&gt; PyResult&lt;PyObject&gt; {
-        Ok(self.into())
+    fn __iter__(slf: PyRefMut&lt;Self&gt;) -&gt; PyResult&lt;Py&lt;MyIterator&gt;&gt; {
+        Ok(slf.into())
     }
-    fn __next__(&amp;mut self) -&gt; PyResult&lt;Option&lt;PyObject&gt;&gt; {
-        Ok(self.iter.next())
+    fn __next__(mut slf: PyRefMut&lt;Self&gt;) -&gt; PyResult&lt;Option&lt;PyObject&gt;&gt; {
+        Ok(slf.iter.next())
     }
 }
 #}</code></pre></pre>

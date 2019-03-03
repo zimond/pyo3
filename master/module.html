@@ -179,27 +179,36 @@ print(rust2py.__doc__)
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
+use pyo3::prelude::*;
+use pyo3::{wrap_pyfunction, wrap_pymodule};
+use pyo3::types::PyDict;
+
 #[pyfunction]
+#[cfg(Py_3)]
 fn subfunction() -&gt; String {
     &quot;Subfunction&quot;.to_string()
 }
 
 #[pymodule]
+#[cfg(Py_3)]
 fn submodule(_py: Python, module: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
     module.add_wrapped(wrap_pyfunction!(subfunction))?;
     Ok(())
 }
 
 #[pymodule]
+#[cfg(Py_3)]
 fn supermodule(_py: Python, module: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
     module.add_wrapped(wrap_pymodule!(submodule))?;
     Ok(())
 }
 
+#[cfg(Py_3)]
 fn nested_call() {
     let gil = GILGuard::acquire();
     let py = gil.python();
     let supermodule = wrap_pymodule!(supermodule)(py);
+    let ctx = PyDict::new(py);
     ctx.set_item(&quot;supermodule&quot;, supermodule);
 
     py.run(&quot;assert supermodule.submodule.subfuntion() == 'Subfunction'&quot;, None, Some(&amp;ctx)).unwrap();
