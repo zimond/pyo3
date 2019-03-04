@@ -683,9 +683,9 @@ let gil = Python::acquire_gil();
 let py = gil.python();
 let obj = PyRef::new(py, MyClass { num: 3, debug: true }).unwrap();
 assert_eq!(obj.num, 3);
-let dict = PyDict::new();
+let dict = PyDict::new(py);
 // You can treat a `PyRef` as a Python object
-dict.set_item(&quot;obj&quot;, obj)).unwrap();
+dict.set_item(&quot;obj&quot;, obj).unwrap();
 #}</code></pre></pre>
 <a class="header" href="#pyrefmut" id="pyrefmut"><h3><code>PyRefMut</code></h3></a>
 <p><code>PyRefMut</code> is a mutable version of <code>PyRef</code>.</p>
