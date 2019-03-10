@@ -143,6 +143,7 @@
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
+# extern crate pyo3;
 # use pyo3::prelude::*;
 
 #[pyclass]
@@ -169,6 +170,7 @@ a Python object, and you are also holding the GIL.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
+# extern crate pyo3;
 # use pyo3::prelude::*;
 # use pyo3::types::PyDict;
 #[pyclass]
@@ -189,6 +191,7 @@ dict.set_item(&quot;obj&quot;, obj).unwrap();
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
+# extern crate pyo3;
 # use pyo3::prelude::*;
 #[pyclass]
 struct MyClass {
@@ -206,6 +209,7 @@ obj.num = 5;
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
+# extern crate pyo3;
 # use pyo3::prelude::*;
 #[pyclass]
 struct MyClass {
@@ -242,6 +246,7 @@ attribute. Only the python <code>__new__</code> method can be specified, <code>_
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
+# extern crate pyo3;
 # use pyo3::prelude::*;
 # use pyo3::PyRawObject;
 #[pyclass]
@@ -278,9 +283,7 @@ a derived class declared in Python.</li>
 <code>base</code> parameter for <code>class</code> needs to be used. Value is full path to base class.
 <code>new</code> method accepts <code>PyRawObject</code> object. <code>obj</code> instance must be initialized
 with value of custom class struct. Subclass must call parent's <code>new</code> method.</p>
-<pre><pre class="playpen"><code class="language-rust">
-# #![allow(unused_variables)]
-#fn main() {
+<pre><code class="language-rust ignore"># extern crate pyo3;
 # use pyo3::prelude::*;
 # use pyo3::PyRawObject;
 #[pyclass]
@@ -314,10 +317,10 @@ impl SubClass {
    }
 
    fn method2(&amp;self) -&gt; PyResult&lt;()&gt; {
-       self.get_base().method()
+      self.get_base().method()
    }
 }
-#}</code></pre></pre>
+</code></pre>
 <p><code>ObjectProtocol</code> trait provides <code>get_base()</code> method. It returns reference to instance of
 base class.</p>
 <a class="header" href="#object-properties" id="object-properties"><h2>Object properties</h2></a>
@@ -327,6 +330,7 @@ attributes. i.e.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
+# extern crate pyo3;
 # use pyo3::prelude::*;
 # #[pyclass]
 # struct MyClass {
@@ -347,9 +351,7 @@ ways how to override name.</p>
 <p>If function name starts with <code>get_</code> or <code>set_</code> for getter or setter respectively.
 Descriptor name becomes function name with prefix removed. This is useful in case of
 rust's special keywords like <code>type</code>.</p>
-<pre><pre class="playpen"><code class="language-rust">
-# #![allow(unused_variables)]
-#fn main() {
+<pre><code class="language-rust ignore"># extern crate pyo3;
 # use pyo3::prelude::*;
 # #[pyclass]
 # struct MyClass {
@@ -370,13 +372,11 @@ impl MyClass {
         Ok(())
      }
 }
-#}</code></pre></pre>
+</code></pre>
 <p>In this case property <code>num</code> is defined. And it is available from python code as <code>self.num</code>.</p>
 <p>Also both <code>#[getter]</code> and <code>#[setter]</code> attributes accepts one parameter.
 If this parameter is specified, it is used as a property name. i.e.</p>
-<pre><pre class="playpen"><code class="language-rust">
-# #![allow(unused_variables)]
-#fn main() {
+<pre><code class="language-rust ignore"># extern crate pyo3;
 # use pyo3::prelude::*;
 # #[pyclass]
 # struct MyClass {
@@ -397,19 +397,17 @@ impl MyClass {
         Ok(())
      }
 }
-#}</code></pre></pre>
+</code></pre>
 <p>In this case the property <code>number</code> is defined and is available from python code as <code>self.number</code>.</p>
 <p>For simple cases you can also define getters and setters in your Rust struct field definition, for example:</p>
-<pre><pre class="playpen"><code class="language-rust">
-# #![allow(unused_variables)]
-#fn main() {
+<pre><code class="language-rust ignore"># extern crate pyo3;
 # use pyo3::prelude::*;
 #[pyclass]
 struct MyClass {
   #[pyo3(get, set)]
   num: i32
 }
-#}</code></pre></pre>
+</code></pre>
 <p>Then it is available from Python code as <code>self.num</code>.</p>
 <a class="header" href="#instance-methods" id="instance-methods"><h2>Instance methods</h2></a>
 <p>To define a python compatible method, <code>impl</code> block for struct has to be annotated with the
@@ -418,6 +416,7 @@ block with some variations, like descriptors, class method static methods, etc.<
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
+# extern crate pyo3;
 # use pyo3::prelude::*;
 # #[pyclass]
 # struct MyClass {
@@ -444,6 +443,7 @@ get injected by method wrapper. i.e</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
+# extern crate pyo3;
 # use pyo3::prelude::*;
 # #[pyclass]
 # struct MyClass {
@@ -465,6 +465,7 @@ with the <code>#[classmethod]</code> attribute.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
+# extern crate pyo3;
 # use pyo3::prelude::*;
 # use pyo3::types::PyType;
 # #[pyclass]
@@ -496,6 +497,7 @@ This may be the type object of a derived class.</li>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
+# extern crate pyo3;
 # use pyo3::prelude::*;
 # #[pyclass]
 # struct MyClass {
@@ -517,6 +519,7 @@ the <code>#[call]</code> attribute. Arguments of the method are specified same a
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
+# extern crate pyo3;
 # use pyo3::prelude::*;
 use pyo3::types::PyTuple;
 # #[pyclass]
@@ -558,6 +561,7 @@ code unmodified.</li>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
+# extern crate pyo3;
 # use pyo3::prelude::*;
 use pyo3::types::{PyDict, PyTuple};
 #
@@ -657,6 +661,8 @@ Example:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
+extern crate pyo3;
+
 use pyo3::prelude::*;
 use pyo3::PyTraverseError;
 use pyo3::gc::{PyGCProtocol, PyVisit};
@@ -694,14 +700,16 @@ collector, and it is possible to track them with <code>gc</code> module methods.
 <a href="https://docs.rs/pyo3/0.6.0-alpha.4/class/iter/trait.PyIterProtocol.html"><code>PyIterProtocol</code></a> trait.
 It includes two methods <code>__iter__</code> and <code>__next__</code>:</p>
 <ul>
-<li><code>fn __iter__(&amp;mut self) -&gt; PyResult&lt;impl IntoPyObject&gt;</code></li>
-<li><code>fn __next__(&amp;mut self) -&gt; PyResult&lt;Option&lt;impl IntoPyObject&gt;&gt;</code></li>
+<li><code>fn __iter__(slf: PyRefMut&lt;Self&gt;) -&gt; PyResult&lt;impl IntoPyObject&gt;</code></li>
+<li><code>fn __next__(slf: PyRefMut&lt;Self&gt;) -&gt; PyResult&lt;Option&lt;impl IntoPyObject&gt;&gt;</code></li>
 </ul>
 <p>Returning <code>Ok(None)</code> from <code>__next__</code> indicates that that there are no further items.</p>
 <p>Example:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
+extern crate pyo3;
+
 use pyo3::prelude::*;
 use pyo3::PyIterProtocol;
 

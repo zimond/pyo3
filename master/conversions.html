@@ -152,7 +152,8 @@ provides two methods:</p>
 <li><code>call_method</code> - call specific method on the object.</li>
 </ul>
 <p>Both methods accept <code>args</code> and <code>kwargs</code> arguments.</p>
-<pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
+<pre><pre class="playpen"><code class="language-rust"># extern crate pyo3;
+use pyo3::prelude::*;
 use pyo3::types::{PyDict, PyTuple};
 
 struct SomeObject;
@@ -186,7 +187,8 @@ fn main() {
 </code></pre></pre>
 <p><code>kwargs</code> can by <code>None</code> or <code>Some(&amp;PyDict)</code>. You can use the
 <a href="https://docs.rs/pyo3/0.6.0-alpha.4/trait.IntoPyDict.html"><code>IntoPyDict</code></a> trait to convert other dict-like containers, e.g. <code>HashMap</code>, <code>BTreeMap</code> as well as tuples with up to 10 elements and <code>Vec</code>s where each element is a two element tuple.</p>
-<pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
+<pre><pre class="playpen"><code class="language-rust"># extern crate pyo3;
+use pyo3::prelude::*;
 use pyo3::types::{IntoPyDict, PyDict};
 use std::collections::HashMap;
 

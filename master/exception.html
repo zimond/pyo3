@@ -142,6 +142,7 @@
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
+# extern crate pyo3;
 use pyo3::create_exception;
 
 create_exception!(module, MyError, pyo3::exceptions::Exception);
@@ -151,7 +152,8 @@ create_exception!(module, MyError, pyo3::exceptions::Exception);
 <li><code>MyError</code> is the name of the new exception type.</li>
 </ul>
 <p>For example:</p>
-<pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
+<pre><pre class="playpen"><code class="language-rust"># extern crate pyo3;
+use pyo3::prelude::*;
 use pyo3::create_exception;
 use pyo3::types::PyDict;
 use pyo3::exceptions::Exception;
@@ -171,7 +173,8 @@ fn main() {
 </code></pre></pre>
 <a class="header" href="#raise-an-exception" id="raise-an-exception"><h2>Raise an exception</h2></a>
 <p>To raise an exception, first you need to obtain an exception type and construct a new <a href="https://docs.rs/pyo3/0.2.7/struct.PyErr.html"><code>PyErr</code></a>, then call <a href="https://docs.rs/pyo3/0.2.7/struct.PyErr.html#method.restore"><code>PyErr::restore()</code></a> method to write the exception back to the Python interpreter's global state.</p>
-<pre><pre class="playpen"><code class="language-rust">use pyo3::{Python, PyErr};
+<pre><pre class="playpen"><code class="language-rust"># extern crate pyo3;
+use pyo3::{Python, PyErr};
 use pyo3::exceptions;
 
 fn main() {
@@ -192,6 +195,7 @@ have rust type as well.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
+# extern crate pyo3;
 # use pyo3::exceptions;
 # use pyo3::prelude::*;
 # fn check_for_error() -&gt; bool {false}
@@ -206,7 +210,8 @@ fn my_func(arg: PyObject) -&gt; PyResult&lt;()&gt; {
 <a class="header" href="#check-exception-type" id="check-exception-type"><h2>Check exception type</h2></a>
 <p>Python has an <a href="https://docs.python.org/3/library/functions.html#isinstance"><code>isinstance</code></a> method to check object type,
 in <code>PyO3</code> there is a <a href="https://docs.rs/pyo3/0.2.7/struct.Python.html#method.is_instance"><code>Python::is_instance()</code></a> method which does the same thing.</p>
-<pre><pre class="playpen"><code class="language-rust">use pyo3::Python;
+<pre><pre class="playpen"><code class="language-rust"># extern crate pyo3;
+use pyo3::Python;
 use pyo3::types::{PyBool, PyList};
 
 fn main() {
@@ -220,7 +225,8 @@ fn main() {
 </code></pre></pre>
 <p><a href="https://docs.rs/pyo3/0.2.7/struct.Python.html#method.is_instance"><code>Python::is_instance()</code></a> calls the underlying <a href="https://docs.rs/pyo3/0.2.7/struct.PyType.html#method.is_instance"><code>PyType::is_instance</code></a> method to do the actual work.</p>
 <p>To check the type of an exception, you can simply do:</p>
-<pre><pre class="playpen"><code class="language-rust"># use pyo3::exceptions;
+<pre><pre class="playpen"><code class="language-rust"># extern crate pyo3;
+# use pyo3::exceptions;
 # use pyo3::prelude::*;
 # fn main() {
 # let gil = Python::acquire_gil();
@@ -263,6 +269,7 @@ types so <code>try!</code> macro or <code>?</code> operator can be used.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
+# extern crate pyo3;
 use pyo3::prelude::*;
 
 fn parse_int(s: String) -&gt; PyResult&lt;usize&gt; {
@@ -277,6 +284,7 @@ for that exception.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
+# extern crate pyo3;
 use pyo3::prelude::*;
 use pyo3::import_exception;
 

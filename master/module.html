@@ -138,7 +138,8 @@
                     <main>
                         <a class="header" href="#python-module" id="python-module"><h1>Python Module</h1></a>
 <p>As shown in the Getting Started chapter, you can create a module as follows:</p>
-<pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
+<pre><pre class="playpen"><code class="language-rust"># extern crate pyo3;
+use pyo3::prelude::*;
 
 // add bindings to the generated python module
 // N.B: names: &quot;librust2py&quot; must be the name of the `.so` or `.pyd` file
@@ -179,6 +180,7 @@ print(rust2py.__doc__)
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
+# extern crate pyo3;
 use pyo3::prelude::*;
 use pyo3::{wrap_pyfunction, wrap_pymodule};
 use pyo3::types::PyDict;
