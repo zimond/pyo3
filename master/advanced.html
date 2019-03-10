@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Python Function - PyO3 user guide</title>
+        <title>Advanced Topics - PyO3 user guide</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="PyO3 user guide">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -72,7 +72,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="get_started.html"><strong aria-hidden="true">1.</strong> Get Started</a></li><li><a href="conversions.html"><strong aria-hidden="true">2.</strong> Type Conversions</a></li><li><a href="exception.html"><strong aria-hidden="true">3.</strong> Python Exception</a></li><li><a href="module.html"><strong aria-hidden="true">4.</strong> Python Module</a></li><li><a href="function.html" class="active"><strong aria-hidden="true">5.</strong> Python Function</a></li><li><a href="class.html"><strong aria-hidden="true">6.</strong> Python Class</a></li><li><a href="parallelism.html"><strong aria-hidden="true">7.</strong> Parallelism</a></li><li><a href="debugging.html"><strong aria-hidden="true">8.</strong> Debugging</a></li><li><a href="advanced.html"><strong aria-hidden="true">9.</strong> Advanced Topics</a></li><li><a href="building-and-distribution.html"><strong aria-hidden="true">10.</strong> Building and Distribution</a></li><li><a href="rust-cpython.html"><strong aria-hidden="true">11.</strong> Appendix: Pyo3 and rust-cpython</a></li></ol>
+            <ol class="chapter"><li><a href="get_started.html"><strong aria-hidden="true">1.</strong> Get Started</a></li><li><a href="conversions.html"><strong aria-hidden="true">2.</strong> Type Conversions</a></li><li><a href="exception.html"><strong aria-hidden="true">3.</strong> Python Exception</a></li><li><a href="module.html"><strong aria-hidden="true">4.</strong> Python Module</a></li><li><a href="function.html"><strong aria-hidden="true">5.</strong> Python Function</a></li><li><a href="class.html"><strong aria-hidden="true">6.</strong> Python Class</a></li><li><a href="parallelism.html"><strong aria-hidden="true">7.</strong> Parallelism</a></li><li><a href="debugging.html"><strong aria-hidden="true">8.</strong> Debugging</a></li><li><a href="advanced.html" class="active"><strong aria-hidden="true">9.</strong> Advanced Topics</a></li><li><a href="building-and-distribution.html"><strong aria-hidden="true">10.</strong> Building and Distribution</a></li><li><a href="rust-cpython.html"><strong aria-hidden="true">11.</strong> Appendix: Pyo3 and rust-cpython</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -136,96 +136,23 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="#python-function" id="python-function"><h1>Python Function</h1></a>
-<p>PyO3 supports two ways to define a function in python. Both require registering
-the function to a <a href="./module.html">module</a></p>
-<p>One way is defining the function in the module definition.</p>
-<pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
-
-#[pymodule]
-fn rust2py(py: Python, m: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
-
-    // Note that the `#[pyfn()]` annotation automatically converts the arguments from
-    // Python objects to Rust values; and the Rust return value back into a Python object.
-    #[pyfn(m, &quot;sum_as_string&quot;)]
-    fn sum_as_string_py(_py: Python, a:i64, b:i64) -&gt; PyResult&lt;String&gt; {
-       Ok(format!(&quot;{}&quot;, a + b).to_string())
-    }
-
-    Ok(())
-}
-
-# fn main() {}
-</code></pre></pre>
-<p>The other is annotating a function with <code>#[pyfunction]</code> and then adding it
-to the module using the <code>add_wrapped_to_module!</code> macro, which takes the module
-as first parameter, the function name as second and an instance of <code>Python</code>
-as third.</p>
-<pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
-use pyo3::wrap_pyfunction;
-
-#[pyfunction]
-fn double(x: usize) -&gt; usize {
-    x * 2
-}
-
-#[pymodule]
-fn module_with_functions(py: Python, m: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
-    m.add_wrapped(wrap_pyfunction!(double)).unwrap();
-
-    Ok(())
-}
-
-# fn main() {}
-</code></pre></pre>
-<a class="header" href="#making-the-function-signature-available-to-python" id="making-the-function-signature-available-to-python"><h3>Making the function signature available to Python</h3></a>
-<p>In order to make the function signature available to Python to be retrieved via
-<code>inspect.signature</code>, simply make sure the first line of your doc-string is
-formatted like in the example below. Please note that the new-line after the
-<code>--</code> is mandatory. The <code>/</code> signifies the end of positional only arguments. This
-is not a feature of this library in particular, but the general format used by
-CPython for annotating signatures of built-in functions. Function signatures for
-built-ins are new in Python 3 — in Python 2, it is simply considered to be part
-of the doc-string.</p>
-<pre><pre class="playpen"><code class="language-rust">
-# #![allow(unused_variables)]
-#fn main() {
-use pyo3::prelude::*;
-
-/// add(a, b, /)
-/// --
-///
-/// This function adds two unsigned 64-bit integers.
-#[pyfunction]
-fn add(a: u64, b: u64) -&gt; u64 {
-    a + b
-}
-#}</code></pre></pre>
-<p>When annotated like this, signatures are also correctly displayed in IPython.</p>
-<pre><code>&gt;&gt;&gt; pyo3_test.add?
-Signature: pyo3_test.add(a, b, /)
-Docstring: This function adds two unsigned 64-bit integers.
-Type:      builtin_function_or_method
-</code></pre>
-<a class="header" href="#closures" id="closures"><h2>Closures</h2></a>
-<p>Currently, there are no conversions between <code>Fn</code>s in rust and callables in python. This would definitely be possible and very useful, so contributions are welcome. In the meantime, you can do the following:</p>
-<a class="header" href="#calling-a-python-function-in-rust" id="calling-a-python-function-in-rust"><h3>Calling a python function in rust</h3></a>
-<p>You can use <code>ObjectProtocol::is_callable</code> to check if you got a callable, which is true for functions (including lambdas), methods and objects with a <code>__call__</code> method. You can call the object with <code>ObjectProtocol::call</code> with the args as first parameter and the kwargs (or <code>None</code>) as second parameter. There are also <code>ObjectProtocol::call0</code> with no args and <code>ObjectProtocol::call1</code> with only the args.</p>
-<a class="header" href="#calling-rust-fns-in-python" id="calling-rust-fns-in-python"><h3>Calling rust <code>Fn</code>s in python</h3></a>
-<p>If you have a static function, you can expose it with <code>#[pyfunction]</code> and use <code>wrap_pyfunction!</code> to get the corresponding <code>PyObject</code>. For dynamic functions, e.g. lambda and functions that were passed as arguments, you must put them in some kind of owned container, e.g. a box. (Long-Term a special container similar to wasm-bindgen's <code>Closure</code> should take care of that). You can than use a <code>#[pyclass]</code> struct with that container as field as a way to pass the function over the ffi-barrier. You can even make that class callable with <code>__call__</code> so it looks like a function in python code.</p>
+                        <a class="header" href="#advanced-topics" id="advanced-topics"><h1>Advanced topics</h1></a>
+<a class="header" href="#ffi" id="ffi"><h2>ffi</h2></a>
+<p>pyo3 exposes much of python's c api through the <code>ffi</code>.</p>
+<p>The c api is naturually unsafe and requires you to manage reference counts, errors and specific invariants yourself. Please refer to the <a href="https://docs.python.org/3/c-api/">C API Reference Manual</a> and <a href="https://doc.rust-lang.org/nightly/nomicon/ffi.html">The Rustonomicon</a> before using any function from that api.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="module.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="debugging.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
 
                         
-                            <a rel="next" href="class.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="building-and-distribution.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -237,13 +164,13 @@ Type:      builtin_function_or_method
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a href="module.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a href="debugging.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a href="class.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a href="building-and-distribution.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 

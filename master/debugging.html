@@ -72,7 +72,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="get_started.html"><strong aria-hidden="true">1.</strong> Get Started</a></li><li><a href="conversions.html"><strong aria-hidden="true">2.</strong> Type Conversions</a></li><li><a href="exception.html"><strong aria-hidden="true">3.</strong> Python Exception</a></li><li><a href="module.html"><strong aria-hidden="true">4.</strong> Python Module</a></li><li><a href="function.html"><strong aria-hidden="true">5.</strong> Python Function</a></li><li><a href="class.html"><strong aria-hidden="true">6.</strong> Python Class</a></li><li><a href="parallelism.html"><strong aria-hidden="true">7.</strong> Parallelism</a></li><li><a href="debugging.html" class="active"><strong aria-hidden="true">8.</strong> Debugging</a></li><li><a href="building-and-distribution.html"><strong aria-hidden="true">9.</strong> Building and Distribution</a></li><li><a href="rust-cpython.html"><strong aria-hidden="true">10.</strong> Appendix: Pyo3 and rust-cpython</a></li></ol>
+            <ol class="chapter"><li><a href="get_started.html"><strong aria-hidden="true">1.</strong> Get Started</a></li><li><a href="conversions.html"><strong aria-hidden="true">2.</strong> Type Conversions</a></li><li><a href="exception.html"><strong aria-hidden="true">3.</strong> Python Exception</a></li><li><a href="module.html"><strong aria-hidden="true">4.</strong> Python Module</a></li><li><a href="function.html"><strong aria-hidden="true">5.</strong> Python Function</a></li><li><a href="class.html"><strong aria-hidden="true">6.</strong> Python Class</a></li><li><a href="parallelism.html"><strong aria-hidden="true">7.</strong> Parallelism</a></li><li><a href="debugging.html" class="active"><strong aria-hidden="true">8.</strong> Debugging</a></li><li><a href="advanced.html"><strong aria-hidden="true">9.</strong> Advanced Topics</a></li><li><a href="building-and-distribution.html"><strong aria-hidden="true">10.</strong> Building and Distribution</a></li><li><a href="rust-cpython.html"><strong aria-hidden="true">11.</strong> Appendix: Pyo3 and rust-cpython</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -152,6 +152,14 @@
 <p>Activate an environment with the debug interpreter and recompile. If you're on linux, use <code>ldd</code> with the name of you're binary and check that you're linking e.g. <code>libpython3.6dm.so.1.0</code> instead of <code>libpython3.6m.so.1.0</code>.</p>
 <p><a href="https://raw.githubusercontent.com/python/cpython/master/Misc/valgrind-python.supp">Download the suppressions file for cpython</a>.</p>
 <p>Run valgrind with <code>valgrind --suppressions=valgrind-python.supp ./my-command --with-options</code></p>
+<a class="header" href="#getting-a-stacktrace" id="getting-a-stacktrace"><h2>Getting a stacktrace</h2></a>
+<p>The best start to investigate a crash such as an segmentation fault is a backtrace.</p>
+<ul>
+<li>Link against a debug build of python as described in the previous chapter</li>
+<li>Run <code>gdb &lt;my-binary&gt;</code></li>
+<li>Enter <code>r</code> to run</li>
+<li>After the crash occured, enter <code>bt</code> or <code>bt full</code> to print the stacktrace</li>
+</ul>
 
                     </main>
 
@@ -164,7 +172,7 @@
                         
 
                         
-                            <a rel="next" href="building-and-distribution.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="advanced.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -182,7 +190,7 @@
                 
 
                 
-                    <a href="building-and-distribution.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a href="advanced.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 
