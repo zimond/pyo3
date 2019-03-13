@@ -239,7 +239,7 @@ err.is_instance::&lt;exceptions::TypeError&gt;(py);
 <p>The vast majority of operations in this library will return <a href="https://docs.rs/pyo3/0.2.7/type.PyResult.html"><code>PyResult&lt;T&gt;</code></a>.
 This is an alias for the type <code>Result&lt;T, PyErr&gt;</code>.</p>
 <p>A <a href="https://docs.rs/pyo3/0.2.7/struct.PyErr.html"><code>PyErr</code></a> represents a Python exception.
-Errors within the <code>Pyo3</code> library are also exposed as Python exceptions.</p>
+Errors within the PyO3 library are also exposed as Python exceptions.</p>
 <p>PyO3 library handles python exception in two stages. During first stage <code>PyErr</code> instance get
 created. At this stage python GIL is not required. During second stage, actual python
 exception instance get crated and set to python interpreter.</p>

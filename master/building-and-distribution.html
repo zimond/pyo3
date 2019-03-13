@@ -138,10 +138,10 @@
                     <main>
                         <a class="header" href="#building-and-distribution" id="building-and-distribution"><h1>Building and Distribution</h1></a>
 <a class="header" href="#python-version" id="python-version"><h2>Python version</h2></a>
-<p>pyo3 uses a build script to determine the python version and set the correct linker arguments. By default it uses the <code>python3</code> executable. With the <code>python2</code> feature it uses the <code>python2</code> executable. You can override the python interpreter by setting <code>PYTHON_SYS_EXECUTABLE</code>.</p>
+<p>PyO3 uses a build script to determine the python version and set the correct linker arguments. By default it uses the <code>python3</code> executable. With the <code>python2</code> feature it uses the <code>python2</code> executable. You can override the python interpreter by setting <code>PYTHON_SYS_EXECUTABLE</code>.</p>
 <a class="header" href="#linking" id="linking"><h2>Linking</h2></a>
 <p>Different linker arguments must be set for libraries/extension modules and binaries, which includes both standalone binaries and tests. (More specifically, binaries must be told where to find libpython and libraries must not link to libpython for <a href="https://www.python.org/dev/peps/pep-0513/">manylinux</a> compliance).</p>
-<p>Since pyo3's build script can't know whether you're building a binary or a library, you have to activate the <code>extension-module</code> feature to get the build options for a library, or it'll default to binary.</p>
+<p>Since PyO3's build script can't know whether you're building a binary or a library, you have to activate the <code>extension-module</code> feature to get the build options for a library, or it'll default to binary.</p>
 <p>If you have e.g. a library crate and a profiling crate alongside, you need to use optional features. E.g. you put the following in the library crate:</p>
 <pre><code class="language-toml">[dependencies]
 pyo3 = &quot;0.5.2&quot;
@@ -162,7 +162,7 @@ pyo3 = &quot;0.5.2&quot;
 <a class="header" href="#distribution" id="distribution"><h2>Distribution</h2></a>
 <p>There are two ways to distribute your module as python package: The old <a href="https://github.com/PyO3/setuptools-rust">setuptools-rust</a> and the new <a href="https://github.com/pyo3/pyo3-pack">pyo3-pack</a>. setuptools-rust needs some configuration files (<code>setup.py</code>,  <code>MANIFEST.in</code>, <code>build-wheels.sh</code>, etc.) and external tools (docker, twine). pyo3-pack doesn't need any configuration files. It can not yet build sdist though (<a href="https://github.com/PyO3/pyo3-pack/issues/2">pyo3/pyo3-pack#2</a>).</p>
 <a class="header" href="#cross-compiling" id="cross-compiling"><h2>Cross Compiling</h2></a>
-<p>Cross compiling Pyo3 modules is relatively straightforward and requires a few pieces of software:</p>
+<p>Cross compiling PyO3 modules is relatively straightforward and requires a few pieces of software:</p>
 <ul>
 <li>A toolchain for your target.</li>
 <li>The appropriate options in your Cargo <code>.config</code> for the platform you're targeting and the toolchain you are using.</li>

@@ -137,7 +137,7 @@
                 <div id="content" class="content">
                     <main>
                         <a class="header" href="#type-conversions" id="type-conversions"><h1>Type Conversions</h1></a>
-<p><code>PyO3</code> provides some handy traits to convert between Python types and Rust types.</p>
+<p>PyO3 provides some handy traits to convert between Python types and Rust types.</p>
 <a class="header" href="#extract" id="extract"><h2><code>.extract()</code></h2></a>
 <p>The easiest way to convert a python object to a rust value is using <code>.extract()?</code>.</p>
 <a class="header" href="#topyobject-and-intopyobject-trait" id="topyobject-and-intopyobject-trait"><h2><code>ToPyObject</code> and <code>IntoPyObject</code> trait</h2></a>
@@ -227,7 +227,7 @@ fn main() {
 }
 </code></pre></pre>
 <a class="header" href="#intopyt" id="intopyt"><h2><code>IntoPy&lt;T&gt;</code></h2></a>
-<p>Many conversions in pyo3 can't use <code>std::convert::Into</code> because they need a gil token. That's why the <code>IntoPy&lt;T&gt;</code> trait offers an <code>into_py</code> methods that works just like <code>into</code> except for taking a <code>Python&lt;'_&gt;</code> as argument.</p>
+<p>Many conversions in PyO3 can't use <code>std::convert::Into</code> because they need a gil token. That's why the <code>IntoPy&lt;T&gt;</code> trait offers an <code>into_py</code> methods that works just like <code>into</code> except for taking a <code>Python&lt;'_&gt;</code> as argument.</p>
 <p>Eventually, traits such as <code>IntoPyObject</code> will be replaces by this trait and a <code>FromPy</code> trait will be added that will implement <code>IntoPy</code>, just like with <code>From</code> and <code>Into</code>.</p>
 
                     </main>

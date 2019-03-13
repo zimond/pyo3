@@ -138,7 +138,7 @@
                     <main>
                         <a class="header" href="#parallelism" id="parallelism"><h1>Parallelism</h1></a>
 <p>CPython has an infamous GIL(Global Interpreter Lock) prevents developers
-getting true parallelism. With <code>pyo3</code> you can release GIL when executing
+getting true parallelism. With PyO3 you can release GIL when executing
 Rust code to achieve true parallelism.</p>
 <p>The <a href="https://docs.rs/pyo3/0.2.7/struct.Python.html#method.allow_threads"><code>Python::allow_threads</code></a>
 method temporarily releases the GIL, thus allowing other Python threads to run.</p>
@@ -173,7 +173,7 @@ fn word_count(py: Python, m: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
 }
 </code></pre>
 <a class="header" href="#benchmark" id="benchmark"><h2>Benchmark</h2></a>
-<p>Let's benchmark the <code>word-count</code> example to verify that we did unlock true parallelism with <code>pyo3</code>.
+<p>Let's benchmark the <code>word-count</code> example to verify that we did unlock true parallelism with PyO3.
 We are using <code>pytest-benchmark</code> to benchmark three word count functions:</p>
 <ol>
 <li><a href="https://github.com/PyO3/pyo3/blob/master/examples/word-count/word_count/__init__.py#L9">Pure Python version</a></li>

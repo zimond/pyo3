@@ -138,7 +138,7 @@
                     <main>
                         <a class="header" href="#debugging" id="debugging"><h1>Debugging</h1></a>
 <a class="header" href="#macros" id="macros"><h2>Macros</h2></a>
-<p>Pyo3's attributes, <code>#[pyclass]</code>, <code>#[pymodule]</code>, etc. are <a href="https://doc.rust-lang.org/unstable-book/language-features/proc-macro.html">procedural macros</a>, which means that rewrite the source of the annotated item. You can view the generated source with the following command, which also expands a few other things:</p>
+<p>PyO3's attributes, <code>#[pyclass]</code>, <code>#[pymodule]</code>, etc. are <a href="https://doc.rust-lang.org/unstable-book/language-features/proc-macro.html">procedural macros</a>, which means that rewrite the source of the annotated item. You can view the generated source with the following command, which also expands a few other things:</p>
 <pre><code class="language-bash">cargo rustc --profile=check -- -Z unstable-options --pretty=expanded &gt; expanded.rs; rustfmt expanded.rs
 </code></pre>
 <p>(You might need to install <a href="https://github.com/rust-lang-nursery/rustfmt">rustfmt</a> if you don't already have it.)</p>
@@ -147,8 +147,8 @@
 </code></pre>
 <p>See <a href="https://github.com/dtolnay/cargo-expand">cargo expand</a> for a more elaborate version of those commands.</p>
 <a class="header" href="#running-with-valgrind" id="running-with-valgrind"><h2>Running with Valgrind</h2></a>
-<p>Valgrind is a tool to detect memory managment bugs such as memory leaks.</p>
-<p>You first need to installa debug build of python, otherwise valgrind won't produce usable results. In ubuntu there's e.g. a <code>python3-dbg</code> package.</p>
+<p>Valgrind is a tool to detect memory management bugs such as memory leaks.</p>
+<p>You first need to install a debug build of python, otherwise valgrind won't produce usable results. In ubuntu there's e.g. a <code>python3-dbg</code> package.</p>
 <p>Activate an environment with the debug interpreter and recompile. If you're on linux, use <code>ldd</code> with the name of you're binary and check that you're linking e.g. <code>libpython3.6dm.so.1.0</code> instead of <code>libpython3.6m.so.1.0</code>.</p>
 <p><a href="https://raw.githubusercontent.com/python/cpython/master/Misc/valgrind-python.supp">Download the suppressions file for cpython</a>.</p>
 <p>Run valgrind with <code>valgrind --suppressions=valgrind-python.supp ./my-command --with-options</code></p>
@@ -158,7 +158,7 @@
 <li>Link against a debug build of python as described in the previous chapter</li>
 <li>Run <code>gdb &lt;my-binary&gt;</code></li>
 <li>Enter <code>r</code> to run</li>
-<li>After the crash occured, enter <code>bt</code> or <code>bt full</code> to print the stacktrace</li>
+<li>After the crash occurred, enter <code>bt</code> or <code>bt full</code> to print the stacktrace</li>
 </ul>
 
                     </main>
