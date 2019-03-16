@@ -620,7 +620,7 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">IntoPyObject</span> <span class="kw">for</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">T</span>: <span class="ident">IntoPyObject</span> <span class="op">+</span> <span class="ident">ToPyObject</span>,
+    <span class="ident">T</span>: <span class="ident">IntoPyObject</span>,
 {
     <span class="kw">fn</span> <span class="ident">into_object</span>(<span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyObject</span> {
         <span class="kw">unsafe</span> {
