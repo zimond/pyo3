@@ -174,10 +174,6 @@
 <span id="174">174</span>
 <span id="175">175</span>
 <span id="176">176</span>
-<span id="177">177</span>
-<span id="178">178</span>
-<span id="179">179</span>
-<span id="180">180</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 
@@ -186,7 +182,7 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">instance</span>::{<span class="ident">Py</span>, <span class="ident">PyNativeType</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">object</span>::<span class="ident">PyObject</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">PyObjectRef</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">PyAny</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">AsPyPointer</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">Python</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">borrow</span>::<span class="ident">Cow</span>;
@@ -215,11 +211,7 @@
         <span class="kw">unsafe</span> { <span class="ident">Py</span>::<span class="ident">from_owned_ptr_or_panic</span>(<span class="ident">ffi</span>::<span class="ident">PyUnicode_FromStringAndSize</span>(<span class="ident">ptr</span>, <span class="ident">len</span>)) }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_object</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>(
-        <span class="ident">src</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">PyObjectRef</span>,
-        <span class="ident">encoding</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-        <span class="ident">errors</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-    ) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">PyString</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_object</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>(<span class="ident">src</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">PyAny</span>, <span class="ident">encoding</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">errors</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">PyString</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> {
             <span class="ident">src</span>.<span class="ident">py</span>()
                 .<span class="ident">from_owned_ptr_or_err</span>::<span class="op">&lt;</span><span class="ident">PyString</span><span class="op">&gt;</span>(<span class="ident">ffi</span>::<span class="ident">PyUnicode_FromEncodedObject</span>(

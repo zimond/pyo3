@@ -466,7 +466,7 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">instance</span>::<span class="ident">AsPyRef</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">object</span>::<span class="ident">PyObject</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">type_object</span>::{<span class="ident">PyTypeInfo</span>, <span class="ident">PyTypeObject</span>};
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">PyDict</span>, <span class="ident">PyModule</span>, <span class="ident">PyObjectRef</span>, <span class="ident">PyType</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">PyAny</span>, <span class="ident">PyDict</span>, <span class="ident">PyModule</span>, <span class="ident">PyType</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">AsPyPointer</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">IntoPyPointer</span>, <span class="ident">PyTryFrom</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ffi</span>::<span class="ident">CString</span>;
@@ -553,7 +553,7 @@
         <span class="ident">code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">globals</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">PyDict</span><span class="op">&gt;</span>,
         <span class="ident">locals</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">PyDict</span><span class="op">&gt;</span>,
-    ) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">PyObjectRef</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">PyAny</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">run_code</span>(<span class="ident">code</span>, <span class="ident">ffi</span>::<span class="ident">Py_eval_input</span>, <span class="ident">globals</span>, <span class="ident">locals</span>)
     }
 
@@ -566,7 +566,7 @@
         <span class="ident">code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">globals</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">PyDict</span><span class="op">&gt;</span>,
         <span class="ident">locals</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">PyDict</span><span class="op">&gt;</span>,
-    ) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">PyObjectRef</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">PyAny</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">run_code</span>(<span class="ident">code</span>, <span class="ident">ffi</span>::<span class="ident">Py_file_input</span>, <span class="ident">globals</span>, <span class="ident">locals</span>)
     }
 
@@ -582,7 +582,7 @@
         <span class="ident">start</span>: <span class="ident">c_int</span>,
         <span class="ident">globals</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">PyDict</span><span class="op">&gt;</span>,
         <span class="ident">locals</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">PyDict</span><span class="op">&gt;</span>,
-    ) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">PyObjectRef</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">PyAny</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">code</span> <span class="op">=</span> <span class="ident">CString</span>::<span class="ident">new</span>(<span class="ident">code</span>)<span class="question-mark">?</span>;
 
         <span class="kw">unsafe</span> {
@@ -651,7 +651,7 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> <span class="ident">Python</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {
-    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">unchecked_downcast</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">PyTypeInfo</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">ob</span>: <span class="kw-2">&amp;</span><span class="ident">PyObjectRef</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">T</span> {
+    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">unchecked_downcast</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">PyTypeInfo</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">ob</span>: <span class="kw-2">&amp;</span><span class="ident">PyAny</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">T</span> {
         <span class="kw">if</span> <span class="ident">T</span>::<span class="ident">OFFSET</span> <span class="op">==</span> <span class="number">0</span> {
             <span class="kw-2">&amp;</span><span class="kw-2">*</span>(<span class="ident">ob</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="kw">_</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">T</span>)
         } <span class="kw">else</span> {
@@ -661,7 +661,7 @@
     }
 
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">cast_ref_to_mut</span>)]</span> <span class="comment">// FIXME</span>
-    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">unchecked_mut_downcast</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">PyTypeInfo</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">ob</span>: <span class="kw-2">&amp;</span><span class="ident">PyObjectRef</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="kw-2">mut</span> <span class="ident">T</span> {
+    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">unchecked_mut_downcast</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">PyTypeInfo</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">ob</span>: <span class="kw-2">&amp;</span><span class="ident">PyAny</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="kw-2">mut</span> <span class="ident">T</span> {
         <span class="kw">if</span> <span class="ident">T</span>::<span class="ident">OFFSET</span> <span class="op">==</span> <span class="number">0</span> {
             <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span>(<span class="ident">ob</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="kw">_</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">T</span>)
         } <span class="kw">else</span> {
@@ -689,7 +689,7 @@
     }
 
     <span class="doccomment">/// Register `ffi::PyObject` pointer in release pool</span>
-    <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">from_borrowed_ptr_to_obj</span>(<span class="self">self</span>, <span class="ident">ptr</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">PyObjectRef</span> {
+    <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">from_borrowed_ptr_to_obj</span>(<span class="self">self</span>, <span class="ident">ptr</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">PyAny</span> {
         <span class="kw">match</span> <span class="ident">NonNull</span>::<span class="ident">new</span>(<span class="ident">ptr</span>) {
             <span class="prelude-val">Some</span>(<span class="ident">p</span>) <span class="op">=&gt;</span> <span class="ident">gil</span>::<span class="ident">register_borrowed</span>(<span class="self">self</span>, <span class="ident">p</span>),
             <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="kw">crate</span>::<span class="ident">err</span>::<span class="ident">panic_after_error</span>(),
@@ -848,7 +848,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">test</span> {
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">objectprotocol</span>::<span class="ident">ObjectProtocol</span>;
-    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">PyBool</span>, <span class="ident">PyDict</span>, <span class="ident">PyInt</span>, <span class="ident">PyList</span>, <span class="ident">PyObjectRef</span>};
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">PyAny</span>, <span class="ident">PyBool</span>, <span class="ident">PyDict</span>, <span class="ident">PyInt</span>, <span class="ident">PyList</span>};
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">Python</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -898,7 +898,7 @@
         <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
         <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">py</span>
-            .<span class="ident">is_instance</span>::<span class="op">&lt;</span><span class="ident">PyBool</span>, <span class="ident">PyObjectRef</span><span class="op">&gt;</span>(<span class="ident">PyBool</span>::<span class="ident">new</span>(<span class="ident">py</span>, <span class="bool-val">true</span>).<span class="ident">into</span>())
+            .<span class="ident">is_instance</span>::<span class="op">&lt;</span><span class="ident">PyBool</span>, <span class="ident">PyAny</span><span class="op">&gt;</span>(<span class="ident">PyBool</span>::<span class="ident">new</span>(<span class="ident">py</span>, <span class="bool-val">true</span>).<span class="ident">into</span>())
             .<span class="ident">unwrap</span>());
         <span class="kw">let</span> <span class="ident">list</span> <span class="op">=</span> <span class="ident">PyList</span>::<span class="ident">new</span>(<span class="ident">py</span>, <span class="kw-2">&amp;</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]);
         <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">py</span>.<span class="ident">is_instance</span>::<span class="op">&lt;</span><span class="ident">PyBool</span>, <span class="kw">_</span><span class="op">&gt;</span>(<span class="ident">list</span>.<span class="ident">as_ref</span>()).<span class="ident">unwrap</span>());

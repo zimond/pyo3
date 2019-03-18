@@ -226,7 +226,7 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">exceptions</span>::<span class="ident">TypeError</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">init_once</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">PyDict</span>, <span class="ident">PyModule</span>, <span class="ident">PyObjectRef</span>, <span class="ident">PyString</span>, <span class="ident">PyTuple</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">PyAny</span>, <span class="ident">PyDict</span>, <span class="ident">PyModule</span>, <span class="ident">PyString</span>, <span class="ident">PyTuple</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">GILPool</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">Python</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">IntoPyObject</span>, <span class="ident">PyTryFrom</span>};
@@ -258,7 +258,7 @@
     <span class="ident">kwargs</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">PyDict</span><span class="op">&gt;</span>,
     <span class="ident">accept_args</span>: <span class="ident">bool</span>,
     <span class="ident">accept_kwargs</span>: <span class="ident">bool</span>,
-    <span class="ident">output</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">PyObjectRef</span><span class="op">&gt;</span>],
+    <span class="ident">output</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">PyAny</span><span class="op">&gt;</span>],
 ) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">nargs</span> <span class="op">=</span> <span class="ident">args</span>.<span class="ident">len</span>();
     <span class="kw">let</span> <span class="ident">nkeywords</span> <span class="op">=</span> <span class="ident">kwargs</span>.<span class="ident">map_or</span>(<span class="number">0</span>, <span class="ident">PyDict</span>::<span class="ident">len</span>);

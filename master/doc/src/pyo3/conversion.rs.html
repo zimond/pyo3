@@ -448,10 +448,6 @@
 <span id="448">448</span>
 <span id="449">449</span>
 <span id="450">450</span>
-<span id="451">451</span>
-<span id="452">452</span>
-<span id="453">453</span>
-<span id="454">454</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 
@@ -461,7 +457,7 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">object</span>::<span class="ident">PyObject</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">type_object</span>::<span class="ident">PyTypeInfo</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">PyObjectRef</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">PyAny</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">PyTuple</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">Py</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">Python</span>;
@@ -637,7 +633,7 @@
 <span class="doccomment">/// the inherent method `PyObject::extract()` can be used.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;source</span><span class="op">&gt;</span>: <span class="ident">Sized</span> {
     <span class="doccomment">/// Extracts `Self` from the source `PyObject`.</span>
-    <span class="kw">fn</span> <span class="ident">extract</span>(<span class="ident">ob</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;source</span> <span class="ident">PyObjectRef</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">extract</span>(<span class="ident">ob</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;source</span> <span class="ident">PyAny</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>;
 }
 
 <span class="doccomment">/// Identity conversion: allows using existing `PyObject` instances where</span>
@@ -717,7 +713,7 @@
     <span class="ident">T</span>: <span class="ident">PyTryFrom</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>,
 {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="ident">default</span> <span class="kw">fn</span> <span class="ident">extract</span>(<span class="ident">ob</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">PyObjectRef</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="ident">default</span> <span class="kw">fn</span> <span class="ident">extract</span>(<span class="ident">ob</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">PyAny</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">T</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="ident">T</span>::<span class="ident">try_from</span>(<span class="ident">ob</span>)<span class="question-mark">?</span>)
     }
 }
@@ -728,7 +724,7 @@
     <span class="ident">T</span>: <span class="ident">PyTryFrom</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>,
 {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="ident">default</span> <span class="kw">fn</span> <span class="ident">extract</span>(<span class="ident">ob</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">PyObjectRef</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="ident">default</span> <span class="kw">fn</span> <span class="ident">extract</span>(<span class="ident">ob</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">PyAny</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">T</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="ident">T</span>::<span class="ident">try_from_mut</span>(<span class="ident">ob</span>)<span class="question-mark">?</span>)
     }
 }
@@ -737,7 +733,7 @@
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>,
 {
-    <span class="kw">fn</span> <span class="ident">extract</span>(<span class="ident">obj</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">PyObjectRef</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">extract</span>(<span class="ident">obj</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">PyAny</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="ident">obj</span>.<span class="ident">as_ptr</span>() <span class="op">==</span> <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">Py_None</span>() } {
             <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>)
         } <span class="kw">else</span> {
@@ -769,31 +765,29 @@
 <span class="doccomment">/// This trait is similar to `std::convert::TryFrom`</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyTryFrom</span><span class="op">&lt;</span><span class="lifetime">&#39;v</span><span class="op">&gt;</span>: <span class="ident">Sized</span> {
     <span class="doccomment">/// Cast from a concrete Python object type to PyObject.</span>
-    <span class="kw">fn</span> <span class="ident">try_from</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="ident">PyObjectRef</span><span class="op">&gt;&gt;</span>(<span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="self">Self</span>, <span class="ident">PyDowncastError</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">try_from</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="ident">PyAny</span><span class="op">&gt;&gt;</span>(<span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="self">Self</span>, <span class="ident">PyDowncastError</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Cast from a concrete Python object type to PyObject. With exact type check.</span>
-    <span class="kw">fn</span> <span class="ident">try_from_exact</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="ident">PyObjectRef</span><span class="op">&gt;&gt;</span>(<span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="self">Self</span>, <span class="ident">PyDowncastError</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">try_from_exact</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="ident">PyAny</span><span class="op">&gt;&gt;</span>(<span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="self">Self</span>, <span class="ident">PyDowncastError</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Cast from a concrete Python object type to PyObject.</span>
-    <span class="kw">fn</span> <span class="ident">try_from_mut</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="ident">PyObjectRef</span><span class="op">&gt;&gt;</span>(<span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="kw-2">mut</span> <span class="self">Self</span>, <span class="ident">PyDowncastError</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">try_from_mut</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="ident">PyAny</span><span class="op">&gt;&gt;</span>(<span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="kw-2">mut</span> <span class="self">Self</span>, <span class="ident">PyDowncastError</span><span class="op">&gt;</span>;
 
     <span class="doccomment">/// Cast from a concrete Python object type to PyObject. With exact type check.</span>
-    <span class="kw">fn</span> <span class="ident">try_from_mut_exact</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="ident">PyObjectRef</span><span class="op">&gt;&gt;</span>(
-        <span class="ident">value</span>: <span class="ident">V</span>,
-    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="kw-2">mut</span> <span class="self">Self</span>, <span class="ident">PyDowncastError</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">try_from_mut_exact</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="ident">PyAny</span><span class="op">&gt;&gt;</span>(<span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="kw-2">mut</span> <span class="self">Self</span>, <span class="ident">PyDowncastError</span><span class="op">&gt;</span>;
 
-    <span class="doccomment">/// Cast a PyObjectRef to a specific type of PyObject. The caller must</span>
+    <span class="doccomment">/// Cast a PyAny to a specific type of PyObject. The caller must</span>
     <span class="doccomment">/// have already verified the reference is for this type.</span>
-    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">try_from_unchecked</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="ident">PyObjectRef</span><span class="op">&gt;&gt;</span>(<span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="self">Self</span>;
+    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">try_from_unchecked</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="ident">PyAny</span><span class="op">&gt;&gt;</span>(<span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="self">Self</span>;
 
-    <span class="doccomment">/// Cast a PyObjectRef to a specific type of PyObject. The caller must</span>
+    <span class="doccomment">/// Cast a PyAny to a specific type of PyObject. The caller must</span>
     <span class="doccomment">/// have already verified the reference is for this type.</span>
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">mut_from_ref</span>)]</span>
-    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">try_from_mut_unchecked</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="ident">PyObjectRef</span><span class="op">&gt;&gt;</span>(<span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="kw-2">mut</span> <span class="self">Self</span>;
+    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">try_from_mut_unchecked</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="ident">PyAny</span><span class="op">&gt;&gt;</span>(<span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="kw-2">mut</span> <span class="self">Self</span>;
 }
 
 <span class="comment">// TryFrom implies TryInto</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">U</span><span class="op">&gt;</span> <span class="ident">PyTryInto</span><span class="op">&lt;</span><span class="ident">U</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">PyObjectRef</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">U</span><span class="op">&gt;</span> <span class="ident">PyTryInto</span><span class="op">&lt;</span><span class="ident">U</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">PyAny</span>
 <span class="kw">where</span>
     <span class="ident">U</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;v</span><span class="op">&gt;</span> <span class="ident">PyTryFrom</span><span class="op">&lt;</span><span class="lifetime">&#39;v</span><span class="op">&gt;</span>,
 {
@@ -815,7 +809,7 @@
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">PyTypeInfo</span>,
 {
-    <span class="kw">fn</span> <span class="ident">try_from</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="ident">PyObjectRef</span><span class="op">&gt;&gt;</span>(<span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="ident">T</span>, <span class="ident">PyDowncastError</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">try_from</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="ident">PyAny</span><span class="op">&gt;&gt;</span>(<span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="ident">T</span>, <span class="ident">PyDowncastError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">into</span>();
         <span class="kw">unsafe</span> {
             <span class="kw">if</span> <span class="ident">T</span>::<span class="ident">is_instance</span>(<span class="ident">value</span>) {
@@ -826,7 +820,7 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">try_from_exact</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="ident">PyObjectRef</span><span class="op">&gt;&gt;</span>(<span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="ident">T</span>, <span class="ident">PyDowncastError</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">try_from_exact</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="ident">PyAny</span><span class="op">&gt;&gt;</span>(<span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="ident">T</span>, <span class="ident">PyDowncastError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">into</span>();
         <span class="kw">unsafe</span> {
             <span class="kw">if</span> <span class="ident">T</span>::<span class="ident">is_exact_instance</span>(<span class="ident">value</span>) {
@@ -837,7 +831,7 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">try_from_mut</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="ident">PyObjectRef</span><span class="op">&gt;&gt;</span>(<span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="kw-2">mut</span> <span class="ident">T</span>, <span class="ident">PyDowncastError</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">try_from_mut</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="ident">PyAny</span><span class="op">&gt;&gt;</span>(<span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="kw-2">mut</span> <span class="ident">T</span>, <span class="ident">PyDowncastError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">into</span>();
         <span class="kw">unsafe</span> {
             <span class="kw">if</span> <span class="ident">T</span>::<span class="ident">is_instance</span>(<span class="ident">value</span>) {
@@ -848,9 +842,7 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">try_from_mut_exact</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="ident">PyObjectRef</span><span class="op">&gt;&gt;</span>(
-        <span class="ident">value</span>: <span class="ident">V</span>,
-    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="kw-2">mut</span> <span class="ident">T</span>, <span class="ident">PyDowncastError</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">try_from_mut_exact</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="ident">PyAny</span><span class="op">&gt;&gt;</span>(<span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="kw-2">mut</span> <span class="ident">T</span>, <span class="ident">PyDowncastError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">into</span>();
         <span class="kw">unsafe</span> {
             <span class="kw">if</span> <span class="ident">T</span>::<span class="ident">is_exact_instance</span>(<span class="ident">value</span>) {
@@ -862,7 +854,7 @@
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">try_from_unchecked</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="ident">PyObjectRef</span><span class="op">&gt;&gt;</span>(<span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="ident">T</span> {
+    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">try_from_unchecked</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="ident">PyAny</span><span class="op">&gt;&gt;</span>(<span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="ident">T</span> {
         <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">into</span>();
         <span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">T</span>::<span class="ident">OFFSET</span> <span class="op">==</span> <span class="number">0</span> {
             <span class="ident">value</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="kw">_</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">u8</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">T</span>
@@ -873,7 +865,7 @@
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">try_from_mut_unchecked</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="ident">PyObjectRef</span><span class="op">&gt;&gt;</span>(<span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="kw-2">mut</span> <span class="ident">T</span> {
+    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">try_from_mut_unchecked</span><span class="op">&lt;</span><span class="ident">V</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="ident">PyAny</span><span class="op">&gt;&gt;</span>(<span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;v</span> <span class="kw-2">mut</span> <span class="ident">T</span> {
         <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">into</span>();
         <span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">T</span>::<span class="ident">OFFSET</span> <span class="op">==</span> <span class="number">0</span> {
             <span class="ident">value</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="kw">_</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">u8</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">T</span>

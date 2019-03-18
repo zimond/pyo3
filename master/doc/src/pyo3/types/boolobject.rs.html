@@ -92,7 +92,7 @@
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">object</span>::<span class="ident">PyObject</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">PyObjectRef</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">PyAny</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">AsPyPointer</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">FromPyObject</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">PyResult</span>;
@@ -147,7 +147,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// Fails with `TypeError` if the input is not a Python `bool`.</span>
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;source</span><span class="op">&gt;</span> <span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;source</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">bool</span> {
-    <span class="kw">fn</span> <span class="ident">extract</span>(<span class="ident">obj</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;source</span> <span class="ident">PyObjectRef</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">extract</span>(<span class="ident">obj</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;source</span> <span class="ident">PyAny</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="prelude-val">Ok</span>(<span class="op">&lt;</span><span class="ident">PyBool</span> <span class="kw">as</span> <span class="ident">PyTryFrom</span><span class="op">&gt;</span>::<span class="ident">try_from</span>(<span class="ident">obj</span>)<span class="question-mark">?</span>.<span class="ident">is_true</span>())
     }
 }
@@ -155,7 +155,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">test</span> {
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">objectprotocol</span>::<span class="ident">ObjectProtocol</span>;
-    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">PyBool</span>, <span class="ident">PyObjectRef</span>};
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">PyAny</span>, <span class="ident">PyBool</span>};
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">Python</span>;
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ToPyObject</span>;
 
@@ -164,7 +164,7 @@
         <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
         <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">PyBool</span>::<span class="ident">new</span>(<span class="ident">py</span>, <span class="bool-val">true</span>).<span class="ident">is_true</span>());
-        <span class="kw">let</span> <span class="ident">t</span>: <span class="kw-2">&amp;</span><span class="ident">PyObjectRef</span> <span class="op">=</span> <span class="ident">PyBool</span>::<span class="ident">new</span>(<span class="ident">py</span>, <span class="bool-val">true</span>).<span class="ident">into</span>();
+        <span class="kw">let</span> <span class="ident">t</span>: <span class="kw-2">&amp;</span><span class="ident">PyAny</span> <span class="op">=</span> <span class="ident">PyBool</span>::<span class="ident">new</span>(<span class="ident">py</span>, <span class="bool-val">true</span>).<span class="ident">into</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="bool-val">true</span>, <span class="ident">t</span>.<span class="ident">extract</span>().<span class="ident">unwrap</span>());
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="bool-val">true</span>.<span class="ident">to_object</span>(<span class="ident">py</span>), <span class="ident">PyBool</span>::<span class="ident">new</span>(<span class="ident">py</span>, <span class="bool-val">true</span>).<span class="ident">into</span>());
     }
@@ -174,7 +174,7 @@
         <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
         <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
         <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">PyBool</span>::<span class="ident">new</span>(<span class="ident">py</span>, <span class="bool-val">false</span>).<span class="ident">is_true</span>());
-        <span class="kw">let</span> <span class="ident">t</span>: <span class="kw-2">&amp;</span><span class="ident">PyObjectRef</span> <span class="op">=</span> <span class="ident">PyBool</span>::<span class="ident">new</span>(<span class="ident">py</span>, <span class="bool-val">false</span>).<span class="ident">into</span>();
+        <span class="kw">let</span> <span class="ident">t</span>: <span class="kw-2">&amp;</span><span class="ident">PyAny</span> <span class="op">=</span> <span class="ident">PyBool</span>::<span class="ident">new</span>(<span class="ident">py</span>, <span class="bool-val">false</span>).<span class="ident">into</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="bool-val">false</span>, <span class="ident">t</span>.<span class="ident">extract</span>().<span class="ident">unwrap</span>());
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="bool-val">false</span>.<span class="ident">to_object</span>(<span class="ident">py</span>), <span class="ident">PyBool</span>::<span class="ident">new</span>(<span class="ident">py</span>, <span class="bool-val">false</span>).<span class="ident">into</span>());
     }

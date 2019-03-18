@@ -194,18 +194,12 @@
 <span id="194">194</span>
 <span id="195">195</span>
 <span id="196">196</span>
-<span id="197">197</span>
-<span id="198">198</span>
-<span id="199">199</span>
-<span id="200">200</span>
-<span id="201">201</span>
-<span id="202">202</span>
-<span id="203">203</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 
 <span class="doccomment">//! Various types defined by the python interpreter such as `int`, `str` and `tuple`</span>
 
+<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">any</span>::<span class="ident">PyAny</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">boolobject</span>::<span class="ident">PyBool</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">bytearray</span>::<span class="ident">PyByteArray</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">complex</span>::<span class="ident">PyComplex</span>;
@@ -233,8 +227,6 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">string2</span>::{<span class="ident">PyBytes</span>, <span class="ident">PyString</span>, <span class="ident">PyUnicode</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">tuple</span>::<span class="ident">PyTuple</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">typeobject</span>::<span class="ident">PyType</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">PyObject</span>;
 
 <span class="doccomment">/// Implements a typesafe conversions throught [FromPyObject], given a typecheck function as second</span>
 <span class="doccomment">/// parameter</span>
@@ -244,11 +236,11 @@
         <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_param</span>,)<span class="kw-2">*</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>
         {
             <span class="doccomment">/// Extracts `Self` from the source `PyObject`.</span>
-            <span class="kw">fn</span> <span class="ident">extract</span>(<span class="ident">ob</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">types</span>::<span class="ident">PyObjectRef</span>) <span class="op">-&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>
+            <span class="kw">fn</span> <span class="ident">extract</span>(<span class="ident">ob</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">types</span>::<span class="ident">PyAny</span>) <span class="op">-&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>
             {
                 <span class="kw">unsafe</span> {
                     <span class="kw">if</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">checkfunction</span>(<span class="ident">ob</span>.<span class="ident">as_ptr</span>()) <span class="op">!=</span> <span class="number">0</span> {
-                        <span class="prelude-val">Ok</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span>(<span class="ident">ob</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">types</span>::<span class="ident">PyObjectRef</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>))
+                        <span class="prelude-val">Ok</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span>(<span class="ident">ob</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">types</span>::<span class="ident">PyAny</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>))
                     } <span class="kw">else</span> {
                         <span class="prelude-val">Err</span>(<span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyDowncastError</span>.<span class="ident">into</span>())
                     }
@@ -261,10 +253,10 @@
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">pyobject_native_type_named</span> (
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>: <span class="ident">ty</span> $(,<span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_param</span>: <span class="ident">ident</span>)<span class="kw-2">*</span>) <span class="op">=&gt;</span> {
-        <span class="kw">impl</span><span class="op">&lt;</span>$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_param</span>,)<span class="kw-2">*</span><span class="op">&gt;</span> ::<span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">AsRef</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">types</span>::<span class="ident">PyObjectRef</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> {
+        <span class="kw">impl</span><span class="op">&lt;</span>$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_param</span>,)<span class="kw-2">*</span><span class="op">&gt;</span> ::<span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">AsRef</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">types</span>::<span class="ident">PyAny</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> {
             <span class="attribute">#[<span class="ident">inline</span>]</span>
-            <span class="kw">fn</span> <span class="ident">as_ref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">types</span>::<span class="ident">PyObjectRef</span> {
-                <span class="kw">unsafe</span>{<span class="kw-2">&amp;</span><span class="kw-2">*</span>(<span class="self">self</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">types</span>::<span class="ident">PyObjectRef</span>)}
+            <span class="kw">fn</span> <span class="ident">as_ref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">types</span>::<span class="ident">PyAny</span> {
+                <span class="kw">unsafe</span>{<span class="kw-2">&amp;</span><span class="kw-2">*</span>(<span class="self">self</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">types</span>::<span class="ident">PyAny</span>)}
             }
         }
 
@@ -295,9 +287,9 @@
         <span class="macro">pyobject_native_type_named</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> $(,<span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_param</span>)<span class="kw-2">*</span>);
         <span class="macro">pyobject_native_type_convert</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typeobject</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">checkfunction</span> $(,<span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_param</span>)<span class="kw-2">*</span>);
 
-        <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_param</span>,)<span class="kw-2">*</span><span class="op">&gt;</span> ::<span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">types</span>::<span class="ident">PyObjectRef</span> {
+        <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_param</span>,)<span class="kw-2">*</span><span class="op">&gt;</span> ::<span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">types</span>::<span class="ident">PyAny</span> {
             <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">ob</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
-                <span class="kw">unsafe</span>{<span class="kw-2">&amp;</span><span class="kw-2">*</span>(<span class="ident">ob</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">types</span>::<span class="ident">PyObjectRef</span>)}
+                <span class="kw">unsafe</span>{<span class="kw-2">&amp;</span><span class="kw-2">*</span>(<span class="ident">ob</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">types</span>::<span class="ident">PyAny</span>)}
             }
         }
     };
@@ -308,7 +300,7 @@
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>: <span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typeobject</span>: <span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">checkfunction</span>: <span class="ident">path</span> $(,<span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_param</span>: <span class="ident">ident</span>)<span class="kw-2">*</span>) <span class="op">=&gt;</span> {
         <span class="kw">impl</span><span class="op">&lt;</span>$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_param</span>,)<span class="kw-2">*</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">type_object</span>::<span class="ident">PyTypeInfo</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> {
             <span class="kw">type</span> <span class="ident">Type</span> <span class="op">=</span> ();
-            <span class="kw">type</span> <span class="ident">BaseType</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">types</span>::<span class="ident">PyObjectRef</span>;
+            <span class="kw">type</span> <span class="ident">BaseType</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">types</span>::<span class="ident">PyAny</span>;
 
             <span class="kw">const</span> <span class="ident">NAME</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> <span class="op">=</span> <span class="macro">stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>);
             <span class="kw">const</span> <span class="ident">SIZE</span>: <span class="ident">usize</span> <span class="op">=</span> ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">size_of</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">ffi</span>::<span class="ident">PyObject</span><span class="op">&gt;</span>();
@@ -320,7 +312,7 @@
             }
 
             <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused_unsafe</span>)]</span>
-            <span class="kw">fn</span> <span class="ident">is_instance</span>(<span class="ident">ptr</span>: <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">types</span>::<span class="ident">PyObjectRef</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+            <span class="kw">fn</span> <span class="ident">is_instance</span>(<span class="ident">ptr</span>: <span class="kw-2">&amp;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">types</span>::<span class="ident">PyAny</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
                 <span class="kw">use</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">AsPyPointer</span>;
 
                 <span class="kw">unsafe</span> { <span class="macro-nonterminal">$</span><span class="macro-nonterminal">checkfunction</span>(<span class="ident">ptr</span>.<span class="ident">as_ptr</span>()) <span class="op">&gt;</span> <span class="number">0</span> }
@@ -342,7 +334,6 @@
             <span class="attribute">#[<span class="ident">inline</span>]</span>
             <span class="kw">fn</span> <span class="ident">to_object</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">Python</span>) <span class="op">-&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyObject</span> {
                 <span class="kw">use</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">AsPyPointer</span>;
-
                 <span class="kw">unsafe</span> {<span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">PyObject</span>::<span class="ident">from_borrowed_ptr</span>(<span class="ident">py</span>, <span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>())}
             }
         }
@@ -369,12 +360,7 @@
     };
 );
 
-<span class="doccomment">/// Represents general python instance.</span>
-<span class="attribute">#[<span class="ident">repr</span>(<span class="ident">transparent</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PyObjectRef</span>(<span class="ident">PyObject</span>);
-<span class="macro">pyobject_native_type_named</span><span class="macro">!</span>(<span class="ident">PyObjectRef</span>);
-<span class="macro">pyobject_native_type_convert</span><span class="macro">!</span>(<span class="ident">PyObjectRef</span>, <span class="ident">ffi</span>::<span class="ident">PyBaseObject_Type</span>, <span class="ident">ffi</span>::<span class="ident">PyObject_Check</span>);
-
+<span class="kw">mod</span> <span class="ident">any</span>;
 <span class="kw">mod</span> <span class="ident">boolobject</span>;
 <span class="kw">mod</span> <span class="ident">bytearray</span>;
 <span class="kw">mod</span> <span class="ident">complex</span>;
