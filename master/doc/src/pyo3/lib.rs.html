@@ -214,15 +214,6 @@
 <span id="214">214</span>
 <span id="215">215</span>
 <span id="216">216</span>
-<span id="217">217</span>
-<span id="218">218</span>
-<span id="219">219</span>
-<span id="220">220</span>
-<span id="221">221</span>
-<span id="222">222</span>
-<span id="223">223</span>
-<span id="224">224</span>
-<span id="225">225</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="attribute">#![<span class="ident">feature</span>(<span class="ident">specialization</span>)]</span>
 
@@ -373,19 +364,10 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">Py_3</span>)]</span>
 <span class="kw">mod</span> <span class="ident">ffi3</span>;
 
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">class</span>;
-
-<span class="doccomment">/// Constructs a `&amp;&#39;static CStr` literal.</span>
-<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">cstr</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">s</span>: <span class="ident">tt</span>) <span class="op">=&gt;</span> {
-        <span class="comment">// TODO: verify that $s is a string literal without nuls</span>
-        <span class="kw">unsafe</span> { ::<span class="ident">std</span>::<span class="ident">ffi</span>::<span class="ident">CStr</span>::<span class="ident">from_ptr</span>(<span class="macro">concat</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">s</span>, <span class="string">&quot;\0&quot;</span>).<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="kw">_</span>) }
-    };
-}
-
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">buffer</span>;
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">callback</span>;
+<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">class</span>;
 <span class="kw">mod</span> <span class="ident">conversion</span>;
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">derive_utils</span>;

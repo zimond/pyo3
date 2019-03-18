@@ -805,10 +805,10 @@
         <span class="kw">let</span> <span class="ident">pos</span> <span class="op">=</span> <span class="ident">err</span>.<span class="ident">valid_up_to</span>();
         <span class="ident">UnicodeDecodeError</span>::<span class="ident">new_err</span>(
             <span class="ident">py</span>,
-            <span class="macro">cstr</span><span class="macro">!</span>(<span class="string">&quot;utf-8&quot;</span>),
+            <span class="ident">CStr</span>::<span class="ident">from_bytes_with_nul</span>(<span class="string">&quot;utf-8&quot;</span>.<span class="ident">as_bytes</span>()).<span class="ident">unwrap</span>(),
             <span class="ident">input</span>,
             <span class="ident">pos</span>..<span class="ident">pos</span> <span class="op">+</span> <span class="number">1</span>,
-            <span class="macro">cstr</span><span class="macro">!</span>(<span class="string">&quot;invalid utf-8&quot;</span>),
+            <span class="ident">CStr</span>::<span class="ident">from_bytes_with_nul</span>(<span class="string">&quot;invalid utf-8&quot;</span>.<span class="ident">as_bytes</span>()).<span class="ident">unwrap</span>(),
         )
     }
 }
