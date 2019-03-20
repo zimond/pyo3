@@ -213,7 +213,6 @@
 <span id="213">213</span>
 <span id="214">214</span>
 <span id="215">215</span>
-<span id="216">216</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="attribute">#![<span class="ident">feature</span>(<span class="ident">specialization</span>)]</span>
 
@@ -317,7 +316,7 @@
 <span class="doccomment">//!</span>
 <span class="doccomment">//! ```rust</span>
 <span class="doccomment">//! use pyo3::prelude::*;</span>
-<span class="doccomment">//! use pyo3::types::PyDict;</span>
+<span class="doccomment">//! use pyo3::types::IntoPyDict;</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! fn main() -&gt; PyResult&lt;()&gt; {</span>
 <span class="doccomment">//!     let gil = Python::acquire_gil();</span>
@@ -325,8 +324,7 @@
 <span class="doccomment">//!     let sys = py.import(&quot;sys&quot;)?;</span>
 <span class="doccomment">//!     let version: String = sys.get(&quot;version&quot;)?.extract()?;</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//!     let locals = PyDict::new(py);</span>
-<span class="doccomment">//!     locals.set_item(&quot;os&quot;, py.import(&quot;os&quot;)?)?;</span>
+<span class="doccomment">//!     let locals = [(&quot;os&quot;, py.import(&quot;os&quot;)?)].into_py_dict(py);</span>
 <span class="doccomment">//!     let code = &quot;os.getenv(&#39;USER&#39;) or os.getenv(&#39;USERNAME&#39;) or &#39;Unknown&#39;&quot;;</span>
 <span class="doccomment">//!     let user: String = py.eval(code, None, Some(&amp;locals))?.extract()?;</span>
 <span class="doccomment">//!</span>

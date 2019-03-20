@@ -454,7 +454,6 @@
 <span id="454">454</span>
 <span id="455">455</span>
 <span id="456">456</span>
-<span id="457">457</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 <span class="comment">//</span>
@@ -848,7 +847,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">test</span> {
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">objectprotocol</span>::<span class="ident">ObjectProtocol</span>;
-    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">PyAny</span>, <span class="ident">PyBool</span>, <span class="ident">PyDict</span>, <span class="ident">PyInt</span>, <span class="ident">PyList</span>};
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">PyAny</span>, <span class="ident">PyBool</span>, <span class="ident">IntoPyDict</span>, <span class="ident">PyInt</span>, <span class="ident">PyList</span>};
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">Python</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -865,8 +864,7 @@
             .<span class="ident">unwrap</span>();
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">v</span>, <span class="number">1</span>);
 
-        <span class="kw">let</span> <span class="ident">d</span> <span class="op">=</span> <span class="ident">PyDict</span>::<span class="ident">new</span>(<span class="ident">py</span>);
-        <span class="ident">d</span>.<span class="ident">set_item</span>(<span class="string">&quot;foo&quot;</span>, <span class="number">13</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">d</span> <span class="op">=</span> [(<span class="string">&quot;foo&quot;</span>, <span class="number">13</span>)].<span class="ident">into_py_dict</span>(<span class="ident">py</span>);
 
         <span class="comment">// Inject our own global namespace</span>
         <span class="kw">let</span> <span class="ident">v</span>: <span class="ident">i32</span> <span class="op">=</span> <span class="ident">py</span>

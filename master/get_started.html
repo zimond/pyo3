@@ -208,7 +208,7 @@ pyo3 = &quot;0.5&quot;
 <p>Example program displaying the value of <code>sys.version</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># extern crate pyo3;
 use pyo3::prelude::*;
-use pyo3::types::PyDict;
+use pyo3::types::IntoPyDict;
 
 fn main() -&gt; PyResult&lt;()&gt; {
     let gil = Python::acquire_gil();
@@ -216,8 +216,7 @@ fn main() -&gt; PyResult&lt;()&gt; {
     let sys = py.import(&quot;sys&quot;)?;
     let version: String = sys.get(&quot;version&quot;)?.extract()?;
 
-    let locals = PyDict::new(py);
-    locals.set_item(&quot;os&quot;, py.import(&quot;os&quot;)?)?;
+    let locals = [(&quot;os&quot;, py.import(&quot;os&quot;)?)].into_py_dict(py);
     let user: String = py.eval(&quot;os.getenv('USER') or os.getenv('USERNAME')&quot;, None, Some(&amp;locals))?.extract()?;
 
     println!(&quot;Hello {}, I'm Python {}&quot;, user, version);

@@ -208,7 +208,7 @@ pyo3 = &quot;0.5&quot;
 <p>Example program displaying the value of <code>sys.version</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># extern crate pyo3;
 use pyo3::prelude::*;
-use pyo3::types::PyDict;
+use pyo3::types::IntoPyDict;
 
 fn main() -&gt; PyResult&lt;()&gt; {
     let gil = Python::acquire_gil();
@@ -216,8 +216,7 @@ fn main() -&gt; PyResult&lt;()&gt; {
     let sys = py.import(&quot;sys&quot;)?;
     let version: String = sys.get(&quot;version&quot;)?.extract()?;
 
-    let locals = PyDict::new(py);
-    locals.set_item(&quot;os&quot;, py.import(&quot;os&quot;)?)?;
+    let locals = [(&quot;os&quot;, py.import(&quot;os&quot;)?)].into_py_dict(py);
     let user: String = py.eval(&quot;os.getenv('USER') or os.getenv('USERNAME')&quot;, None, Some(&amp;locals))?.extract()?;
 
     println!(&quot;Hello {}, I'm Python {}&quot;, user, version);
@@ -311,8 +310,7 @@ fn main() {
     let obj = SomeObject::new(py);
 
     // call object with PyDict
-    let kwargs = PyDict::new(py);
-    kwargs.set_item(key1, val1);
+    let kwargs = [(key1, val1)].into_py_dict(py);
     obj.call(py, (), Some(kwargs));
 
     // pass arguments as Vec
@@ -347,7 +345,7 @@ create_exception!(module, MyError, pyo3::exceptions::Exception);
 <pre><pre class="playpen"><code class="language-rust"># extern crate pyo3;
 use pyo3::prelude::*;
 use pyo3::create_exception;
-use pyo3::types::PyDict;
+use pyo3::types::IntoPyDict;
 use pyo3::exceptions::Exception;
 
 create_exception!(mymodule, CustomError, Exception);
@@ -355,9 +353,7 @@ create_exception!(mymodule, CustomError, Exception);
 fn main() {
     let gil = Python::acquire_gil();
     let py = gil.python();
-    let ctx = PyDict::new(py);
-
-    ctx.set_item(&quot;CustomError&quot;, py.get_type::&lt;CustomError&gt;()).unwrap();
+    let ctx = [(&quot;CustomError&quot;, py.get_type::&lt;CustomError&gt;())].into_py_dict(py);
 
     py.run(&quot;assert str(CustomError) == \&quot;&lt;class 'mymodule.CustomError'&gt;\&quot;&quot;, None, Some(&amp;ctx)).unwrap();
     py.run(&quot;assert CustomError('oops').args == ('oops',)&quot;, None, Some(&amp;ctx)).unwrap();
@@ -571,8 +567,7 @@ fn nested_call() {
     let gil = GILGuard::acquire();
     let py = gil.python();
     let supermodule = wrap_pymodule!(supermodule)(py);
-    let ctx = PyDict::new(py);
-    ctx.set_item(&quot;supermodule&quot;, supermodule);
+    let ctx = [(&quot;supermodule&quot;, supermodule)].into_py_dict(py);
 
     py.run(&quot;assert supermodule.submodule.subfuntion() == 'Subfunction'&quot;, None, Some(&amp;ctx)).unwrap();
 }

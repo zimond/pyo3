@@ -155,7 +155,7 @@ create_exception!(module, MyError, pyo3::exceptions::Exception);
 <pre><pre class="playpen"><code class="language-rust"># extern crate pyo3;
 use pyo3::prelude::*;
 use pyo3::create_exception;
-use pyo3::types::PyDict;
+use pyo3::types::IntoPyDict;
 use pyo3::exceptions::Exception;
 
 create_exception!(mymodule, CustomError, Exception);
@@ -163,9 +163,7 @@ create_exception!(mymodule, CustomError, Exception);
 fn main() {
     let gil = Python::acquire_gil();
     let py = gil.python();
-    let ctx = PyDict::new(py);
-
-    ctx.set_item(&quot;CustomError&quot;, py.get_type::&lt;CustomError&gt;()).unwrap();
+    let ctx = [(&quot;CustomError&quot;, py.get_type::&lt;CustomError&gt;())].into_py_dict(py);
 
     py.run(&quot;assert str(CustomError) == \&quot;&lt;class 'mymodule.CustomError'&gt;\&quot;&quot;, None, Some(&amp;ctx)).unwrap();
     py.run(&quot;assert CustomError('oops').args == ('oops',)&quot;, None, Some(&amp;ctx)).unwrap();

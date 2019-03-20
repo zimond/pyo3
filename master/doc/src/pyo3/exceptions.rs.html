@@ -459,9 +459,6 @@
 <span id="459">459</span>
 <span id="460">460</span>
 <span id="461">461</span>
-<span id="462">462</span>
-<span id="463">463</span>
-<span id="464">464</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 
@@ -517,7 +514,7 @@
 <span class="doccomment">/// # Example</span>
 <span class="doccomment">/// ```</span>
 <span class="doccomment">/// use pyo3::import_exception;</span>
-<span class="doccomment">/// use pyo3::types::PyDict;</span>
+<span class="doccomment">/// use pyo3::types::IntoPyDict;</span>
 <span class="doccomment">/// use pyo3::Python;</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// import_exception!(socket, gaierror);</span>
@@ -525,9 +522,8 @@
 <span class="doccomment">/// fn main() {</span>
 <span class="doccomment">///     let gil = Python::acquire_gil();</span>
 <span class="doccomment">///     let py = gil.python();</span>
-<span class="doccomment">///     let ctx = PyDict::new(py);</span>
 <span class="doccomment">///</span>
-<span class="doccomment">///     ctx.set_item(&quot;gaierror&quot;, py.get_type::&lt;gaierror&gt;()).unwrap();</span>
+<span class="doccomment">///     let ctx = [(&quot;gaierror&quot;, py.get_type::&lt;gaierror&gt;())].into_py_dict(py);</span>
 <span class="doccomment">///     py.run(</span>
 <span class="doccomment">///         &quot;import socket; assert gaierror is socket.gaierror&quot;,</span>
 <span class="doccomment">///         None,</span>
@@ -598,7 +594,7 @@
 <span class="doccomment">/// ```</span>
 <span class="doccomment">/// use pyo3::prelude::*;</span>
 <span class="doccomment">/// use pyo3::create_exception;</span>
-<span class="doccomment">/// use pyo3::types::PyDict;</span>
+<span class="doccomment">/// use pyo3::types::IntoPyDict;</span>
 <span class="doccomment">/// use pyo3::exceptions::Exception;</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// create_exception!(mymodule, CustomError, Exception);</span>
@@ -606,9 +602,8 @@
 <span class="doccomment">/// fn main() {</span>
 <span class="doccomment">///     let gil = Python::acquire_gil();</span>
 <span class="doccomment">///     let py = gil.python();</span>
-<span class="doccomment">///     let ctx = PyDict::new(py);</span>
 <span class="doccomment">///     let error_type = py.get_type::&lt;CustomError&gt;();</span>
-<span class="doccomment">///     ctx.set_item(&quot;CustomError&quot;, error_type).unwrap();</span>
+<span class="doccomment">///     let ctx = [(&quot;CustomError&quot;, error_type)].into_py_dict(py);</span>
 <span class="doccomment">///     let type_description: String = py</span>
 <span class="doccomment">///         .eval(&quot;str(CustomError)&quot;, None, Some(&amp;ctx))</span>
 <span class="doccomment">///         .unwrap()</span>
@@ -846,7 +841,7 @@
 <span class="kw">mod</span> <span class="ident">test</span> {
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">exceptions</span>::<span class="ident">Exception</span>;
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">objectprotocol</span>::<span class="ident">ObjectProtocol</span>;
-    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">PyDict</span>;
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">PyDict</span>, <span class="ident">IntoPyDict</span>};
     <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">PyErr</span>, <span class="ident">Python</span>};
 
     <span class="macro">import_exception</span><span class="macro">!</span>(<span class="ident">socket</span>, <span class="ident">gaierror</span>);
@@ -910,9 +905,8 @@
 
         <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
         <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
-        <span class="kw">let</span> <span class="ident">ctx</span> <span class="op">=</span> <span class="ident">PyDict</span>::<span class="ident">new</span>(<span class="ident">py</span>);
         <span class="kw">let</span> <span class="ident">error_type</span> <span class="op">=</span> <span class="ident">py</span>.<span class="ident">get_type</span>::<span class="op">&lt;</span><span class="ident">CustomError</span><span class="op">&gt;</span>();
-        <span class="ident">ctx</span>.<span class="ident">set_item</span>(<span class="string">&quot;CustomError&quot;</span>, <span class="ident">error_type</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">ctx</span> <span class="op">=</span> [(<span class="string">&quot;CustomError&quot;</span>, <span class="ident">error_type</span>)].<span class="ident">into_py_dict</span>(<span class="ident">py</span>);
         <span class="kw">let</span> <span class="ident">type_description</span>: <span class="ident">String</span> <span class="op">=</span> <span class="ident">py</span>
             .<span class="ident">eval</span>(<span class="string">&quot;str(CustomError)&quot;</span>, <span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">ctx</span>))
             .<span class="ident">unwrap</span>()
@@ -922,7 +916,7 @@
         <span class="ident">py</span>.<span class="ident">run</span>(
             <span class="string">&quot;assert CustomError(&#39;oops&#39;).args == (&#39;oops&#39;,)&quot;</span>,
             <span class="prelude-val">None</span>,
-            <span class="prelude-val">Some</span>(<span class="ident">ctx</span>),
+            <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">ctx</span>),
         )
         .<span class="ident">unwrap</span>();
     }
