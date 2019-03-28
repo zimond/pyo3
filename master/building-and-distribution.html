@@ -144,7 +144,7 @@
 <p>Since PyO3's build script can't know whether you're building a binary or a library, you have to activate the <code>extension-module</code> feature to get the build options for a library, or it'll default to binary.</p>
 <p>If you have e.g. a library crate and a profiling crate alongside, you need to use optional features. E.g. you put the following in the library crate:</p>
 <pre><code class="language-toml">[dependencies]
-pyo3 = &quot;0.5.2&quot;
+pyo3 = &quot;0.6&quot;
 
 [lib]
 name = &quot;hyperjson&quot;
@@ -156,7 +156,7 @@ default = [&quot;pyo3/extension-module&quot;]
 <p>And this in the profiling crate:</p>
 <pre><code class="language-toml">[dependencies]
 my_main_crate = { path = &quot;..&quot;, default-features = false }
-pyo3 = &quot;0.5.2&quot;
+pyo3 = &quot;0.6&quot;
 </code></pre>
 <p>On linux/mac you might have to change <code>LD_LIBRARY_PATH</code> to include libpython, while on windows you might need to set <code>LIB</code> to include <code>pythonxy.lib</code> (where x and y are major and minor version), which is normally either in the <code>libs</code> or <code>Lib</code> folder of a python installation.</p>
 <a class="header" href="#distribution" id="distribution"><h2>Distribution</h2></a>

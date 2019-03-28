@@ -203,7 +203,7 @@ rustflags = [
 <a class="header" href="#using-python-from-rust" id="using-python-from-rust"><h2>Using python from rust</h2></a>
 <p>Add <code>pyo3</code> this to your <code>Cargo.toml</code>:</p>
 <pre><code class="language-toml">[dependencies]
-pyo3 = &quot;0.5&quot;
+pyo3 = &quot;0.6&quot;
 </code></pre>
 <p>Example program displaying the value of <code>sys.version</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># extern crate pyo3;
@@ -1329,6 +1329,15 @@ then we can run <code>pytest tests</code> to benchmark them.</p>
 <a class="header" href="#ffi" id="ffi"><h2>ffi</h2></a>
 <p>PyO3 exposes much of python's C api through the <code>ffi</code>.</p>
 <p>The C api is naturally unsafe and requires you to manage reference counts, errors and specific invariants yourself. Please refer to the <a href="https://docs.python.org/3/c-api/">C API Reference Manual</a> and <a href="https://doc.rust-lang.org/nightly/nomicon/ffi.html">The Rustonomicon</a> before using any function from that api.</p>
+<a class="header" href="#testing" id="testing"><h2>Testing</h2></a>
+<p>Currently, <a href="https://github.com/PyO3/pyo3/issues/341">#341</a> causes <code>cargo test</code> to fail with weird linking errors when the <code>extension-module</code> feature is activated. For nnow you can work around this by making the <code>extension-module</code> feature optional and running the tests with <code>cargo test --no-default-features</code>:</p>
+<pre><code class="language-toml">[dependencies.pyo3]
+version = &quot;0.6.0&quot;
+
+[features]
+extension-module = [&quot;pyo3/extension-module&quot;]
+default = [&quot;extension-module&quot;]
+</code></pre>
 <a class="header" href="#building-and-distribution" id="building-and-distribution"><h1>Building and Distribution</h1></a>
 <a class="header" href="#python-version" id="python-version"><h2>Python version</h2></a>
 <p>PyO3 uses a build script to determine the python version and set the correct linker arguments. By default it uses the <code>python3</code> executable. With the <code>python2</code> feature it uses the <code>python2</code> executable. You can override the python interpreter by setting <code>PYTHON_SYS_EXECUTABLE</code>.</p>
@@ -1337,7 +1346,7 @@ then we can run <code>pytest tests</code> to benchmark them.</p>
 <p>Since PyO3's build script can't know whether you're building a binary or a library, you have to activate the <code>extension-module</code> feature to get the build options for a library, or it'll default to binary.</p>
 <p>If you have e.g. a library crate and a profiling crate alongside, you need to use optional features. E.g. you put the following in the library crate:</p>
 <pre><code class="language-toml">[dependencies]
-pyo3 = &quot;0.5.2&quot;
+pyo3 = &quot;0.6&quot;
 
 [lib]
 name = &quot;hyperjson&quot;
@@ -1349,7 +1358,7 @@ default = [&quot;pyo3/extension-module&quot;]
 <p>And this in the profiling crate:</p>
 <pre><code class="language-toml">[dependencies]
 my_main_crate = { path = &quot;..&quot;, default-features = false }
-pyo3 = &quot;0.5.2&quot;
+pyo3 = &quot;0.6&quot;
 </code></pre>
 <p>On linux/mac you might have to change <code>LD_LIBRARY_PATH</code> to include libpython, while on windows you might need to set <code>LIB</code> to include <code>pythonxy.lib</code> (where x and y are major and minor version), which is normally either in the <code>libs</code> or <code>Lib</code> folder of a python installation.</p>
 <a class="header" href="#distribution" id="distribution"><h2>Distribution</h2></a>
