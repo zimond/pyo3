@@ -177,44 +177,6 @@
 <span id="177">177</span>
 <span id="178">178</span>
 <span id="179">179</span>
-<span id="180">180</span>
-<span id="181">181</span>
-<span id="182">182</span>
-<span id="183">183</span>
-<span id="184">184</span>
-<span id="185">185</span>
-<span id="186">186</span>
-<span id="187">187</span>
-<span id="188">188</span>
-<span id="189">189</span>
-<span id="190">190</span>
-<span id="191">191</span>
-<span id="192">192</span>
-<span id="193">193</span>
-<span id="194">194</span>
-<span id="195">195</span>
-<span id="196">196</span>
-<span id="197">197</span>
-<span id="198">198</span>
-<span id="199">199</span>
-<span id="200">200</span>
-<span id="201">201</span>
-<span id="202">202</span>
-<span id="203">203</span>
-<span id="204">204</span>
-<span id="205">205</span>
-<span id="206">206</span>
-<span id="207">207</span>
-<span id="208">208</span>
-<span id="209">209</span>
-<span id="210">210</span>
-<span id="211">211</span>
-<span id="212">212</span>
-<span id="213">213</span>
-<span id="214">214</span>
-<span id="215">215</span>
-<span id="216">216</span>
-<span id="217">217</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 <span class="comment">//</span>
@@ -327,7 +289,6 @@
     <span class="prelude-val">Ok</span>(())
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">Py_3</span>)]</span>
 <span class="doccomment">/// Builds a module (or null) from a user given initializer. Used for `#[pymodule]`.</span>
 <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">make_module</span>(
     <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
@@ -373,43 +334,6 @@
             <span class="ident">e</span>.<span class="ident">restore</span>(<span class="ident">py</span>);
             <span class="ident">ptr</span>::<span class="ident">null_mut</span>()
         }
-    }
-}
-
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">Py_3</span>))]</span>
-<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="doccomment">/// Builds a module (or null) from a user given initializer. Used for `#[pymodule]`.</span>
-<span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">make_module</span>(
-    <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-    <span class="ident">doc</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-    <span class="ident">initializer</span>: <span class="kw">impl</span> <span class="ident">Fn</span>(<span class="ident">Python</span>, <span class="kw-2">&amp;</span><span class="ident">PyModule</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span>,
-) {
-    <span class="ident">init_once</span>();
-
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">py_sys_config</span> <span class="op">=</span> <span class="string">&quot;WITH_THREAD&quot;</span>)]</span>
-    <span class="ident">ffi</span>::<span class="ident">PyEval_InitThreads</span>();
-
-    <span class="kw">let</span> <span class="ident">_name</span> <span class="op">=</span> <span class="ident">name</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="kw">_</span>;
-    <span class="kw">let</span> <span class="ident">_pool</span> <span class="op">=</span> <span class="ident">GILPool</span>::<span class="ident">new</span>();
-    <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">assume_gil_acquired</span>();
-    <span class="kw">let</span> <span class="ident">_module</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">Py_InitModule</span>(<span class="ident">_name</span>, <span class="ident">ptr</span>::<span class="ident">null_mut</span>());
-    <span class="kw">if</span> <span class="ident">_module</span>.<span class="ident">is_null</span>() {
-        <span class="kw">return</span>;
-    }
-
-    <span class="kw">let</span> <span class="ident">_module</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">py</span>.<span class="ident">from_borrowed_ptr_or_err</span>::<span class="op">&lt;</span><span class="ident">PyModule</span><span class="op">&gt;</span>(<span class="ident">_module</span>) {
-        <span class="prelude-val">Ok</span>(<span class="ident">m</span>) <span class="op">=&gt;</span> <span class="ident">m</span>,
-        <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> {
-            <span class="ident">e</span>.<span class="ident">restore</span>(<span class="ident">py</span>);
-            <span class="kw">return</span>;
-        }
-    };
-
-    <span class="ident">_module</span>
-        .<span class="ident">add</span>(<span class="string">&quot;__doc__&quot;</span>, <span class="ident">doc</span>)
-        .<span class="ident">expect</span>(<span class="string">&quot;Failed to add doc for module&quot;</span>);
-    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="ident">initializer</span>(<span class="ident">py</span>, <span class="ident">_module</span>) {
-        <span class="ident">e</span>.<span class="ident">restore</span>(<span class="ident">py</span>)
     }
 }
 

@@ -442,23 +442,6 @@
 <span id="442">442</span>
 <span id="443">443</span>
 <span id="444">444</span>
-<span id="445">445</span>
-<span id="446">446</span>
-<span id="447">447</span>
-<span id="448">448</span>
-<span id="449">449</span>
-<span id="450">450</span>
-<span id="451">451</span>
-<span id="452">452</span>
-<span id="453">453</span>
-<span id="454">454</span>
-<span id="455">455</span>
-<span id="456">456</span>
-<span id="457">457</span>
-<span id="458">458</span>
-<span id="459">459</span>
-<span id="460">460</span>
-<span id="461">461</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 
@@ -693,7 +676,6 @@
 
 <span class="macro">impl_native_exception</span><span class="macro">!</span>(<span class="ident">BaseException</span>, <span class="ident">PyExc_BaseException</span>);
 <span class="macro">impl_native_exception</span><span class="macro">!</span>(<span class="ident">Exception</span>, <span class="ident">PyExc_Exception</span>);
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">Py_3</span>)]</span>
 <span class="macro">impl_native_exception</span><span class="macro">!</span>(<span class="ident">StopAsyncIteration</span>, <span class="ident">PyExc_StopAsyncIteration</span>);
 <span class="macro">impl_native_exception</span><span class="macro">!</span>(<span class="ident">StopIteration</span>, <span class="ident">PyExc_StopIteration</span>);
 <span class="macro">impl_native_exception</span><span class="macro">!</span>(<span class="ident">GeneratorExit</span>, <span class="ident">PyExc_GeneratorExit</span>);
@@ -718,7 +700,6 @@
 <span class="macro">impl_native_exception</span><span class="macro">!</span>(<span class="ident">NameError</span>, <span class="ident">PyExc_NameError</span>);
 <span class="macro">impl_native_exception</span><span class="macro">!</span>(<span class="ident">OverflowError</span>, <span class="ident">PyExc_OverflowError</span>);
 <span class="macro">impl_native_exception</span><span class="macro">!</span>(<span class="ident">RuntimeError</span>, <span class="ident">PyExc_RuntimeError</span>);
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">Py_3</span>)]</span>
 <span class="macro">impl_native_exception</span><span class="macro">!</span>(<span class="ident">RecursionError</span>, <span class="ident">PyExc_RecursionError</span>);
 <span class="macro">impl_native_exception</span><span class="macro">!</span>(<span class="ident">NotImplementedError</span>, <span class="ident">PyExc_NotImplementedError</span>);
 <span class="macro">impl_native_exception</span><span class="macro">!</span>(<span class="ident">SyntaxError</span>, <span class="ident">PyExc_SyntaxError</span>);
@@ -734,35 +715,20 @@
 <span class="macro">impl_native_exception</span><span class="macro">!</span>(<span class="ident">ValueError</span>, <span class="ident">PyExc_ValueError</span>);
 <span class="macro">impl_native_exception</span><span class="macro">!</span>(<span class="ident">ZeroDivisionError</span>, <span class="ident">PyExc_ZeroDivisionError</span>);
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">Py_3</span>)]</span>
 <span class="macro">impl_native_exception</span><span class="macro">!</span>(<span class="ident">BlockingIOError</span>, <span class="ident">PyExc_BlockingIOError</span>);
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">Py_3</span>)]</span>
 <span class="macro">impl_native_exception</span><span class="macro">!</span>(<span class="ident">BrokenPipeError</span>, <span class="ident">PyExc_BrokenPipeError</span>);
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">Py_3</span>)]</span>
 <span class="macro">impl_native_exception</span><span class="macro">!</span>(<span class="ident">ChildProcessError</span>, <span class="ident">PyExc_ChildProcessError</span>);
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">Py_3</span>)]</span>
 <span class="macro">impl_native_exception</span><span class="macro">!</span>(<span class="ident">ConnectionError</span>, <span class="ident">PyExc_ConnectionError</span>);
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">Py_3</span>)]</span>
 <span class="macro">impl_native_exception</span><span class="macro">!</span>(<span class="ident">ConnectionAbortedError</span>, <span class="ident">PyExc_ConnectionAbortedError</span>);
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">Py_3</span>)]</span>
 <span class="macro">impl_native_exception</span><span class="macro">!</span>(<span class="ident">ConnectionRefusedError</span>, <span class="ident">PyExc_ConnectionRefusedError</span>);
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">Py_3</span>)]</span>
 <span class="macro">impl_native_exception</span><span class="macro">!</span>(<span class="ident">ConnectionResetError</span>, <span class="ident">PyExc_ConnectionResetError</span>);
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">Py_3</span>)]</span>
 <span class="macro">impl_native_exception</span><span class="macro">!</span>(<span class="ident">FileExistsError</span>, <span class="ident">PyExc_FileExistsError</span>);
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">Py_3</span>)]</span>
 <span class="macro">impl_native_exception</span><span class="macro">!</span>(<span class="ident">FileNotFoundError</span>, <span class="ident">PyExc_FileNotFoundError</span>);
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">Py_3</span>)]</span>
 <span class="macro">impl_native_exception</span><span class="macro">!</span>(<span class="ident">InterruptedError</span>, <span class="ident">PyExc_InterruptedError</span>);
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">Py_3</span>)]</span>
 <span class="macro">impl_native_exception</span><span class="macro">!</span>(<span class="ident">IsADirectoryError</span>, <span class="ident">PyExc_IsADirectoryError</span>);
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">Py_3</span>)]</span>
 <span class="macro">impl_native_exception</span><span class="macro">!</span>(<span class="ident">NotADirectoryError</span>, <span class="ident">PyExc_NotADirectoryError</span>);
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">Py_3</span>)]</span>
 <span class="macro">impl_native_exception</span><span class="macro">!</span>(<span class="ident">PermissionError</span>, <span class="ident">PyExc_PermissionError</span>);
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">Py_3</span>)]</span>
 <span class="macro">impl_native_exception</span><span class="macro">!</span>(<span class="ident">ProcessLookupError</span>, <span class="ident">PyExc_ProcessLookupError</span>);
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">Py_3</span>)]</span>
 <span class="macro">impl_native_exception</span><span class="macro">!</span>(<span class="ident">TimeoutError</span>, <span class="ident">PyExc_TimeoutError</span>);
 
 <span class="macro">impl_native_exception</span><span class="macro">!</span>(<span class="ident">EnvironmentError</span>, <span class="ident">PyExc_EnvironmentError</span>);

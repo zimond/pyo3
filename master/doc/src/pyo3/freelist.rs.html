@@ -108,32 +108,6 @@
 <span id="108">108</span>
 <span id="109">109</span>
 <span id="110">110</span>
-<span id="111">111</span>
-<span id="112">112</span>
-<span id="113">113</span>
-<span id="114">114</span>
-<span id="115">115</span>
-<span id="116">116</span>
-<span id="117">117</span>
-<span id="118">118</span>
-<span id="119">119</span>
-<span id="120">120</span>
-<span id="121">121</span>
-<span id="122">122</span>
-<span id="123">123</span>
-<span id="124">124</span>
-<span id="125">125</span>
-<span id="126">126</span>
-<span id="127">127</span>
-<span id="128">128</span>
-<span id="129">129</span>
-<span id="130">130</span>
-<span id="131">131</span>
-<span id="132">132</span>
-<span id="133">133</span>
-<span id="134">134</span>
-<span id="135">135</span>
-<span id="136">136</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 
@@ -217,38 +191,12 @@
         }
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">Py_3</span>)]</span>
     <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">dealloc</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">obj</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>) {
         <span class="ident">pytype_drop</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>(<span class="ident">py</span>, <span class="ident">obj</span>);
 
         <span class="kw">if</span> <span class="ident">ffi</span>::<span class="ident">PyObject_CallFinalizerFromDealloc</span>(<span class="ident">obj</span>) <span class="op">&lt;</span> <span class="number">0</span> {
             <span class="kw">return</span>;
         }
-
-        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">obj</span>) <span class="op">=</span> <span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">PyObjectWithFreeList</span><span class="op">&gt;</span>::<span class="ident">get_free_list</span>().<span class="ident">insert</span>(<span class="ident">obj</span>) {
-            <span class="kw">match</span> <span class="self">Self</span>::<span class="ident">type_object</span>().<span class="ident">tp_free</span> {
-                <span class="prelude-val">Some</span>(<span class="ident">free</span>) <span class="op">=&gt;</span> <span class="ident">free</span>(<span class="ident">obj</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>),
-                <span class="prelude-val">None</span> <span class="op">=&gt;</span> {
-                    <span class="kw">let</span> <span class="ident">ty</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">Py_TYPE</span>(<span class="ident">obj</span>);
-                    <span class="kw">if</span> <span class="ident">ffi</span>::<span class="ident">PyType_IS_GC</span>(<span class="ident">ty</span>) <span class="op">!=</span> <span class="number">0</span> {
-                        <span class="ident">ffi</span>::<span class="ident">PyObject_GC_Del</span>(<span class="ident">obj</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>);
-                    } <span class="kw">else</span> {
-                        <span class="ident">ffi</span>::<span class="ident">PyObject_Free</span>(<span class="ident">obj</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">c_void</span>);
-                    }
-
-                    <span class="comment">// For heap types, PyType_GenericAlloc calls INCREF on the type objects,</span>
-                    <span class="comment">// so we need to call DECREF here:</span>
-                    <span class="kw">if</span> <span class="ident">ffi</span>::<span class="ident">PyType_HasFeature</span>(<span class="ident">ty</span>, <span class="ident">ffi</span>::<span class="ident">Py_TPFLAGS_HEAPTYPE</span>) <span class="op">!=</span> <span class="number">0</span> {
-                        <span class="ident">ffi</span>::<span class="ident">Py_DECREF</span>(<span class="ident">ty</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>);
-                    }
-                }
-            }
-        }
-    }
-
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">Py_3</span>))]</span>
-    <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">dealloc</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">obj</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>) {
-        <span class="ident">pytype_drop</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>(<span class="ident">py</span>, <span class="ident">obj</span>);
 
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">obj</span>) <span class="op">=</span> <span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">PyObjectWithFreeList</span><span class="op">&gt;</span>::<span class="ident">get_free_list</span>().<span class="ident">insert</span>(<span class="ident">obj</span>) {
             <span class="kw">match</span> <span class="self">Self</span>::<span class="ident">type_object</span>().<span class="ident">tp_free</span> {

@@ -601,19 +601,11 @@ each protocol implementation block has to be annotated with <code>#[pyproto]</co
 </li>
 <li>
 <p><code>fn __str__(&amp;self) -&gt; PyResult&lt;impl ToPyObject&lt;ObjectType=PyString&gt;&gt;</code></p>
-<p>Possible return types for <code>__str__</code> and <code>__repr__</code> are <code>PyResult&lt;String&gt;</code> or <code>PyResult&lt;PyString&gt;</code>.
-In Python 2.7, Unicode strings returned by <code>__str__</code> and <code>__repr__</code> will be converted to byte strings
-by the Python runtime, which results in an exception if the string contains non-ASCII characters.</p>
+<p>Possible return types for <code>__str__</code> and <code>__repr__</code> are <code>PyResult&lt;String&gt;</code> or <code>PyResult&lt;PyString&gt;</code>.</p>
 </li>
 <li>
 <p><code>fn __bytes__(&amp;self) -&gt; PyResult&lt;PyBytes&gt;</code></p>
-<p>On Python 3.x, provides the conversion to <code>bytes</code>.
-On Python 2.7, <code>__bytes__</code> is allowed but has no effect.</p>
-</li>
-<li>
-<p><code>fn __unicode__(&amp;self) -&gt; PyResult&lt;PyUnicode&gt;</code></p>
-<p>On Python 2.7, provides the conversion to <code>unicode</code>.
-On Python 3.x, <code>__unicode__</code> is allowed but has no effect.</p>
+<p>Provides the conversion to <code>bytes</code>.</p>
 </li>
 <li>
 <p><code>fn __format__(&amp;self, format_spec: &amp;str) -&gt; PyResult&lt;impl ToPyObject&lt;ObjectType=PyString&gt;&gt;</code></p>
@@ -641,9 +633,7 @@ The return type must be <code>PyResult&lt;T&gt;</code> where <code>T</code> is o
 <ul>
 <li>
 <p><code>fn __bool__(&amp;self) -&gt; PyResult&lt;bool&gt;</code></p>
-<p>Determines the &quot;truthiness&quot; of the object.
-This method works for both python 3 and python 2,
-even on Python 2.7 where the Python spelling was <code>__nonzero__</code>.</p>
+<p>Determines the &quot;truthyness&quot; of the object.</p>
 </li>
 </ul>
 <a class="header" href="#garbage-collector-integration" id="garbage-collector-integration"><h3>Garbage Collector Integration</h3></a>

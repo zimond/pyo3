@@ -307,14 +307,12 @@
 <span id="307">307</span>
 <span id="308">308</span>
 <span id="309">309</span>
-<span id="310">310</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">instance</span>::<span class="ident">PyNativeType</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">object</span>::<span class="ident">PyObject</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">AsPyPointer</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">Python</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>), <span class="ident">not</span>(<span class="ident">Py_3</span>)))]</span>
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ops</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">raw</span>::<span class="ident">c_double</span>;
 
@@ -341,7 +339,7 @@
         <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">PyComplex_ImagAsDouble</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>()) }
     }
     <span class="doccomment">/// Returns `|self|`.</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>), <span class="ident">not</span>(<span class="ident">Py_3</span>)))]</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">abs</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">c_double</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">val</span> <span class="op">=</span> (<span class="kw-2">*</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyComplexObject</span>)).<span class="ident">cval</span>;
@@ -349,7 +347,7 @@
         }
     }
     <span class="doccomment">/// Returns `self ** other`</span>
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>), <span class="ident">not</span>(<span class="ident">Py_3</span>)))]</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">pow</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="ident">PyComplex</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">PyComplex</span> {
         <span class="kw">unsafe</span> {
             <span class="self">self</span>.<span class="ident">py</span>()
@@ -358,7 +356,7 @@
     }
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>), <span class="ident">not</span>(<span class="ident">Py_3</span>)))]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>))]</span>
 <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">always</span>)]</span>
 <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">complex_operation</span>(
     <span class="ident">l</span>: <span class="kw-2">&amp;</span><span class="ident">PyComplex</span>,
@@ -370,7 +368,7 @@
     <span class="ident">ffi</span>::<span class="ident">PyComplex_FromCComplex</span>(<span class="ident">operation</span>(<span class="ident">l_val</span>, <span class="ident">r_val</span>))
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>), <span class="ident">not</span>(<span class="ident">Py_3</span>)))]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>))]</span>
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;py</span><span class="op">&gt;</span> <span class="ident">Add</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span> {
     <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span>;
     <span class="kw">fn</span> <span class="ident">add</span>(<span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span> {
@@ -381,7 +379,7 @@
     }
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>), <span class="ident">not</span>(<span class="ident">Py_3</span>)))]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>))]</span>
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;py</span><span class="op">&gt;</span> <span class="ident">Sub</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span> {
     <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span>;
     <span class="kw">fn</span> <span class="ident">sub</span>(<span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span> {
@@ -392,7 +390,7 @@
     }
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>), <span class="ident">not</span>(<span class="ident">Py_3</span>)))]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>))]</span>
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;py</span><span class="op">&gt;</span> <span class="ident">Mul</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span> {
     <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span>;
     <span class="kw">fn</span> <span class="ident">mul</span>(<span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span> {
@@ -403,7 +401,7 @@
     }
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>), <span class="ident">not</span>(<span class="ident">Py_3</span>)))]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>))]</span>
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;py</span><span class="op">&gt;</span> <span class="ident">Div</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span> {
     <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span>;
     <span class="kw">fn</span> <span class="ident">div</span>(<span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span> {
@@ -414,7 +412,7 @@
     }
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>), <span class="ident">not</span>(<span class="ident">Py_3</span>)))]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>))]</span>
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;py</span><span class="op">&gt;</span> <span class="ident">Neg</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span> {
     <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span>;
     <span class="kw">fn</span> <span class="ident">neg</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span> {
@@ -464,7 +462,7 @@
                     }
                 }
             }
-            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>), <span class="ident">not</span>(<span class="ident">Py_3</span>)))]</span>
+            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>))]</span>
             <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">float_cmp</span>)]</span> <span class="comment">// The comparison is for an error value</span>
             <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;source</span><span class="op">&gt;</span> <span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;source</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Complex</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">float</span><span class="op">&gt;</span> {
                 <span class="kw">fn</span> <span class="ident">extract</span>(<span class="ident">obj</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;source</span> <span class="ident">PyAny</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">Complex</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">float</span><span class="op">&gt;&gt;</span> {
@@ -478,7 +476,7 @@
                     }
                 }
             }
-            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">Py_LIMITED_API</span>, <span class="ident">Py_3</span>))]</span>
+            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">Py_LIMITED_API</span>)]</span>
             <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">float_cmp</span>)]</span> <span class="comment">// The comparison is for an error value</span>
             <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;source</span><span class="op">&gt;</span> <span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;source</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Complex</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">float</span><span class="op">&gt;</span> {
                 <span class="kw">fn</span> <span class="ident">extract</span>(<span class="ident">obj</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;source</span> <span class="ident">PyAny</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">Complex</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">float</span><span class="op">&gt;&gt;</span> {
@@ -539,7 +537,7 @@
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">complex</span>.<span class="ident">imag</span>(), <span class="number">1.2</span>);
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>), <span class="ident">not</span>(<span class="ident">Py_3</span>)))]</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>))]</span>
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_add</span>() {
         <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
@@ -551,7 +549,7 @@
         <span class="macro">assert_approx_eq</span><span class="macro">!</span>(<span class="ident">res</span>.<span class="ident">imag</span>(), <span class="number">3.8</span>);
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>), <span class="ident">not</span>(<span class="ident">Py_3</span>)))]</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>))]</span>
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_sub</span>() {
         <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
@@ -563,7 +561,7 @@
         <span class="macro">assert_approx_eq</span><span class="macro">!</span>(<span class="ident">res</span>.<span class="ident">imag</span>(), <span class="op">-</span><span class="number">1.4</span>);
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>), <span class="ident">not</span>(<span class="ident">Py_3</span>)))]</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>))]</span>
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_mul</span>() {
         <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
@@ -575,7 +573,7 @@
         <span class="macro">assert_approx_eq</span><span class="macro">!</span>(<span class="ident">res</span>.<span class="ident">imag</span>(), <span class="number">9.0</span>);
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>), <span class="ident">not</span>(<span class="ident">Py_3</span>)))]</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>))]</span>
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_div</span>() {
         <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
@@ -587,7 +585,7 @@
         <span class="macro">assert_approx_eq</span><span class="macro">!</span>(<span class="ident">res</span>.<span class="ident">imag</span>(), <span class="op">-</span><span class="number">0.8505154639175257</span>);
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>), <span class="ident">not</span>(<span class="ident">Py_3</span>)))]</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>))]</span>
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_neg</span>() {
         <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
@@ -598,7 +596,7 @@
         <span class="macro">assert_approx_eq</span><span class="macro">!</span>(<span class="ident">res</span>.<span class="ident">imag</span>(), <span class="op">-</span><span class="number">1.2</span>);
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>), <span class="ident">not</span>(<span class="ident">Py_3</span>)))]</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>))]</span>
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_abs</span>() {
         <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
@@ -607,7 +605,7 @@
         <span class="macro">assert_approx_eq</span><span class="macro">!</span>(<span class="ident">val</span>.<span class="ident">abs</span>(), <span class="number">3.2310988842807022</span>);
     }
 
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>), <span class="ident">not</span>(<span class="ident">Py_3</span>)))]</span>
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>))]</span>
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_pow</span>() {
         <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();

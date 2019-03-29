@@ -148,7 +148,7 @@
 </ul>
 <p>A comparison with rust-cpython can be found <a href="https://pyo3.rs/master/rust-cpython.html">in the guide</a>.</p>
 <a class="header" href="#usage" id="usage"><h2>Usage</h2></a>
-<p>PyO3 supports python 2.7 as well as python 3.5 and up. The minimum required rust version is 1.30.0-nightly 2018-08-18.</p>
+<p>PyO3 supports python 3.5 and up. The minimum required rust version is 1.34.0-nightly 2019-02-06.</p>
 <p>You can either write a native python module in rust or use python from a rust binary.</p>
 <p>On some OSs, you need some additional packages.</p>
 <p>E.g. if you are on Ubuntu18.04, please run</p>
@@ -540,36 +540,32 @@ print(rust2py.__doc__)
 # extern crate pyo3;
 use pyo3::prelude::*;
 use pyo3::{wrap_pyfunction, wrap_pymodule};
-use pyo3::types::PyDict;
+use pyo3::types::IntoPyDict;
 
 #[pyfunction]
-#[cfg(Py_3)]
 fn subfunction() -&gt; String {
     &quot;Subfunction&quot;.to_string()
 }
 
 #[pymodule]
-#[cfg(Py_3)]
 fn submodule(_py: Python, module: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
     module.add_wrapped(wrap_pyfunction!(subfunction))?;
     Ok(())
 }
 
 #[pymodule]
-#[cfg(Py_3)]
 fn supermodule(_py: Python, module: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
     module.add_wrapped(wrap_pymodule!(submodule))?;
     Ok(())
 }
 
-#[cfg(Py_3)]
 fn nested_call() {
     let gil = GILGuard::acquire();
     let py = gil.python();
     let supermodule = wrap_pymodule!(supermodule)(py);
     let ctx = [(&quot;supermodule&quot;, supermodule)].into_py_dict(py);
 
-    py.run(&quot;assert supermodule.submodule.subfuntion() == 'Subfunction'&quot;, None, Some(&amp;ctx)).unwrap();
+    py.run(&quot;assert supermodule.submodule.subfunction() == 'Subfunction'&quot;, None, Some(&amp;ctx)).unwrap();
 }
 #}</code></pre></pre>
 <a class="header" href="#python-function" id="python-function"><h1>Python Function</h1></a>
@@ -1117,19 +1113,11 @@ each protocol implementation block has to be annotated with <code>#[pyproto]</co
 </li>
 <li>
 <p><code>fn __str__(&amp;self) -&gt; PyResult&lt;impl ToPyObject&lt;ObjectType=PyString&gt;&gt;</code></p>
-<p>Possible return types for <code>__str__</code> and <code>__repr__</code> are <code>PyResult&lt;String&gt;</code> or <code>PyResult&lt;PyString&gt;</code>.
-In Python 2.7, Unicode strings returned by <code>__str__</code> and <code>__repr__</code> will be converted to byte strings
-by the Python runtime, which results in an exception if the string contains non-ASCII characters.</p>
+<p>Possible return types for <code>__str__</code> and <code>__repr__</code> are <code>PyResult&lt;String&gt;</code> or <code>PyResult&lt;PyString&gt;</code>.</p>
 </li>
 <li>
 <p><code>fn __bytes__(&amp;self) -&gt; PyResult&lt;PyBytes&gt;</code></p>
-<p>On Python 3.x, provides the conversion to <code>bytes</code>.
-On Python 2.7, <code>__bytes__</code> is allowed but has no effect.</p>
-</li>
-<li>
-<p><code>fn __unicode__(&amp;self) -&gt; PyResult&lt;PyUnicode&gt;</code></p>
-<p>On Python 2.7, provides the conversion to <code>unicode</code>.
-On Python 3.x, <code>__unicode__</code> is allowed but has no effect.</p>
+<p>Provides the conversion to <code>bytes</code>.</p>
 </li>
 <li>
 <p><code>fn __format__(&amp;self, format_spec: &amp;str) -&gt; PyResult&lt;impl ToPyObject&lt;ObjectType=PyString&gt;&gt;</code></p>
@@ -1157,9 +1145,7 @@ The return type must be <code>PyResult&lt;T&gt;</code> where <code>T</code> is o
 <ul>
 <li>
 <p><code>fn __bool__(&amp;self) -&gt; PyResult&lt;bool&gt;</code></p>
-<p>Determines the &quot;truthiness&quot; of the object.
-This method works for both python 3 and python 2,
-even on Python 2.7 where the Python spelling was <code>__nonzero__</code>.</p>
+<p>Determines the &quot;truthyness&quot; of the object.</p>
 </li>
 </ul>
 <a class="header" href="#garbage-collector-integration" id="garbage-collector-integration"><h3>Garbage Collector Integration</h3></a>
@@ -1340,7 +1326,7 @@ default = [&quot;extension-module&quot;]
 </code></pre>
 <a class="header" href="#building-and-distribution" id="building-and-distribution"><h1>Building and Distribution</h1></a>
 <a class="header" href="#python-version" id="python-version"><h2>Python version</h2></a>
-<p>PyO3 uses a build script to determine the python version and set the correct linker arguments. By default it uses the <code>python3</code> executable. With the <code>python2</code> feature it uses the <code>python2</code> executable. You can override the python interpreter by setting <code>PYTHON_SYS_EXECUTABLE</code>.</p>
+<p>PyO3 uses a build script to determine the python version and set the correct linker arguments. By default it uses the <code>python3</code> executable. You can override the python interpreter by setting <code>PYTHON_SYS_EXECUTABLE</code>, e.g., <code>PYTHON_SYS_EXECUTABLE=python3.6</code>.</p>
 <a class="header" href="#linking" id="linking"><h2>Linking</h2></a>
 <p>Different linker arguments must be set for libraries/extension modules and binaries, which includes both standalone binaries and tests. (More specifically, binaries must be told where to find libpython and libraries must not link to libpython for <a href="https://www.python.org/dev/peps/pep-0513/">manylinux</a> compliance).</p>
 <p>Since PyO3's build script can't know whether you're building a binary or a library, you have to activate the <code>extension-module</code> feature to get the build options for a library, or it'll default to binary.</p>
