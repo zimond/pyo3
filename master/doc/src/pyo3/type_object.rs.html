@@ -537,6 +537,9 @@
 <span id="537">537</span>
 <span id="538">538</span>
 <span id="539">539</span>
+<span id="540">540</span>
+<span id="541">541</span>
+<span id="542">542</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 
@@ -770,7 +773,10 @@
 }
 
 <span class="doccomment">/// Python object types that have a corresponding type object.</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyTypeObject</span> {
+<span class="doccomment">///</span>
+<span class="doccomment">/// This trait is marked unsafe because not fulfilling the contract for [PyTypeObject::init_type]</span>
+<span class="doccomment">/// leads to UB</span>
+<span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">trait</span> <span class="ident">PyTypeObject</span> {
     <span class="doccomment">/// This function must make sure that the corresponding type object gets</span>
     <span class="doccomment">/// initialized exactly once and return it.</span>
     <span class="kw">fn</span> <span class="ident">init_type</span>() <span class="op">-&gt;</span> <span class="ident">NonNull</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">PyTypeObject</span><span class="op">&gt;</span>;
@@ -781,7 +787,7 @@
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">PyTypeObject</span> <span class="kw">for</span> <span class="ident">T</span>
+<span class="kw">unsafe</span> <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">PyTypeObject</span> <span class="kw">for</span> <span class="ident">T</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">PyTypeInfo</span> <span class="op">+</span> <span class="ident">PyMethodsProtocol</span> <span class="op">+</span> <span class="ident">PyObjectAlloc</span>,
 {
