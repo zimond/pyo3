@@ -585,7 +585,7 @@ mapping or number protocols. PyO3 defines separate traits for each of them. To p
 python object behavior you need to implement the specific trait for your struct. Important note,
 each protocol implementation block has to be annotated with <code>#[pyproto]</code> attribute.</p>
 <a class="header" href="#basic-object-customization" id="basic-object-customization"><h3>Basic object customization</h3></a>
-<p><a href="https://docs.rs/pyo3/0.6.0-alpha.4/class/basic/trait.PyObjectProtocol.html"><code>PyObjectProtocol</code></a> trait provide several basic customizations.</p>
+<p><a href="https://docs.rs/pyo3/0.6.0/class/basic/trait.PyObjectProtocol.html"><code>PyObjectProtocol</code></a> trait provide several basic customizations.</p>
 <a class="header" href="#attribute-access" id="attribute-access"><h4>Attribute access</h4></a>
 <p>To customize object attribute access define following methods:</p>
 <ul>
@@ -650,7 +650,7 @@ even on Python 2.7 where the Python spelling was <code>__nonzero__</code>.</p>
 <p>If your type owns references to other python objects, you will need to
 integrate with Python's garbage collector so that the GC is aware of
 those references.
-To do this, implement <a href="https://docs.rs/pyo3/0.6.0-alpha.4/class/gc/trait.PyGCProtocol.html"><code>PyGCProtocol</code></a> trait for your struct.
+To do this, implement <a href="https://docs.rs/pyo3/0.6.0/class/gc/trait.PyGCProtocol.html"><code>PyGCProtocol</code></a> trait for your struct.
 It includes two methods <code>__traverse__</code> and <code>__clear__</code>.
 These correspond to the slots <code>tp_traverse</code> and <code>tp_clear</code> in the Python C API.
 <code>__traverse__</code> must call <code>visit.call()</code> for each reference to another python object.
@@ -697,7 +697,7 @@ i.e. <code>#[pyclass(gc)]</code>. In that case instances of custom class partici
 collector, and it is possible to track them with <code>gc</code> module methods.</p>
 <a class="header" href="#iterator-types" id="iterator-types"><h3>Iterator Types</h3></a>
 <p>Iterators can be defined using the
-<a href="https://docs.rs/pyo3/0.6.0-alpha.4/class/iter/trait.PyIterProtocol.html"><code>PyIterProtocol</code></a> trait.
+<a href="https://docs.rs/pyo3/0.6.0/class/iter/trait.PyIterProtocol.html"><code>PyIterProtocol</code></a> trait.
 It includes two methods <code>__iter__</code> and <code>__next__</code>:</p>
 <ul>
 <li><code>fn __iter__(slf: PyRefMut&lt;Self&gt;) -&gt; PyResult&lt;impl IntoPyObject&gt;</code></li>
