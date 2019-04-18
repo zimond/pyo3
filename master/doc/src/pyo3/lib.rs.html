@@ -205,6 +205,9 @@
 <span id="205">205</span>
 <span id="206">206</span>
 <span id="207">207</span>
+<span id="208">208</span>
+<span id="209">209</span>
+<span id="210">210</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="attribute">#![<span class="ident">feature</span>(<span class="ident">specialization</span>)]</span>
 
@@ -338,12 +341,15 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">python</span>::{<span class="ident">prepare_freethreaded_python</span>, <span class="ident">Python</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">type_object</span>::{<span class="ident">PyObjectAlloc</span>, <span class="ident">PyRawObject</span>, <span class="ident">PyTypeInfo</span>};
 
-<span class="comment">// We need that reexport for wrap_function</span>
+<span class="comment">// Re-exported for wrap_function</span>
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">mashup</span>;
-<span class="comment">// We need that reexport for pymethods</span>
+<span class="comment">// Re-exported for pymethods</span>
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">inventory</span>;
+<span class="comment">// Re-exported for the `__wrap` functions</span>
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">libc</span>;
 
 <span class="doccomment">/// Raw ffi declarations for the c interface of python</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">ffi</span>;
