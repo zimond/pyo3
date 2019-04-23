@@ -140,7 +140,7 @@
 <p>CPython has an infamous GIL(Global Interpreter Lock) prevents developers
 getting true parallelism. With PyO3 you can release GIL when executing
 Rust code to achieve true parallelism.</p>
-<p>The <a href="https://docs.rs/pyo3/0.2.7/struct.Python.html#method.allow_threads"><code>Python::allow_threads</code></a>
+<p>The <a href="https://docs.rs/pyo3/0.7.0-alpha.1/struct.Python.html#method.allow_threads"><code>Python::allow_threads</code></a>
 method temporarily releases the GIL, thus allowing other Python threads to run.</p>
 <pre><code class="language-rust ignore">impl Python {
     pub fn allow_threads&lt;T, F&gt;(self, f: F) -&gt; T where F: Send + FnOnce() -&gt; T {}
