@@ -79,6 +79,7 @@
 <span id="79">79</span>
 <span id="80">80</span>
 <span id="81">81</span>
+<span id="82">82</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi3</span>::<span class="ident">code</span>::{<span class="ident">PyCodeObject</span>, <span class="ident">CO_MAXBLOCKS</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi3</span>::<span class="ident">object</span>::<span class="kw-2">*</span>;
@@ -139,6 +140,7 @@
 
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">windows</span>, <span class="ident">link</span>(<span class="ident">name</span> <span class="op">=</span> <span class="string">&quot;pythonXY&quot;</span>))]</span>
 <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> {
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">PyPy</span>, <span class="ident">link_name</span> <span class="op">=</span> <span class="string">&quot;PyPyFrame_New&quot;</span>)]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">PyFrame_New</span>(
         <span class="ident">tstate</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyThreadState</span>,
         <span class="ident">code</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">PyCodeObject</span>,

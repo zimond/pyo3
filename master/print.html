@@ -72,7 +72,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="get_started.html"><strong aria-hidden="true">1.</strong> Get Started</a></li><li><a href="conversions.html"><strong aria-hidden="true">2.</strong> Type Conversions</a></li><li><a href="exception.html"><strong aria-hidden="true">3.</strong> Python Exception</a></li><li><a href="module.html"><strong aria-hidden="true">4.</strong> Python Module</a></li><li><a href="function.html"><strong aria-hidden="true">5.</strong> Python Function</a></li><li><a href="class.html"><strong aria-hidden="true">6.</strong> Python Class</a></li><li><a href="parallelism.html"><strong aria-hidden="true">7.</strong> Parallelism</a></li><li><a href="debugging.html"><strong aria-hidden="true">8.</strong> Debugging</a></li><li><a href="advanced.html"><strong aria-hidden="true">9.</strong> Advanced Topics</a></li><li><a href="building-and-distribution.html"><strong aria-hidden="true">10.</strong> Building and Distribution</a></li><li><a href="rust-cpython.html"><strong aria-hidden="true">11.</strong> Appendix: Pyo3 and rust-cpython</a></li></ol>
+            <ol class="chapter"><li><a href="get_started.html"><strong aria-hidden="true">1.</strong> Get Started</a></li><li><a href="conversions.html"><strong aria-hidden="true">2.</strong> Type Conversions</a></li><li><a href="exception.html"><strong aria-hidden="true">3.</strong> Python Exception</a></li><li><a href="module.html"><strong aria-hidden="true">4.</strong> Python Module</a></li><li><a href="function.html"><strong aria-hidden="true">5.</strong> Python Function</a></li><li><a href="class.html"><strong aria-hidden="true">6.</strong> Python Class</a></li><li><a href="parallelism.html"><strong aria-hidden="true">7.</strong> Parallelism</a></li><li><a href="debugging.html"><strong aria-hidden="true">8.</strong> Debugging</a></li><li><a href="advanced.html"><strong aria-hidden="true">9.</strong> Advanced Topics</a></li><li><a href="building-and-distribution.html"><strong aria-hidden="true">10.</strong> Building and Distribution</a></li><li><a href="pypy.html"><strong aria-hidden="true">11.</strong> PyPy support</a></li><li><a href="rust-cpython.html"><strong aria-hidden="true">12.</strong> Appendix: Pyo3 and rust-cpython</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -1369,6 +1369,20 @@ export PYO3_CROSS_LIB_DIR=&quot;/home/pyo3/cross/sysroot/usr/lib&quot;
 
 cargo build --target armv7-unknown-linux-gnueabihf
 </code></pre>
+<a class="header" href="#pypy-support" id="pypy-support"><h1>PyPy Support</h1></a>
+<p>Using PyPy is supported via cpyext.</p>
+<p>Support is only provided for building rust extension for code running under PyPy. This means PyPy <strong>cannot</strong> be called from rust via cpyext. Note that there some differences in the ffi module between pypy and cpython.</p>
+<p>This is a limitation of cpyext and supported for embedding cpyext is not planned.</p>
+<p>Compilation against PyPy is done by exporting the <code>PYTHON_SYS_EXECUTABLE</code> to a pypy binary or by compiling in a PyPy virtualenv.</p>
+<p>For example, <code>PYTHON_SYS_EXECUTABLE=&quot;/path/to/pypy3&quot; /path/to/pypy3 setup.py install</code></p>
+<a class="header" href="#unsupported-features" id="unsupported-features"><h2>Unsupported Features</h2></a>
+<p>These are features currently supported by PyO3, but not yet implemented in cpyext.</p>
+<ul>
+<li>Complex number functions (<code>_Py_c_sum</code>, <code>_Py_c_sum</code> ..)</li>
+<li>Conversion to rust's i128, u128 types.</li>
+<li><code>PySequence_Count</code> (which is used to count number of element in array)</li>
+<li><code>PyDict_MergeFromSeq2</code> (used in <code>PyDict::from_sequence</code>)</li>
+</ul>
 <a class="header" href="#appendix-pyo3-and-rust-cpython" id="appendix-pyo3-and-rust-cpython"><h1>Appendix: PyO3 and rust-cpython</h1></a>
 <p>PyO3 began as fork of <a href="https://github.com/dgrunwald/rust-cpython">rust-cpython</a> when rust-cpython wasn't maintained. Over the time pyo3 has become fundamentally different from rust-cpython.</p>
 <p>This chapter is based on the discussion in <a href="https://github.com/PyO3/pyo3/issues/55">PyO3/pyo3#55</a>.</p>

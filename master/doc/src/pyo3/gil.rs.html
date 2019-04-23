@@ -501,6 +501,15 @@
 <span id="501">501</span>
 <span id="502">502</span>
 <span id="503">503</span>
+<span id="504">504</span>
+<span id="505">505</span>
+<span id="506">506</span>
+<span id="507">507</span>
+<span id="508">508</span>
+<span id="509">509</span>
+<span id="510">510</span>
+<span id="511">511</span>
+<span id="512">512</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 
@@ -546,6 +555,7 @@
         <span class="kw">if</span> <span class="ident">ffi</span>::<span class="ident">Py_IsInitialized</span>() <span class="op">!=</span> <span class="number">0</span> {
             <span class="comment">// If Python is already initialized, we expect Python threading to also be initialized,</span>
             <span class="comment">// as we can&#39;t make the existing Python main thread acquire the GIL.</span>
+            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">Py_3_7</span>))]</span>
             <span class="macro">assert_ne</span><span class="macro">!</span>(<span class="ident">ffi</span>::<span class="ident">PyEval_ThreadsInitialized</span>(), <span class="number">0</span>);
         } <span class="kw">else</span> {
             <span class="comment">// If Python isn&#39;t initialized yet, we expect that Python threading</span>
@@ -557,12 +567,20 @@
             <span class="comment">// Signal handling depends on the notion of a &#39;main thread&#39;, which doesn&#39;t exist in this case.</span>
             <span class="comment">// Note that the &#39;main thread&#39; notion in Python isn&#39;t documented properly;</span>
             <span class="comment">// and running Python without one is not officially supported.</span>
+
+            <span class="comment">// PyPy does not support the embedding API</span>
+            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">PyPy</span>))]</span>
             <span class="ident">ffi</span>::<span class="ident">Py_InitializeEx</span>(<span class="number">0</span>);
+
+            <span class="comment">// &gt; Changed in version 3.7: This function is now called by Py_Initialize(), so you don’t have</span>
+            <span class="comment">// &gt; to call it yourself anymore.</span>
+            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">Py_3_7</span>))]</span>
             <span class="ident">ffi</span>::<span class="ident">PyEval_InitThreads</span>();
             <span class="comment">// PyEval_InitThreads() will acquire the GIL,</span>
             <span class="comment">// but we don&#39;t want to hold it at this point</span>
             <span class="comment">// (it&#39;s not acquired in the other code paths)</span>
             <span class="comment">// So immediately release the GIL:</span>
+            <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">PyPy</span>))]</span>
             <span class="kw">let</span> <span class="ident">_thread_state</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">PyEval_SaveThread</span>();
             <span class="comment">// Note that the PyThreadState returned by PyEval_SaveThread is also held in TLS by the Python runtime,</span>
             <span class="comment">// and will be restored by PyGILState_Ensure.</span>
