@@ -72,7 +72,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="get_started.html"><strong aria-hidden="true">1.</strong> Get Started</a></li><li><a href="conversions.html"><strong aria-hidden="true">2.</strong> Type Conversions</a></li><li><a href="exception.html"><strong aria-hidden="true">3.</strong> Python Exception</a></li><li><a href="module.html"><strong aria-hidden="true">4.</strong> Python Module</a></li><li><a href="function.html"><strong aria-hidden="true">5.</strong> Python Function</a></li><li><a href="class.html"><strong aria-hidden="true">6.</strong> Python Class</a></li><li><a href="parallelism.html"><strong aria-hidden="true">7.</strong> Parallelism</a></li><li><a href="debugging.html"><strong aria-hidden="true">8.</strong> Debugging</a></li><li><a href="advanced.html"><strong aria-hidden="true">9.</strong> Advanced Topics</a></li><li><a href="building-and-distribution.html"><strong aria-hidden="true">10.</strong> Building and Distribution</a></li><li><a href="pypy.html"><strong aria-hidden="true">11.</strong> PyPy support</a></li><li><a href="rust-cpython.html"><strong aria-hidden="true">12.</strong> Appendix: Pyo3 and rust-cpython</a></li></ol>
+            <ol class="chapter"><li><a href="get_started.html"><strong aria-hidden="true">1.</strong> Get Started</a></li><li><a href="conversions.html"><strong aria-hidden="true">2.</strong> Type Conversions</a></li><li><a href="exception.html"><strong aria-hidden="true">3.</strong> Python Exception</a></li><li><a href="module.html"><strong aria-hidden="true">4.</strong> Python Module</a></li><li><a href="function.html"><strong aria-hidden="true">5.</strong> Python Function</a></li><li><a href="class.html"><strong aria-hidden="true">6.</strong> Python Class</a></li><li><a href="parallelism.html"><strong aria-hidden="true">7.</strong> Parallelism</a></li><li><a href="debugging.html"><strong aria-hidden="true">8.</strong> Debugging</a></li><li><a href="advanced.html"><strong aria-hidden="true">9.</strong> Advanced Topics</a></li><li><a href="building_and_distribution.html"><strong aria-hidden="true">10.</strong> Building and Distribution</a></li><li><a href="pypy.html"><strong aria-hidden="true">11.</strong> PyPy support</a></li><li><a href="rust_cpython.html"><strong aria-hidden="true">12.</strong> Appendix: PyO3 and rust-cpython</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -173,7 +173,6 @@ features = [&quot;extension-module&quot;]
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 use pyo3::prelude::*;
 use pyo3::wrap_pyfunction;
 
@@ -206,8 +205,7 @@ rustflags = [
 pyo3 = &quot;0.6&quot;
 </code></pre>
 <p>Example program displaying the value of <code>sys.version</code>:</p>
-<pre><pre class="playpen"><code class="language-rust"># extern crate pyo3;
-use pyo3::prelude::*;
+<pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
 use pyo3::types::IntoPyDict;
 
 fn main() -&gt; PyResult&lt;()&gt; {
@@ -250,8 +248,7 @@ provides two methods:</p>
 <li><code>call_method</code> - call specific method on the object.</li>
 </ul>
 <p>Both methods accept <code>args</code> and <code>kwargs</code> arguments.</p>
-<pre><pre class="playpen"><code class="language-rust"># extern crate pyo3;
-use pyo3::prelude::*;
+<pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
 use pyo3::types::{PyDict, PyTuple};
 
 struct SomeObject;
@@ -285,8 +282,7 @@ fn main() {
 </code></pre></pre>
 <p><code>kwargs</code> can by <code>None</code> or <code>Some(&amp;PyDict)</code>. You can use the
 <a href="https://docs.rs/pyo3/0.7.0-alpha.1/trait.IntoPyDict.html"><code>IntoPyDict</code></a> trait to convert other dict-like containers, e.g. <code>HashMap</code>, <code>BTreeMap</code> as well as tuples with up to 10 elements and <code>Vec</code>s where each element is a two element tuple.</p>
-<pre><pre class="playpen"><code class="language-rust"># extern crate pyo3;
-use pyo3::prelude::*;
+<pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
 use pyo3::types::{IntoPyDict, PyDict};
 use std::collections::HashMap;
 
@@ -332,7 +328,6 @@ fn main() {
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 use pyo3::create_exception;
 
 create_exception!(module, MyError, pyo3::exceptions::Exception);
@@ -342,8 +337,7 @@ create_exception!(module, MyError, pyo3::exceptions::Exception);
 <li><code>MyError</code> is the name of the new exception type.</li>
 </ul>
 <p>For example:</p>
-<pre><pre class="playpen"><code class="language-rust"># extern crate pyo3;
-use pyo3::prelude::*;
+<pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
 use pyo3::create_exception;
 use pyo3::types::IntoPyDict;
 use pyo3::exceptions::Exception;
@@ -361,8 +355,7 @@ fn main() {
 </code></pre></pre>
 <a class="header" href="#raise-an-exception" id="raise-an-exception"><h2>Raise an exception</h2></a>
 <p>To raise an exception, first you need to obtain an exception type and construct a new <a href="https://docs.rs/pyo3/0.7.0-alpha.1/struct.PyErr.html"><code>PyErr</code></a>, then call <a href="https://docs.rs/pyo3/0.7.0-alpha.1/struct.PyErr.html#method.restore"><code>PyErr::restore()</code></a> method to write the exception back to the Python interpreter's global state.</p>
-<pre><pre class="playpen"><code class="language-rust"># extern crate pyo3;
-use pyo3::{Python, PyErr};
+<pre><pre class="playpen"><code class="language-rust">use pyo3::{Python, PyErr};
 use pyo3::exceptions;
 
 fn main() {
@@ -383,7 +376,6 @@ have rust type as well.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 # use pyo3::exceptions;
 # use pyo3::prelude::*;
 # fn check_for_error() -&gt; bool {false}
@@ -398,8 +390,7 @@ fn my_func(arg: PyObject) -&gt; PyResult&lt;()&gt; {
 <a class="header" href="#check-exception-type" id="check-exception-type"><h2>Check exception type</h2></a>
 <p>Python has an <a href="https://docs.python.org/3/library/functions.html#isinstance"><code>isinstance</code></a> method to check object type,
 in <code>PyO3</code> there is a <a href="https://docs.rs/pyo3/0.7.0-alpha.1/struct.Python.html#method.is_instance"><code>Python::is_instance()</code></a> method which does the same thing.</p>
-<pre><pre class="playpen"><code class="language-rust"># extern crate pyo3;
-use pyo3::Python;
+<pre><pre class="playpen"><code class="language-rust">use pyo3::Python;
 use pyo3::types::{PyBool, PyList};
 
 fn main() {
@@ -413,8 +404,7 @@ fn main() {
 </code></pre></pre>
 <p><a href="https://docs.rs/pyo3/0.7.0-alpha.1/struct.Python.html#method.is_instance"><code>Python::is_instance()</code></a> calls the underlying <a href="https://docs.rs/pyo3/0.7.0-alpha.1/struct.PyType.html#method.is_instance"><code>PyType::is_instance</code></a> method to do the actual work.</p>
 <p>To check the type of an exception, you can simply do:</p>
-<pre><pre class="playpen"><code class="language-rust"># extern crate pyo3;
-# use pyo3::exceptions;
+<pre><pre class="playpen"><code class="language-rust"># use pyo3::exceptions;
 # use pyo3::prelude::*;
 # fn main() {
 # let gil = Python::acquire_gil();
@@ -457,7 +447,6 @@ types so <code>try!</code> macro or <code>?</code> operator can be used.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 use pyo3::prelude::*;
 
 fn parse_int(s: String) -&gt; PyResult&lt;usize&gt; {
@@ -472,7 +461,6 @@ for that exception.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 use pyo3::prelude::*;
 use pyo3::import_exception;
 
@@ -495,8 +483,7 @@ fn tell(file: PyObject) -&gt; PyResult&lt;u64&gt; {
 several standard library modules.</p>
 <a class="header" href="#python-module" id="python-module"><h1>Python Module</h1></a>
 <p>As shown in the Getting Started chapter, you can create a module as follows:</p>
-<pre><pre class="playpen"><code class="language-rust"># extern crate pyo3;
-use pyo3::prelude::*;
+<pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
 
 // add bindings to the generated python module
 // N.B: names: &quot;librust2py&quot; must be the name of the `.so` or `.pyd` file
@@ -537,7 +524,6 @@ print(rust2py.__doc__)
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 use pyo3::prelude::*;
 use pyo3::{wrap_pyfunction, wrap_pymodule};
 use pyo3::types::IntoPyDict;
@@ -572,8 +558,7 @@ fn nested_call() {
 <p>PyO3 supports two ways to define a function in python. Both require registering
 the function to a <a href="./module.html">module</a></p>
 <p>One way is defining the function in the module definition.</p>
-<pre><pre class="playpen"><code class="language-rust"># extern crate pyo3;
-use pyo3::prelude::*;
+<pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
 
 #[pymodule]
 fn rust2py(py: Python, m: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
@@ -594,8 +579,7 @@ fn rust2py(py: Python, m: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
 to the module using the <code>add_wrapped_to_module!</code> macro, which takes the module
 as first parameter, the function name as second and an instance of <code>Python</code>
 as third.</p>
-<pre><pre class="playpen"><code class="language-rust"># extern crate pyo3;
-use pyo3::prelude::*;
+<pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
 use pyo3::wrap_pyfunction;
 
 #[pyfunction]
@@ -624,7 +608,6 @@ of the doc-string.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 use pyo3::prelude::*;
 
 /// add(a, b, /)
@@ -655,7 +638,6 @@ Type:      builtin_function_or_method
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 # use pyo3::prelude::*;
 
 #[pyclass]
@@ -682,7 +664,6 @@ a Python object, and you are also holding the GIL.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 # use pyo3::prelude::*;
 # use pyo3::types::PyDict;
 #[pyclass]
@@ -703,7 +684,6 @@ dict.set_item(&quot;obj&quot;, obj).unwrap();
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 # use pyo3::prelude::*;
 #[pyclass]
 struct MyClass {
@@ -721,7 +701,6 @@ obj.num = 5;
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 # use pyo3::prelude::*;
 #[pyclass]
 struct MyClass {
@@ -758,7 +737,6 @@ attribute. Only the python <code>__new__</code> method can be specified, <code>_
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 # use pyo3::prelude::*;
 # use pyo3::PyRawObject;
 #[pyclass]
@@ -795,8 +773,7 @@ a derived class declared in Python.</li>
 <code>base</code> parameter for <code>class</code> needs to be used. Value is full path to base class.
 <code>new</code> method accepts <code>PyRawObject</code> object. <code>obj</code> instance must be initialized
 with value of custom class struct. Subclass must call parent's <code>new</code> method.</p>
-<pre><code class="language-rust ignore"># extern crate pyo3;
-# use pyo3::prelude::*;
+<pre><code class="language-rust ignore"># use pyo3::prelude::*;
 # use pyo3::PyRawObject;
 #[pyclass]
 struct BaseClass {
@@ -842,7 +819,6 @@ attributes. i.e.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 # use pyo3::prelude::*;
 # #[pyclass]
 # struct MyClass {
@@ -863,7 +839,9 @@ ways how to override name.</p>
 <p>If function name starts with <code>get_</code> or <code>set_</code> for getter or setter respectively.
 Descriptor name becomes function name with prefix removed. This is useful in case of
 rust's special keywords like <code>type</code>.</p>
-<pre><code class="language-rust ignore"># extern crate pyo3;
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
 # use pyo3::prelude::*;
 # #[pyclass]
 # struct MyClass {
@@ -884,11 +862,13 @@ impl MyClass {
         Ok(())
      }
 }
-</code></pre>
+#}</code></pre></pre>
 <p>In this case property <code>num</code> is defined. And it is available from python code as <code>self.num</code>.</p>
 <p>Also both <code>#[getter]</code> and <code>#[setter]</code> attributes accepts one parameter.
 If this parameter is specified, it is used as a property name. i.e.</p>
-<pre><code class="language-rust ignore"># extern crate pyo3;
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
 # use pyo3::prelude::*;
 # #[pyclass]
 # struct MyClass {
@@ -909,17 +889,19 @@ impl MyClass {
         Ok(())
      }
 }
-</code></pre>
+#}</code></pre></pre>
 <p>In this case the property <code>number</code> is defined and is available from python code as <code>self.number</code>.</p>
 <p>For simple cases you can also define getters and setters in your Rust struct field definition, for example:</p>
-<pre><code class="language-rust ignore"># extern crate pyo3;
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
 # use pyo3::prelude::*;
 #[pyclass]
 struct MyClass {
   #[pyo3(get, set)]
   num: i32
 }
-</code></pre>
+#}</code></pre></pre>
 <p>Then it is available from Python code as <code>self.num</code>.</p>
 <a class="header" href="#instance-methods" id="instance-methods"><h2>Instance methods</h2></a>
 <p>To define a python compatible method, <code>impl</code> block for struct has to be annotated with the
@@ -928,7 +910,6 @@ block with some variations, like descriptors, class method static methods, etc.<
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 # use pyo3::prelude::*;
 # #[pyclass]
 # struct MyClass {
@@ -955,7 +936,6 @@ get injected by method wrapper. i.e</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 # use pyo3::prelude::*;
 # #[pyclass]
 # struct MyClass {
@@ -977,7 +957,6 @@ with the <code>#[classmethod]</code> attribute.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 # use pyo3::prelude::*;
 # use pyo3::types::PyType;
 # #[pyclass]
@@ -1009,7 +988,6 @@ This may be the type object of a derived class.</li>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 # use pyo3::prelude::*;
 # #[pyclass]
 # struct MyClass {
@@ -1031,7 +1009,6 @@ the <code>#[call]</code> attribute. Arguments of the method are specified same a
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 # use pyo3::prelude::*;
 use pyo3::types::PyTuple;
 # #[pyclass]
@@ -1073,7 +1050,6 @@ code unmodified.</li>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 # use pyo3::prelude::*;
 use pyo3::types::{PyDict, PyTuple};
 #
@@ -1403,7 +1379,6 @@ cargo build --target armv7-unknown-linux-gnueabihf
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 use pyo3::prelude::*;
 use pyo3::PyRawObject;
 

@@ -72,7 +72,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="get_started.html"><strong aria-hidden="true">1.</strong> Get Started</a></li><li><a href="conversions.html"><strong aria-hidden="true">2.</strong> Type Conversions</a></li><li><a href="exception.html" class="active"><strong aria-hidden="true">3.</strong> Python Exception</a></li><li><a href="module.html"><strong aria-hidden="true">4.</strong> Python Module</a></li><li><a href="function.html"><strong aria-hidden="true">5.</strong> Python Function</a></li><li><a href="class.html"><strong aria-hidden="true">6.</strong> Python Class</a></li><li><a href="parallelism.html"><strong aria-hidden="true">7.</strong> Parallelism</a></li><li><a href="debugging.html"><strong aria-hidden="true">8.</strong> Debugging</a></li><li><a href="advanced.html"><strong aria-hidden="true">9.</strong> Advanced Topics</a></li><li><a href="building-and-distribution.html"><strong aria-hidden="true">10.</strong> Building and Distribution</a></li><li><a href="pypy.html"><strong aria-hidden="true">11.</strong> PyPy support</a></li><li><a href="rust-cpython.html"><strong aria-hidden="true">12.</strong> Appendix: Pyo3 and rust-cpython</a></li></ol>
+            <ol class="chapter"><li><a href="get_started.html"><strong aria-hidden="true">1.</strong> Get Started</a></li><li><a href="conversions.html"><strong aria-hidden="true">2.</strong> Type Conversions</a></li><li><a href="exception.html" class="active"><strong aria-hidden="true">3.</strong> Python Exception</a></li><li><a href="module.html"><strong aria-hidden="true">4.</strong> Python Module</a></li><li><a href="function.html"><strong aria-hidden="true">5.</strong> Python Function</a></li><li><a href="class.html"><strong aria-hidden="true">6.</strong> Python Class</a></li><li><a href="parallelism.html"><strong aria-hidden="true">7.</strong> Parallelism</a></li><li><a href="debugging.html"><strong aria-hidden="true">8.</strong> Debugging</a></li><li><a href="advanced.html"><strong aria-hidden="true">9.</strong> Advanced Topics</a></li><li><a href="building_and_distribution.html"><strong aria-hidden="true">10.</strong> Building and Distribution</a></li><li><a href="pypy.html"><strong aria-hidden="true">11.</strong> PyPy support</a></li><li><a href="rust_cpython.html"><strong aria-hidden="true">12.</strong> Appendix: PyO3 and rust-cpython</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -142,7 +142,6 @@
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 use pyo3::create_exception;
 
 create_exception!(module, MyError, pyo3::exceptions::Exception);
@@ -152,8 +151,7 @@ create_exception!(module, MyError, pyo3::exceptions::Exception);
 <li><code>MyError</code> is the name of the new exception type.</li>
 </ul>
 <p>For example:</p>
-<pre><pre class="playpen"><code class="language-rust"># extern crate pyo3;
-use pyo3::prelude::*;
+<pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
 use pyo3::create_exception;
 use pyo3::types::IntoPyDict;
 use pyo3::exceptions::Exception;
@@ -171,8 +169,7 @@ fn main() {
 </code></pre></pre>
 <a class="header" href="#raise-an-exception" id="raise-an-exception"><h2>Raise an exception</h2></a>
 <p>To raise an exception, first you need to obtain an exception type and construct a new <a href="https://docs.rs/pyo3/0.7.0-alpha.1/struct.PyErr.html"><code>PyErr</code></a>, then call <a href="https://docs.rs/pyo3/0.7.0-alpha.1/struct.PyErr.html#method.restore"><code>PyErr::restore()</code></a> method to write the exception back to the Python interpreter's global state.</p>
-<pre><pre class="playpen"><code class="language-rust"># extern crate pyo3;
-use pyo3::{Python, PyErr};
+<pre><pre class="playpen"><code class="language-rust">use pyo3::{Python, PyErr};
 use pyo3::exceptions;
 
 fn main() {
@@ -193,7 +190,6 @@ have rust type as well.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 # use pyo3::exceptions;
 # use pyo3::prelude::*;
 # fn check_for_error() -&gt; bool {false}
@@ -208,8 +204,7 @@ fn my_func(arg: PyObject) -&gt; PyResult&lt;()&gt; {
 <a class="header" href="#check-exception-type" id="check-exception-type"><h2>Check exception type</h2></a>
 <p>Python has an <a href="https://docs.python.org/3/library/functions.html#isinstance"><code>isinstance</code></a> method to check object type,
 in <code>PyO3</code> there is a <a href="https://docs.rs/pyo3/0.7.0-alpha.1/struct.Python.html#method.is_instance"><code>Python::is_instance()</code></a> method which does the same thing.</p>
-<pre><pre class="playpen"><code class="language-rust"># extern crate pyo3;
-use pyo3::Python;
+<pre><pre class="playpen"><code class="language-rust">use pyo3::Python;
 use pyo3::types::{PyBool, PyList};
 
 fn main() {
@@ -223,8 +218,7 @@ fn main() {
 </code></pre></pre>
 <p><a href="https://docs.rs/pyo3/0.7.0-alpha.1/struct.Python.html#method.is_instance"><code>Python::is_instance()</code></a> calls the underlying <a href="https://docs.rs/pyo3/0.7.0-alpha.1/struct.PyType.html#method.is_instance"><code>PyType::is_instance</code></a> method to do the actual work.</p>
 <p>To check the type of an exception, you can simply do:</p>
-<pre><pre class="playpen"><code class="language-rust"># extern crate pyo3;
-# use pyo3::exceptions;
+<pre><pre class="playpen"><code class="language-rust"># use pyo3::exceptions;
 # use pyo3::prelude::*;
 # fn main() {
 # let gil = Python::acquire_gil();
@@ -267,7 +261,6 @@ types so <code>try!</code> macro or <code>?</code> operator can be used.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 use pyo3::prelude::*;
 
 fn parse_int(s: String) -&gt; PyResult&lt;usize&gt; {
@@ -282,7 +275,6 @@ for that exception.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 use pyo3::prelude::*;
 use pyo3::import_exception;
 

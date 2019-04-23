@@ -72,7 +72,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="get_started.html"><strong aria-hidden="true">1.</strong> Get Started</a></li><li><a href="conversions.html"><strong aria-hidden="true">2.</strong> Type Conversions</a></li><li><a href="exception.html"><strong aria-hidden="true">3.</strong> Python Exception</a></li><li><a href="module.html"><strong aria-hidden="true">4.</strong> Python Module</a></li><li><a href="function.html"><strong aria-hidden="true">5.</strong> Python Function</a></li><li><a href="class.html" class="active"><strong aria-hidden="true">6.</strong> Python Class</a></li><li><a href="parallelism.html"><strong aria-hidden="true">7.</strong> Parallelism</a></li><li><a href="debugging.html"><strong aria-hidden="true">8.</strong> Debugging</a></li><li><a href="advanced.html"><strong aria-hidden="true">9.</strong> Advanced Topics</a></li><li><a href="building-and-distribution.html"><strong aria-hidden="true">10.</strong> Building and Distribution</a></li><li><a href="pypy.html"><strong aria-hidden="true">11.</strong> PyPy support</a></li><li><a href="rust-cpython.html"><strong aria-hidden="true">12.</strong> Appendix: Pyo3 and rust-cpython</a></li></ol>
+            <ol class="chapter"><li><a href="get_started.html"><strong aria-hidden="true">1.</strong> Get Started</a></li><li><a href="conversions.html"><strong aria-hidden="true">2.</strong> Type Conversions</a></li><li><a href="exception.html"><strong aria-hidden="true">3.</strong> Python Exception</a></li><li><a href="module.html"><strong aria-hidden="true">4.</strong> Python Module</a></li><li><a href="function.html"><strong aria-hidden="true">5.</strong> Python Function</a></li><li><a href="class.html" class="active"><strong aria-hidden="true">6.</strong> Python Class</a></li><li><a href="parallelism.html"><strong aria-hidden="true">7.</strong> Parallelism</a></li><li><a href="debugging.html"><strong aria-hidden="true">8.</strong> Debugging</a></li><li><a href="advanced.html"><strong aria-hidden="true">9.</strong> Advanced Topics</a></li><li><a href="building_and_distribution.html"><strong aria-hidden="true">10.</strong> Building and Distribution</a></li><li><a href="pypy.html"><strong aria-hidden="true">11.</strong> PyPy support</a></li><li><a href="rust_cpython.html"><strong aria-hidden="true">12.</strong> Appendix: PyO3 and rust-cpython</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -143,7 +143,6 @@
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 # use pyo3::prelude::*;
 
 #[pyclass]
@@ -170,7 +169,6 @@ a Python object, and you are also holding the GIL.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 # use pyo3::prelude::*;
 # use pyo3::types::PyDict;
 #[pyclass]
@@ -191,7 +189,6 @@ dict.set_item(&quot;obj&quot;, obj).unwrap();
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 # use pyo3::prelude::*;
 #[pyclass]
 struct MyClass {
@@ -209,7 +206,6 @@ obj.num = 5;
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 # use pyo3::prelude::*;
 #[pyclass]
 struct MyClass {
@@ -246,7 +242,6 @@ attribute. Only the python <code>__new__</code> method can be specified, <code>_
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 # use pyo3::prelude::*;
 # use pyo3::PyRawObject;
 #[pyclass]
@@ -283,8 +278,7 @@ a derived class declared in Python.</li>
 <code>base</code> parameter for <code>class</code> needs to be used. Value is full path to base class.
 <code>new</code> method accepts <code>PyRawObject</code> object. <code>obj</code> instance must be initialized
 with value of custom class struct. Subclass must call parent's <code>new</code> method.</p>
-<pre><code class="language-rust ignore"># extern crate pyo3;
-# use pyo3::prelude::*;
+<pre><code class="language-rust ignore"># use pyo3::prelude::*;
 # use pyo3::PyRawObject;
 #[pyclass]
 struct BaseClass {
@@ -330,7 +324,6 @@ attributes. i.e.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 # use pyo3::prelude::*;
 # #[pyclass]
 # struct MyClass {
@@ -351,7 +344,9 @@ ways how to override name.</p>
 <p>If function name starts with <code>get_</code> or <code>set_</code> for getter or setter respectively.
 Descriptor name becomes function name with prefix removed. This is useful in case of
 rust's special keywords like <code>type</code>.</p>
-<pre><code class="language-rust ignore"># extern crate pyo3;
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
 # use pyo3::prelude::*;
 # #[pyclass]
 # struct MyClass {
@@ -372,11 +367,13 @@ impl MyClass {
         Ok(())
      }
 }
-</code></pre>
+#}</code></pre></pre>
 <p>In this case property <code>num</code> is defined. And it is available from python code as <code>self.num</code>.</p>
 <p>Also both <code>#[getter]</code> and <code>#[setter]</code> attributes accepts one parameter.
 If this parameter is specified, it is used as a property name. i.e.</p>
-<pre><code class="language-rust ignore"># extern crate pyo3;
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
 # use pyo3::prelude::*;
 # #[pyclass]
 # struct MyClass {
@@ -397,17 +394,19 @@ impl MyClass {
         Ok(())
      }
 }
-</code></pre>
+#}</code></pre></pre>
 <p>In this case the property <code>number</code> is defined and is available from python code as <code>self.number</code>.</p>
 <p>For simple cases you can also define getters and setters in your Rust struct field definition, for example:</p>
-<pre><code class="language-rust ignore"># extern crate pyo3;
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
 # use pyo3::prelude::*;
 #[pyclass]
 struct MyClass {
   #[pyo3(get, set)]
   num: i32
 }
-</code></pre>
+#}</code></pre></pre>
 <p>Then it is available from Python code as <code>self.num</code>.</p>
 <a class="header" href="#instance-methods" id="instance-methods"><h2>Instance methods</h2></a>
 <p>To define a python compatible method, <code>impl</code> block for struct has to be annotated with the
@@ -416,7 +415,6 @@ block with some variations, like descriptors, class method static methods, etc.<
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 # use pyo3::prelude::*;
 # #[pyclass]
 # struct MyClass {
@@ -443,7 +441,6 @@ get injected by method wrapper. i.e</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 # use pyo3::prelude::*;
 # #[pyclass]
 # struct MyClass {
@@ -465,7 +462,6 @@ with the <code>#[classmethod]</code> attribute.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 # use pyo3::prelude::*;
 # use pyo3::types::PyType;
 # #[pyclass]
@@ -497,7 +493,6 @@ This may be the type object of a derived class.</li>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 # use pyo3::prelude::*;
 # #[pyclass]
 # struct MyClass {
@@ -519,7 +514,6 @@ the <code>#[call]</code> attribute. Arguments of the method are specified same a
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 # use pyo3::prelude::*;
 use pyo3::types::PyTuple;
 # #[pyclass]
@@ -561,7 +555,6 @@ code unmodified.</li>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
-# extern crate pyo3;
 # use pyo3::prelude::*;
 use pyo3::types::{PyDict, PyTuple};
 #
