@@ -658,6 +658,24 @@
 <span id="658">658</span>
 <span id="659">659</span>
 <span id="660">660</span>
+<span id="661">661</span>
+<span id="662">662</span>
+<span id="663">663</span>
+<span id="664">664</span>
+<span id="665">665</span>
+<span id="666">666</span>
+<span id="667">667</span>
+<span id="668">668</span>
+<span id="669">669</span>
+<span id="670">670</span>
+<span id="671">671</span>
+<span id="672">672</span>
+<span id="673">673</span>
+<span id="674">674</span>
+<span id="675">675</span>
+<span id="676">676</span>
+<span id="677">677</span>
+<span id="678">678</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 
@@ -686,6 +704,11 @@
         } <span class="kw">else</span> {
             <span class="prelude-val">Ok</span>(<span class="ident">v</span> <span class="kw">as</span> <span class="ident">isize</span>)
         }
+    }
+
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_empty</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">len</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">l</span><span class="op">|</span> <span class="ident">l</span> <span class="op">==</span> <span class="number">0</span>)
     }
 
     <span class="doccomment">/// Return the concatenation of o1 and o2. Equivalent to python `o1 + o2`</span>
@@ -1317,6 +1340,19 @@
         <span class="kw">let</span> <span class="ident">type_ptr</span> <span class="op">=</span> <span class="ident">seq</span>.<span class="ident">as_ref</span>();
         <span class="kw">let</span> <span class="ident">seq_from</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="op">&lt;</span><span class="ident">PySequence</span> <span class="kw">as</span> <span class="ident">PyTryFrom</span><span class="op">&gt;</span>::<span class="ident">try_from_unchecked</span>(<span class="ident">type_ptr</span>) };
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">seq_from</span>.<span class="ident">list</span>().<span class="ident">is_ok</span>());
+    }
+
+    <span class="attribute">#[<span class="ident">test</span>]</span>
+    <span class="kw">fn</span> <span class="ident">test_is_empty</span>() {
+        <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
+        <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
+        <span class="kw">let</span> <span class="ident">list</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="number">1</span>].<span class="ident">to_object</span>(<span class="ident">py</span>);
+        <span class="kw">let</span> <span class="ident">seq</span> <span class="op">=</span> <span class="ident">list</span>.<span class="ident">cast_as</span>::<span class="op">&lt;</span><span class="ident">PySequence</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">seq</span>.<span class="ident">is_empty</span>().<span class="ident">unwrap</span>(), <span class="bool-val">false</span>);
+        <span class="kw">let</span> <span class="ident">vec</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u32</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
+        <span class="kw">let</span> <span class="ident">empty_list</span> <span class="op">=</span> <span class="ident">vec</span>.<span class="ident">to_object</span>(<span class="ident">py</span>);
+        <span class="kw">let</span> <span class="ident">empty_seq</span> <span class="op">=</span> <span class="ident">empty_list</span>.<span class="ident">cast_as</span>::<span class="op">&lt;</span><span class="ident">PySequence</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>();
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">empty_seq</span>.<span class="ident">is_empty</span>().<span class="ident">unwrap</span>(), <span class="bool-val">true</span>);
     }
 }
 </pre></div>

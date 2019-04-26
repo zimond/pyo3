@@ -626,7 +626,7 @@
     <span class="ident">T</span>: <span class="ident">PySequenceProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>,
 {
     <span class="kw">fn</span> <span class="ident">tp_as_sequence</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">PySequenceMethods</span><span class="op">&gt;</span> {
-        <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="ident">ffi</span>::<span class="ident">PySequenceMethods</span> {
+        <span class="prelude-val">Some</span>(<span class="ident">ffi</span>::<span class="ident">PySequenceMethods</span> {
             <span class="ident">sq_length</span>: <span class="self">Self</span>::<span class="ident">sq_length</span>(),
             <span class="ident">sq_concat</span>: <span class="self">Self</span>::<span class="ident">sq_concat</span>(),
             <span class="ident">sq_repeat</span>: <span class="self">Self</span>::<span class="ident">sq_repeat</span>(),
@@ -637,7 +637,7 @@
             <span class="ident">sq_contains</span>: <span class="self">Self</span>::<span class="ident">sq_contains</span>(),
             <span class="ident">sq_inplace_concat</span>: <span class="self">Self</span>::<span class="ident">sq_inplace_concat</span>(),
             <span class="ident">sq_inplace_repeat</span>: <span class="self">Self</span>::<span class="ident">sq_inplace_repeat</span>(),
-        });
+        })
     }
 }
 

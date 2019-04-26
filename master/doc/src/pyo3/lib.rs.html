@@ -226,6 +226,7 @@
 <span id="226">226</span>
 <span id="227">227</span>
 <span id="228">228</span>
+<span id="229">229</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="attribute">#![<span class="ident">feature</span>(<span class="ident">specialization</span>)]</span>
 
@@ -362,12 +363,13 @@
 <span class="macro">doctest</span><span class="macro">!</span>(<span class="string">&quot;../guide/src/get_started.md&quot;</span>, <span class="ident">guide_get_started_md</span>);
 <span class="macro">doctest</span><span class="macro">!</span>(<span class="string">&quot;../guide/src/module.md&quot;</span>, <span class="ident">guide_module_md</span>);
 <span class="macro">doctest</span><span class="macro">!</span>(<span class="string">&quot;../guide/src/parallelism.md&quot;</span>, <span class="ident">guide_parallelism_md</span>);
+<span class="macro">doctest</span><span class="macro">!</span>(<span class="string">&quot;../guide/src/pypy.md&quot;</span>, <span class="ident">guide_pypy_md</span>);
 <span class="macro">doctest</span><span class="macro">!</span>(<span class="string">&quot;../guide/src/rust_cpython.md&quot;</span>, <span class="ident">guide_rust_cpython_md</span>);
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">class</span>::<span class="kw-2">*</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">conversion</span>::{
-    <span class="ident">AsPyPointer</span>, <span class="ident">FromPy</span>, <span class="ident">FromPyObject</span>, <span class="ident">IntoPy</span>, <span class="ident">IntoPyObject</span>, <span class="ident">IntoPyPointer</span>, <span class="ident">PyTryFrom</span>, <span class="ident">PyTryInto</span>,
-    <span class="ident">ToBorrowedObject</span>, <span class="ident">ToPyObject</span>,
+    <span class="ident">AsPyPointer</span>, <span class="ident">FromPy</span>, <span class="ident">FromPyObject</span>, <span class="ident">FromPyPointer</span>, <span class="ident">IntoPy</span>, <span class="ident">IntoPyObject</span>, <span class="ident">IntoPyPointer</span>,
+    <span class="ident">PyTryFrom</span>, <span class="ident">PyTryInto</span>, <span class="ident">ToBorrowedObject</span>, <span class="ident">ToPyObject</span>,
 };
 <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">err</span>::{<span class="ident">PyDowncastError</span>, <span class="ident">PyErr</span>, <span class="ident">PyErrArguments</span>, <span class="ident">PyErrValue</span>, <span class="ident">PyResult</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">gil</span>::{<span class="ident">init_once</span>, <span class="ident">GILGuard</span>, <span class="ident">GILPool</span>};
