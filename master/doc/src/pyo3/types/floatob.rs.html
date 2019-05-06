@@ -120,7 +120,7 @@
 
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">err</span>::<span class="ident">PyErr</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">instance</span>::{<span class="ident">Py</span>, <span class="ident">PyNativeType</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">instance</span>::<span class="ident">PyNativeType</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">object</span>::<span class="ident">PyObject</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">objectprotocol</span>::<span class="ident">ObjectProtocol</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">PyAny</span>;
@@ -144,8 +144,8 @@
 
 <span class="kw">impl</span> <span class="ident">PyFloat</span> {
     <span class="doccomment">/// Creates a new Python `float` object.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">_py</span>: <span class="ident">Python</span>, <span class="ident">val</span>: <span class="ident">c_double</span>) <span class="op">-&gt;</span> <span class="ident">Py</span><span class="op">&lt;</span><span class="ident">PyFloat</span><span class="op">&gt;</span> {
-        <span class="kw">unsafe</span> { <span class="ident">Py</span>::<span class="ident">from_owned_ptr_or_panic</span>(<span class="ident">ffi</span>::<span class="ident">PyFloat_FromDouble</span>(<span class="ident">val</span>)) }
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>(<span class="ident">py</span>: <span class="ident">Python</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>, <span class="ident">val</span>: <span class="ident">c_double</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">PyFloat</span> {
+        <span class="kw">unsafe</span> { <span class="ident">py</span>.<span class="ident">from_owned_ptr</span>(<span class="ident">ffi</span>::<span class="ident">PyFloat_FromDouble</span>(<span class="ident">val</span>)) }
     }
 
     <span class="doccomment">/// Gets the value of this float.</span>
