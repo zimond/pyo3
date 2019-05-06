@@ -138,20 +138,20 @@
                     <main>
                         <a class="header" href="#debugging" id="debugging"><h1>Debugging</h1></a>
 <a class="header" href="#macros" id="macros"><h2>Macros</h2></a>
-<p>PyO3's attributes, <code>#[pyclass]</code>, <code>#[pymodule]</code>, etc. are <a href="https://doc.rust-lang.org/unstable-book/language-features/proc-macro.html">procedural macros</a>, which means that rewrite the source of the annotated item. You can view the generated source with the following command, which also expands a few other things:</p>
+<p>PyO3's attributes (<code>#[pyclass]</code>, <code>#[pymodule]</code>, etc.) are <a href="https://doc.rust-lang.org/reference/procedural-macros.html">procedural macros</a>, which means that they rewrite the source of the annotated item. You can view the generated source with the following command, which also expands a few other things:</p>
 <pre><code class="language-bash">cargo rustc --profile=check -- -Z unstable-options --pretty=expanded &gt; expanded.rs; rustfmt expanded.rs
 </code></pre>
 <p>(You might need to install <a href="https://github.com/rust-lang-nursery/rustfmt">rustfmt</a> if you don't already have it.)</p>
-<p>You can also debug classic <code>!</code>-macros by adding -Z trace-macros`:</p>
+<p>You can also debug classic <code>!</code>-macros by adding <code>-Z trace-macros</code>:</p>
 <pre><code class="language-bash">cargo rustc --profile=check -- -Z unstable-options --pretty=expanded -Z trace-macros &gt; expanded.rs; rustfmt expanded.rs
 </code></pre>
 <p>See <a href="https://github.com/dtolnay/cargo-expand">cargo expand</a> for a more elaborate version of those commands.</p>
 <a class="header" href="#running-with-valgrind" id="running-with-valgrind"><h2>Running with Valgrind</h2></a>
 <p>Valgrind is a tool to detect memory management bugs such as memory leaks.</p>
-<p>You first need to install a debug build of python, otherwise valgrind won't produce usable results. In ubuntu there's e.g. a <code>python3-dbg</code> package.</p>
-<p>Activate an environment with the debug interpreter and recompile. If you're on linux, use <code>ldd</code> with the name of you're binary and check that you're linking e.g. <code>libpython3.6dm.so.1.0</code> instead of <code>libpython3.6m.so.1.0</code>.</p>
+<p>You first need to install a debug build of Python, otherwise Valgrind won't produce usable results. In Ubuntu there's e.g. a <code>python3-dbg</code> package.</p>
+<p>Activate an environment with the debug interpreter and recompile. If you're on Linux, use <code>ldd</code> with the name of your binary and check that you're linking e.g. <code>libpython3.6dm.so.1.0</code> instead of <code>libpython3.6m.so.1.0</code>.</p>
 <p><a href="https://raw.githubusercontent.com/python/cpython/master/Misc/valgrind-python.supp">Download the suppressions file for cpython</a>.</p>
-<p>Run valgrind with <code>valgrind --suppressions=valgrind-python.supp ./my-command --with-options</code></p>
+<p>Run Valgrind with <code>valgrind --suppressions=valgrind-python.supp ./my-command --with-options</code></p>
 <a class="header" href="#getting-a-stacktrace" id="getting-a-stacktrace"><h2>Getting a stacktrace</h2></a>
 <p>The best start to investigate a crash such as an segmentation fault is a backtrace.</p>
 <ul>

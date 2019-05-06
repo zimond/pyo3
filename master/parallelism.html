@@ -137,25 +137,24 @@
                 <div id="content" class="content">
                     <main>
                         <a class="header" href="#parallelism" id="parallelism"><h1>Parallelism</h1></a>
-<p>CPython has an infamous GIL(Global Interpreter Lock) prevents developers
-getting true parallelism. With PyO3 you can release GIL when executing
-Rust code to achieve true parallelism.</p>
-<p>The <a href="https://docs.rs/pyo3/0.7.0-alpha.1/struct.Python.html#method.allow_threads"><code>Python::allow_threads</code></a>
+<p>CPython has the infamous GIL (Global Interpreter Lock), which prevents developers
+from getting true parallelism when running pure Python code. With PyO3, you can
+release the GIL when executing Rust code to achieve true parallelism.</p>
+<p>The <a href="https://docs.rs/pyo3/0.7.0-alpha.1/pyo3/struct.Python.html#method.allow_threads"><code>Python::allow_threads</code></a>
 method temporarily releases the GIL, thus allowing other Python threads to run.</p>
 <pre><code class="language-rust ignore">impl Python {
     pub fn allow_threads&lt;T, F&gt;(self, f: F) -&gt; T where F: Send + FnOnce() -&gt; T {}
 }
 </code></pre>
 <p>Let's take a look at our <a href="https://github.com/PyO3/pyo3/blob/master/examples/word-count/src/lib.rs">word-count</a> example,
-we have a <code>wc_parallel</code> function utilize the <a href="https://github.com/nikomatsakis/rayon">rayon</a> crate to count words in parallel.</p>
+where we have a <code>wc_parallel</code> function that utilizes the <a href="https://github.com/nikomatsakis/rayon">rayon</a> crate to count words in parallel.</p>
 <pre><code class="language-rust ignore">fn wc_parallel(lines: &amp;str, search: &amp;str) -&gt; i32 {
     lines.par_lines()
          .map(|line| wc_line(line, search))
          .sum()
 }
 </code></pre>
-<p>Then in the Python bridge, we have a function <code>search</code> exposed to Python runtime which calls <code>wc_parallel</code> inside
-<code>Python::allow_threads</code> method to enable true parallelism:</p>
+<p>Then in the Python bridge, we have a function <code>search</code> exposed to the Python runtime which calls <code>wc_parallel</code> inside a closure passed to <code>Python::allow_threads</code> to enable true parallelism:</p>
 <pre><code class="language-rust ignore">#[pymodule]
 fn word_count(py: Python, m: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
 
@@ -180,7 +179,7 @@ We are using <code>pytest-benchmark</code> to benchmark three word count functio
 <li><a href="https://github.com/PyO3/pyo3/blob/master/examples/word-count/src/lib.rs#L64">Rust sequential version</a></li>
 <li><a href="https://github.com/PyO3/pyo3/blob/master/examples/word-count/src/lib.rs#L54">Rust parallel version</a></li>
 </ol>
-<p>Benchmark script can be found <a href="https://github.com/PyO3/pyo3/blob/master/examples/word-count/tests/test_word_count.py">here</a>,
+<p>The benchmark script can be found <a href="https://github.com/PyO3/pyo3/blob/master/examples/word-count/tests/test_word_count.py">here</a>,
 then we can run <code>pytest tests</code> to benchmark them.</p>
 <p>On MacBook Pro (Retina, 15-inch, Mid 2015) the benchmark gives:</p>
 <p><img src="https://user-images.githubusercontent.com/1556054/28604608-81bd6d22-71fe-11e7-8a2c-c3cf3bd0f622.png" alt="Benchmark Result" /></p>

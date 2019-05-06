@@ -136,9 +136,9 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="#python-class" id="python-class"><h1>Python Class</h1></a>
+                        <a class="header" href="#python-classes" id="python-classes"><h1>Python Classes</h1></a>
 <a class="header" href="#define-new-class" id="define-new-class"><h2>Define new class</h2></a>
-<p>To define a custom python class, a rust struct needs to be annotated with the
+<p>To define a custom Python class, a Rust struct needs to be annotated with the
 <code>#[pyclass]</code> attribute.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -161,9 +161,9 @@ struct MyClass {
 a Python object, and you are also holding the GIL.</p>
 <p>You can get an instance of <code>PyRef</code> by <code>PyRef::new</code>, which does 3 things:</p>
 <ol>
-<li>Allocate a Python object in the Python heap</li>
-<li>Copies the rust struct into the Python object</li>
-<li>Returns a reference of it</li>
+<li>Allocates a Python object in the Python heap</li>
+<li>Copies the Rust struct into the Python object</li>
+<li>Returns a reference to it</li>
 </ol>
 <p>You can use <code>PyRef</code> just like <code>&amp;T</code>, because it implements <code>Deref&lt;Target=T&gt;</code>.</p>
 <pre><pre class="playpen"><code class="language-rust">
@@ -201,7 +201,7 @@ let mut obj = PyRefMut::new(py, MyClass { num: 3, debug: true }).unwrap();
 obj.num = 5;
 #}</code></pre></pre>
 <a class="header" href="#py" id="py"><h3><code>Py</code></h3></a>
-<p><code>Py</code> is a object wrapper which stores an object longer than the GIL lifetime.</p>
+<p><code>Py</code> is an object wrapper which stores an object longer than the GIL lifetime.</p>
 <p>You can use it to avoid lifetime problems.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -221,24 +221,23 @@ let obj = return_myclass();
 assert_eq!(obj.as_ref(gil.python()).num, 1);
 #}</code></pre></pre>
 <a class="header" href="#customizing-the-class" id="customizing-the-class"><h2>Customizing the class</h2></a>
-<p>The <code>#[pyclass]</code> macro accepts following parameters:</p>
+<p>The <code>#[pyclass]</code> macro accepts the following parameters:</p>
 <ul>
-<li><code>name=XXX</code> - Set the class name shown in python code. By default struct name is used as a class name.</li>
-<li><code>freelist=XXX</code> - <code>freelist</code> parameter add support of free allocation list to custom class.
+<li><code>name=XXX</code> - Set the class name shown in Python code. By default, the struct name is used as the class name.</li>
+<li><code>freelist=XXX</code> - The <code>freelist</code> parameter adds support of free allocation list to custom class.
 The performance improvement applies to types that are often created and deleted in a row,
-so that they can benefit from a freelist. <code>XXX</code> is a number of items for free list.</li>
-<li><code>gc</code> - Classes with the <code>gc</code> parameter
-participate in python garbage collector. If a custom class contains references to other
-python object that can be collected, the <code>PyGCProtocol</code> trait has to be implemented.</li>
-<li><code>weakref</code> - adds support for python weak references</li>
-<li><code>extends=BaseType</code> - use a custom base class. The base BaseType must implement <code>PyTypeInfo</code>.</li>
-<li><code>subclass</code> - Allows Python classes to inherit from this class</li>
-<li><code>dict</code> - adds <code>__dict__</code> support, the instances of this type have a dictionary containing instance variables.</li>
+so that they can benefit from a freelist. <code>XXX</code> is a number of items for the free list.</li>
+<li><code>gc</code> - Classes with the <code>gc</code> parameter participate in Python garbage collection.
+If a custom class contains references to other Python objects that can be collected, the <code>PyGCProtocol</code> trait has to be implemented.</li>
+<li><code>weakref</code> - Adds support for Python weak references.</li>
+<li><code>extends=BaseType</code> - Use a custom base class. The base <code>BaseType</code> must implement <code>PyTypeInfo</code>.</li>
+<li><code>subclass</code> - Allows Python classes to inherit from this class.</li>
+<li><code>dict</code> - Adds <code>__dict__</code> support, so that the instances of this type have a dictionary containing arbitrary instance variables.</li>
 </ul>
 <a class="header" href="#constructor" id="constructor"><h2>Constructor</h2></a>
-<p>By default it is not possible to create an instance of a custom class from python code.
-To declare a constructor, you need to define a class method and annotate it with <code>#[new]</code>
-attribute. Only the python <code>__new__</code> method can be specified, <code>__init__</code> is not available.</p>
+<p>By default it is not possible to create an instance of a custom class from Python code.
+To declare a constructor, you need to define a method and annotate it with the <code>#[new]</code>
+attribute. Only Python's <code>__new__</code> method can be specified, <code>__init__</code> is not available.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -267,17 +266,17 @@ impl MyClass {
 <li>If no method marked with <code>#[new]</code> is declared, object instances can only be created
 from Rust, but not from Python.</li>
 <li>The first parameter is the raw object and the custom <code>new</code> method must initialize the object
-with an instance of the struct using <code>init</code> method. The type of the object may be the type object of
+with an instance of the struct using the <code>init</code> method. The type of the object may be the type object of
 a derived class declared in Python.</li>
-<li>The first parameter implicitly has type <code>&amp;PyRawObject</code>.</li>
-<li>For details on <code>parameter-list</code>, see the documentation of <code>Method arguments</code> section.</li>
-<li>The return type must be <code>PyResult&lt;T&gt;</code> for some <code>T</code> that implements <code>IntoPyObject</code>. Usually, <code>T</code> will be <code>MyType</code>.</li>
+<li>The first parameter must have type <code>&amp;PyRawObject</code>.</li>
+<li>For details on the parameter list, see the <code>Method arguments</code> section below.</li>
+<li>The return value must be <code>T</code> or <code>PyResult&lt;T&gt;</code> where <code>T</code> is ignored, so it can
+be just <code>()</code> as in the example above.</li>
 </ul>
 <a class="header" href="#inheritance" id="inheritance"><h2>Inheritance</h2></a>
-<p>By default <code>PyObject</code> is used as default base class. To override default base class
-<code>base</code> parameter for <code>class</code> needs to be used. Value is full path to base class.
-<code>new</code> method accepts <code>PyRawObject</code> object. <code>obj</code> instance must be initialized
-with value of custom class struct. Subclass must call parent's <code>new</code> method.</p>
+<p>By default, <code>PyObject</code> is used as the base class. To override this default,
+use the <code>extends</code> parameter for <code>pyclass</code> with the full path to the base class.
+The <code>new</code> method of subclasses must call their parent's <code>new</code> method.</p>
 <pre><code class="language-rust ignore"># use pyo3::prelude::*;
 # use pyo3::PyRawObject;
 #[pyclass]
@@ -289,7 +288,7 @@ struct BaseClass {
 impl BaseClass {
    #[new]
    fn new(obj: &amp;PyRawObject) {
-       obj.init(BaseClass{ val1: 10 });
+       obj.init(BaseClass { val1: 10 });
    }
 
    pub fn method(&amp;self) -&gt; PyResult&lt;()&gt; {
@@ -306,7 +305,7 @@ struct SubClass {
 impl SubClass {
    #[new]
    fn new(obj: &amp;PyRawObject) {
-       obj.init(SubClass{ val2: 10 });
+       obj.init(SubClass { val2: 10 });
        BaseClass::new(obj);
    }
 
@@ -315,12 +314,11 @@ impl SubClass {
    }
 }
 </code></pre>
-<p><code>ObjectProtocol</code> trait provides <code>get_base()</code> method. It returns reference to instance of
-base class.</p>
+<p>The <code>ObjectProtocol</code> trait provides a <code>get_base()</code> method, which returns a reference
+to the instance of the base struct.</p>
 <a class="header" href="#object-properties" id="object-properties"><h2>Object properties</h2></a>
-<p>Descriptor methods can be defined in
-<code>#[pymethods]</code> <code>impl</code> block only and has to be annotated with <code>#[getter]</code> or <code>[setter]</code>
-attributes. i.e.</p>
+<p>Property descriptor methods can be defined in a <code>#[pymethods]</code> <code>impl</code> block only and have to be
+annotated with <code>#[getter]</code> and <code>#[setter]</code> attributes. For example:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -339,11 +337,13 @@ impl MyClass {
      }
 }
 #}</code></pre></pre>
-<p>Getter or setter function's name is used as property name by default. There are several
-ways how to override name.</p>
-<p>If function name starts with <code>get_</code> or <code>set_</code> for getter or setter respectively.
-Descriptor name becomes function name with prefix removed. This is useful in case of
-rust's special keywords like <code>type</code>.</p>
+<p>A getter or setter's function name is used as the property name by default. There are several
+ways how to override the name.</p>
+<p>If a function name starts with <code>get_</code> or <code>set_</code> for getter or setter respectively,
+the descriptor name becomes the function name with this prefix removed. This is also useful in case of
+Rust keywords like <code>type</code>
+(<a href="https://doc.rust-lang.org/edition-guide/rust-2018/module-system/raw-identifiers.html">raw identifiers</a>
+can be used since Rust 2018).</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -368,9 +368,9 @@ impl MyClass {
      }
 }
 #}</code></pre></pre>
-<p>In this case property <code>num</code> is defined. And it is available from python code as <code>self.num</code>.</p>
-<p>Also both <code>#[getter]</code> and <code>#[setter]</code> attributes accepts one parameter.
-If this parameter is specified, it is used as a property name. i.e.</p>
+<p>In this case, a property <code>num</code> is defined and available from Python code as <code>self.num</code>.</p>
+<p>Both the <code>#[getter]</code> and <code>#[setter]</code> attributes accept one parameter.
+If this parameter is specified, it is used as the property name, i.e.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -395,8 +395,9 @@ impl MyClass {
      }
 }
 #}</code></pre></pre>
-<p>In this case the property <code>number</code> is defined and is available from python code as <code>self.number</code>.</p>
-<p>For simple cases you can also define getters and setters in your Rust struct field definition, for example:</p>
+<p>In this case, the property <code>number</code> is defined and available from Python code as <code>self.number</code>.</p>
+<p>For simple cases where a member variable is just read and written with no side effects, you
+can also declare getters and setters in your Rust struct field definition, for example:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -409,8 +410,8 @@ struct MyClass {
 #}</code></pre></pre>
 <p>Then it is available from Python code as <code>self.num</code>.</p>
 <a class="header" href="#instance-methods" id="instance-methods"><h2>Instance methods</h2></a>
-<p>To define a python compatible method, <code>impl</code> block for struct has to be annotated with the
-<code>#[pymethods]</code> attribute. PyO3 generates python compatible wrappers for all functions in this
+<p>To define a Python compatible method, an <code>impl</code> block for your struct has to be annotated with the
+<code>#[pymethods]</code> attribute. PyO3 generates Python compatible wrappers for all functions in this
 block with some variations, like descriptors, class method static methods, etc.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -434,10 +435,11 @@ impl MyClass {
      }
 }
 #}</code></pre></pre>
-<p>Calls to this methods protected by <code>GIL</code>, <code>&amp;self</code> or <code>&amp;mut self</code> can be used.
-The return type must be <code>PyResult&lt;T&gt;</code> for some <code>T</code> that implements <code>IntoPyObject</code>.</p>
-<p><code>Python</code> parameter can be specified as part of method signature, in this case <code>py</code> argument
-get injected by method wrapper. i.e</p>
+<p>Calls to these methods are protected by the GIL, so both <code>&amp;self</code> and <code>&amp;mut self</code> can be used.
+The return type must be <code>PyResult&lt;T&gt;</code> or <code>T</code> for some <code>T</code> that implements <code>IntoPyObject</code>;
+the latter is allowed if the method cannot raise Python exceptions.</p>
+<p>A <code>Python</code> parameter can be specified as part of method signature, in this case the <code>py</code> argument
+gets injected by the method wrapper, e.g.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -455,9 +457,9 @@ impl MyClass {
      }
 }
 #}</code></pre></pre>
-<p>From python perspective <code>method2</code>, in above example, does not accept any arguments.</p>
+<p>From the Python perspective, the <code>method2</code> in this example does not accept any arguments.</p>
 <a class="header" href="#class-methods" id="class-methods"><h2>Class methods</h2></a>
-<p>To specify a class method for a custom class, the method needs to be annotated
+<p>To create a class method for a custom class, the method needs to be annotated
 with the <code>#[classmethod]</code> attribute.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -484,11 +486,11 @@ impl MyClass {
 This may be the type object of a derived class.</li>
 <li>The first parameter implicitly has type <code>&amp;PyType</code>.</li>
 <li>For details on <code>parameter-list</code>, see the documentation of <code>Method arguments</code> section.</li>
-<li>The return type must be <code>PyResult&lt;T&gt;</code> for some <code>T</code> that implements <code>IntoPyObject</code>.</li>
+<li>The return type must be <code>PyResult&lt;T&gt;</code> or <code>T</code> for some <code>T</code> that implements <code>IntoPyObject</code>.</li>
 </ul>
 <a class="header" href="#static-methods" id="static-methods"><h2>Static methods</h2></a>
-<p>To specify a static method for a custom class, method needs to be annotated with
-<code>#[staticmethod]</code> attribute. The return type must be <code>PyResult&lt;T&gt;</code> for some <code>T</code> that implements
+<p>To create a static method for a custom class, the method needs to be annotated with the
+<code>#[staticmethod]</code> attribute. The return type must be <code>T</code> or <code>PyResult&lt;T&gt;</code> for some <code>T</code> that implements
 <code>IntoPyObject</code>.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
@@ -508,9 +510,9 @@ impl MyClass {
      }
 }
 #}</code></pre></pre>
-<a class="header" href="#callable-object" id="callable-object"><h2>Callable object</h2></a>
-<p>To specify a custom <code>__call__</code> method for a custom class, call methods need to be annotated with
-the <code>#[call]</code> attribute. Arguments of the method are specified same as for instance method.</p>
+<a class="header" href="#callable-objects" id="callable-objects"><h2>Callable objects</h2></a>
+<p>To specify a custom <code>__call__</code> method for a custom class, the method needs to be annotated with
+the <code>#[call]</code> attribute. Arguments of the method are specified as for instance methods.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -533,22 +535,22 @@ impl MyClass {
 }
 #}</code></pre></pre>
 <a class="header" href="#method-arguments" id="method-arguments"><h2>Method arguments</h2></a>
-<p>By default PyO3 uses function signatures to determine which arguments are required. Then it scans
-incoming <code>args</code> parameter and then incoming <code>kwargs</code> parameter. If it can not find all required
+<p>By default, PyO3 uses function signatures to determine which arguments are required. Then it scans
+the incoming <code>args</code> and <code>kwargs</code> parameters. If it can not find all required
 parameters, it raises a <code>TypeError</code> exception. It is possible to override the default behavior
-with <code>#[args(...)]</code> attribute. <code>args</code> attribute accepts a comma separated list of parameters in
-form of <code>attr_name=&quot;default value&quot;</code>. Each parameter has to match the method parameter by name.</p>
-<p>Each parameter could be one of following type:</p>
+with the <code>#[args(...)]</code> attribute. This attribute accepts a comma separated list of parameters in
+the form of <code>attr_name=&quot;default value&quot;</code>. Each parameter has to match the method parameter by name.</p>
+<p>Each parameter can be one of the following types:</p>
 <ul>
-<li>&quot;*&quot;: var arguments separator, each parameter defined after &quot;*&quot; is keyword only parameters.
-corresponds to python's <code>def meth(*, arg1.., arg2=..)</code></li>
-<li>args=&quot;*&quot;: &quot;args&quot; is var args, corresponds to python's <code>def meth(*args)</code>. Type of <code>args</code>
+<li><code>&quot;*&quot;</code>: var arguments separator, each parameter defined after <code>&quot;*&quot;</code> is a keyword-only parameter.
+Corresponds to python's <code>def meth(*, arg1.., arg2=..)</code>.</li>
+<li><code>args=&quot;*&quot;</code>: &quot;args&quot; is var args, corresponds to Python's <code>def meth(*args)</code>. Type of the <code>args</code>
 parameter has to be <code>&amp;PyTuple</code>.</li>
-<li>kwargs=&quot;**&quot;: &quot;kwargs&quot; is keyword arguments, corresponds to python's <code>def meth(**kwargs)</code>.
-Type of <code>kwargs</code> parameter has to be <code>Option&lt;&amp;PyDict&gt;</code>.</li>
-<li>arg=&quot;Value&quot;: arguments with default value. corresponds to python's <code>def meth(arg=Value)</code>.
-if <code>arg</code> argument is defined after var arguments it is treated as keyword argument.
-Note that <code>Value</code> has to be valid rust code, PyO3 just inserts it into generated
+<li><code>kwargs=&quot;**&quot;</code>: &quot;kwargs&quot; receives keyword arguments, corresponds to Python's <code>def meth(**kwargs)</code>.
+The type of the <code>kwargs</code> parameter has to be <code>Option&lt;&amp;PyDict&gt;</code>.</li>
+<li><code>arg=&quot;Value&quot;</code>: arguments with default value. Corresponds to Python's <code>def meth(arg=Value)</code>.
+If the <code>arg</code> argument is defined after var arguments, it is treated as a keyword-only argument.
+Note that <code>Value</code> has to be valid rust code, PyO3 just inserts it into the generated
 code unmodified.</li>
 </ul>
 <p>Example:</p>
@@ -575,18 +577,18 @@ impl MyClass {
 <a class="header" href="#class-customizations" id="class-customizations"><h2>Class customizations</h2></a>
 <p>Python's object model defines several protocols for different object behavior, like sequence,
 mapping or number protocols. PyO3 defines separate traits for each of them. To provide specific
-python object behavior you need to implement the specific trait for your struct. Important note,
-each protocol implementation block has to be annotated with <code>#[pyproto]</code> attribute.</p>
+Python object behavior, you need to implement the specific trait for your struct. Important note,
+each protocol implementation block has to be annotated with the <code>#[pyproto]</code> attribute.</p>
 <a class="header" href="#basic-object-customization" id="basic-object-customization"><h3>Basic object customization</h3></a>
-<p><a href="https://docs.rs/pyo3/0.7.0-alpha.1/class/basic/trait.PyObjectProtocol.html"><code>PyObjectProtocol</code></a> trait provide several basic customizations.</p>
+<p>The <a href="https://docs.rs/pyo3/0.7.0-alpha.1/pyo3/class/basic/trait.PyObjectProtocol.html"><code>PyObjectProtocol</code></a> trait provides several basic customizations.</p>
 <a class="header" href="#attribute-access" id="attribute-access"><h4>Attribute access</h4></a>
-<p>To customize object attribute access define following methods:</p>
+<p>To customize object attribute access, define the following methods:</p>
 <ul>
 <li><code>fn __getattr__(&amp;self, name: FromPyObject) -&gt; PyResult&lt;impl IntoPyObject&gt;</code></li>
 <li><code>fn __setattr__(&amp;mut self, name: FromPyObject, value: FromPyObject) -&gt; PyResult&lt;()&gt;</code></li>
 <li><code>fn __delattr__(&amp;mut self, name: FromPyObject) -&gt; PyResult&lt;()&gt;</code></li>
 </ul>
-<p>Each methods corresponds to python's <code>self.attr</code>, <code>self.attr = value</code> and <code>del self.attr</code> code.</p>
+<p>Each method corresponds to Python's <code>self.attr</code>, <code>self.attr = value</code> and <code>del self.attr</code> code.</p>
 <a class="header" href="#string-conversions" id="string-conversions"><h4>String Conversions</h4></a>
 <ul>
 <li>
@@ -630,14 +632,14 @@ The return type must be <code>PyResult&lt;T&gt;</code> where <code>T</code> is o
 </li>
 </ul>
 <a class="header" href="#garbage-collector-integration" id="garbage-collector-integration"><h3>Garbage Collector Integration</h3></a>
-<p>If your type owns references to other python objects, you will need to
+<p>If your type owns references to other Python objects, you will need to
 integrate with Python's garbage collector so that the GC is aware of
 those references.
-To do this, implement <a href="https://docs.rs/pyo3/0.7.0-alpha.1/class/gc/trait.PyGCProtocol.html"><code>PyGCProtocol</code></a> trait for your struct.
+To do this, implement the <a href="https://docs.rs/pyo3/0.7.0-alpha.1/pyo3/class/gc/trait.PyGCProtocol.html"><code>PyGCProtocol</code></a> trait for your struct.
 It includes two methods <code>__traverse__</code> and <code>__clear__</code>.
 These correspond to the slots <code>tp_traverse</code> and <code>tp_clear</code> in the Python C API.
-<code>__traverse__</code> must call <code>visit.call()</code> for each reference to another python object.
-<code>__clear__</code> must clear out any mutable references to other python objects
+<code>__traverse__</code> must call <code>visit.call()</code> for each reference to another Python object.
+<code>__clear__</code> must clear out any mutable references to other Python objects
 (thus breaking reference cycles). Immutable references do not have to be cleared,
 as every cycle must contain at least one mutable reference.
 Example:</p>
@@ -666,21 +668,21 @@ impl PyGCProtocol for ClassWithGCSupport {
 
     fn __clear__(&amp;mut self) {
         if let Some(obj) = self.obj.take() {
-          // Release reference, this decrements ref counter.
-          let gil = GILGuard::acquire();
-          let py = gil.python();
-          py.release(obj);
+            // Release reference, this decrements ref counter.
+            let gil = GILGuard::acquire();
+            let py = gil.python();
+            py.release(obj);
         }
     }
 }
 #}</code></pre></pre>
 <p>Special protocol trait implementations have to be annotated with the <code>#[pyproto]</code> attribute.</p>
-<p>It is also possible to enable GC for custom class using <code>gc</code> parameter for <code>class</code> annotation.
-i.e. <code>#[pyclass(gc)]</code>. In that case instances of custom class participate in python garbage
-collector, and it is possible to track them with <code>gc</code> module methods.</p>
+<p>It is also possible to enable GC for custom class using the <code>gc</code> parameter of the <code>pyclass</code> attribute.
+i.e. <code>#[pyclass(gc)]</code>. In that case instances of custom class participate in Python garbage
+collection, and it is possible to track them with <code>gc</code> module methods.</p>
 <a class="header" href="#iterator-types" id="iterator-types"><h3>Iterator Types</h3></a>
 <p>Iterators can be defined using the
-<a href="https://docs.rs/pyo3/0.7.0-alpha.1/class/iter/trait.PyIterProtocol.html"><code>PyIterProtocol</code></a> trait.
+<a href="https://docs.rs/pyo3/0.7.0-alpha.1/pyo3/class/iter/trait.PyIterProtocol.html"><code>PyIterProtocol</code></a> trait.
 It includes two methods <code>__iter__</code> and <code>__next__</code>:</p>
 <ul>
 <li><code>fn __iter__(slf: PyRefMut&lt;Self&gt;) -&gt; PyResult&lt;impl IntoPyObject&gt;</code></li>

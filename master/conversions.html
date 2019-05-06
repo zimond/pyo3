@@ -139,17 +139,18 @@
                         <a class="header" href="#type-conversions" id="type-conversions"><h1>Type Conversions</h1></a>
 <p>PyO3 provides some handy traits to convert between Python types and Rust types.</p>
 <a class="header" href="#extract" id="extract"><h2><code>.extract()</code></h2></a>
-<p>The easiest way to convert a python object to a rust value is using <code>.extract()?</code>.</p>
+<p>The easiest way to convert a Python object to a Rust value is using <code>.extract()?</code>.</p>
 <a class="header" href="#topyobject-and-intopyobject-trait" id="topyobject-and-intopyobject-trait"><h2><code>ToPyObject</code> and <code>IntoPyObject</code> trait</h2></a>
-<p><a href="https://docs.rs/pyo3/0.7.0-alpha.1/trait.ToPyObject.html"><code>ToPyObject</code></a> trait is a conversion trait that allows various objects to be converted into <a href="https://docs.rs/pyo3/0.7.0-alpha.1/struct.PyObject.html"><code>PyObject</code></a>. <a href="https://docs.rs/pyo3/0.7.0-alpha.1/trait.IntoPyObject.html"><code>IntoPyObject</code></a> serves the same purpose except it consumes <code>self</code>.</p>
+<p><a href="https://docs.rs/pyo3/0.7.0-alpha.1/pyo3/trait.ToPyObject.html"><code>ToPyObject</code></a> trait is a conversion trait that allows various objects to be
+converted into <a href="https://docs.rs/pyo3/0.7.0-alpha.1/pyo3/struct.PyObject.html"><code>PyObject</code></a>. <a href="https://docs.rs/pyo3/0.7.0-alpha.1/pyo3/trait.IntoPyObject.html"><code>IntoPyObject</code></a> serves the
+same purpose, except that it consumes <code>self</code>.</p>
 <a class="header" href="#frompyobject-and-reffrompyobject-trait" id="frompyobject-and-reffrompyobject-trait"><h2><code>FromPyObject</code> and <code>RefFromPyObject</code> trait</h2></a>
 <a class="header" href="#args-and-kwargs-for-python-object-call" id="args-and-kwargs-for-python-object-call"><h2><code>*args</code> and <code>**kwargs</code> for python object call</h2></a>
-<p>There are several way how to pass positional and keyword arguments to python object call.
-<a href="https://docs.rs/pyo3/0.7.0-alpha.1/trait.ObjectProtocol.html"><code>ObjectProtocol</code></a> trait
-provides two methods:</p>
+<p>There are several ways how to pass positional and keyword arguments to a Python object call.
+The <a href="https://docs.rs/pyo3/0.7.0-alpha.1/pyo3/trait.ObjectProtocol.html"><code>ObjectProtocol</code></a> trait provides two methods:</p>
 <ul>
-<li><code>call</code> - call callable python object.</li>
-<li><code>call_method</code> - call specific method on the object.</li>
+<li><code>call</code> - call any callable Python object.</li>
+<li><code>call_method</code> - call a specific method on the object, shorthand for <code>get_attr</code> then <code>call</code>.</li>
 </ul>
 <p>Both methods accept <code>args</code> and <code>kwargs</code> arguments.</p>
 <pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
@@ -184,8 +185,8 @@ fn main() {
     obj.call1(py, args);
 }
 </code></pre></pre>
-<p><code>kwargs</code> can by <code>None</code> or <code>Some(&amp;PyDict)</code>. You can use the
-<a href="https://docs.rs/pyo3/0.7.0-alpha.1/trait.IntoPyDict.html"><code>IntoPyDict</code></a> trait to convert other dict-like containers, e.g. <code>HashMap</code>, <code>BTreeMap</code> as well as tuples with up to 10 elements and <code>Vec</code>s where each element is a two element tuple.</p>
+<p><code>kwargs</code> can be <code>None</code> or <code>Some(&amp;PyDict)</code>. You can use the
+<a href="https://docs.rs/pyo3/0.7.0-alpha.1/pyo3/types/trait.IntoPyDict.html"><code>IntoPyDict</code></a> trait to convert other dict-like containers, e.g. <code>HashMap</code>, <code>BTreeMap</code> as well as tuples with up to 10 elements and <code>Vec</code>s where each element is a two-element tuple.</p>
 <pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
 use pyo3::types::{IntoPyDict, PyDict};
 use std::collections::HashMap;
@@ -224,8 +225,8 @@ fn main() {
 }
 </code></pre></pre>
 <a class="header" href="#intopyt" id="intopyt"><h2><code>IntoPy&lt;T&gt;</code></h2></a>
-<p>Many conversions in PyO3 can't use <code>std::convert::Into</code> because they need a gil token. That's why the <code>IntoPy&lt;T&gt;</code> trait offers an <code>into_py</code> methods that works just like <code>into</code> except for taking a <code>Python&lt;'_&gt;</code> as argument.</p>
-<p>Eventually, traits such as <code>IntoPyObject</code> will be replaces by this trait and a <code>FromPy</code> trait will be added that will implement <code>IntoPy</code>, just like with <code>From</code> and <code>Into</code>.</p>
+<p>Many conversions in PyO3 can't use <code>std::convert::Into</code> because they need a GIL token. That's why the <code>IntoPy&lt;T&gt;</code> trait offers an <code>into_py</code> method that works just like <code>into</code>, except for taking a <code>Python&lt;'_&gt;</code> argument.</p>
+<p>Eventually, traits such as <code>IntoPyObject</code> will be replaced by this trait and a <code>FromPy</code> trait will be added that will implement <code>IntoPy</code>, just like with <code>From</code> and <code>Into</code>.</p>
 
                     </main>
 

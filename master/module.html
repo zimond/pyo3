@@ -136,7 +136,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <a class="header" href="#python-module" id="python-module"><h1>Python Module</h1></a>
+                        <a class="header" href="#python-modules" id="python-modules"><h1>Python Modules</h1></a>
 <p>As shown in the Getting Started chapter, you can create a module as follows:</p>
 <pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
 
@@ -146,7 +146,7 @@
 #[pymodule]
 fn rust2py(py: Python, m: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
 
-    // PyO3 aware function. All of our python interface could be declared in a separate module.
+    // PyO3 aware function. All of our python interfaces could be declared in a separate module.
     // Note that the `#[pyfn()]` annotation automatically converts the arguments from
     // Python objects to Rust values; and the Rust return value back into a Python object.
     #[pyfn(m, &quot;sum_as_string&quot;)]
@@ -165,7 +165,7 @@ fn sum_as_string(a:i64, b:i64) -&gt; String {
 
 # fn main() {}
 </code></pre></pre>
-<p>The <code>#[pymodule]</code> procedural macro attribute takes care of exporting the initialization function of your module to Python. It takes one argument as the name of your module, which must be the name of the <code>.so</code> or <code>.pyd</code> file.</p>
+<p>The <code>#[pymodule]</code> procedural macro attribute takes care of exporting the initialization function of your module to Python. It can take as an argument the name of your module, which must be the name of the <code>.so</code> or <code>.pyd</code> file; the default is the Rust function's name.</p>
 <p>To import the module, either copy the shared library as described in <a href="./overview.html">Get Started</a> or use a tool, e.g. <code>pyo3-pack develop</code> with <a href="https://github.com/PyO3/pyo3-pack">pyo3-pack</a> or <code>python setup.py develop</code> with <a href="https://github.com/PyO3/setuptools-rust">setuptools-rust</a>.</p>
 <a class="header" href="#documentation" id="documentation"><h2>Documentation</h2></a>
 <p>The <a href="https://doc.rust-lang.org/stable/book/first-edition/comments.html">Rust doc comments</a> of the module initialization function will be applied automatically as the Python doc string of your module.</p>
@@ -175,7 +175,7 @@ print(rust2py.__doc__)
 </code></pre>
 <p>Which means that the above Python code will print <code>This module is implemented in Rust.</code>.</p>
 <a class="header" href="#modules-as-objects" id="modules-as-objects"><h2>Modules as objects</h2></a>
-<p>In python, modules are first class objects. This means can store them as values or add them to dicts or other modules:</p>
+<p>In Python, modules are first class objects. This means that you can store them as values or add them to dicts or other modules:</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -209,6 +209,7 @@ fn nested_call() {
     py.run(&quot;assert supermodule.submodule.subfunction() == 'Subfunction'&quot;, None, Some(&amp;ctx)).unwrap();
 }
 #}</code></pre></pre>
+<p>This way, you can create a module hierarchy within a single extension module.</p>
 
                     </main>
 
