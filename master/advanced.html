@@ -143,7 +143,7 @@
 <a class="header" href="#testing" id="testing"><h2>Testing</h2></a>
 <p>Currently, <a href="https://github.com/PyO3/pyo3/issues/341">#341</a> causes <code>cargo test</code> to fail with weird linking errors when the <code>extension-module</code> feature is activated. For now you can work around this by making the <code>extension-module</code> feature optional and running the tests with <code>cargo test --no-default-features</code>:</p>
 <pre><code class="language-toml">[dependencies.pyo3]
-version = &quot;0.7.0-alpha.1&quot;
+version = &quot;0.7.0&quot;
 
 [features]
 extension-module = [&quot;pyo3/extension-module&quot;]
