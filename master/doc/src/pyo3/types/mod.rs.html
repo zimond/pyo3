@@ -173,6 +173,13 @@
 <span id="173">173</span>
 <span id="174">174</span>
 <span id="175">175</span>
+<span id="176">176</span>
+<span id="177">177</span>
+<span id="178">178</span>
+<span id="179">179</span>
+<span id="180">180</span>
+<span id="181">181</span>
+<span id="182">182</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 
@@ -255,9 +262,9 @@
 
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">pyobject_native_type</span> (
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>: <span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typeobject</span>: <span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">checkfunction</span>: <span class="ident">path</span> $(,<span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_param</span>: <span class="ident">ident</span>)<span class="kw-2">*</span>) <span class="op">=&gt;</span> {
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>: <span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typeobject</span>: <span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">module</span>: <span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">checkfunction</span>: <span class="ident">path</span> $(,<span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_param</span>: <span class="ident">ident</span>)<span class="kw-2">*</span>) <span class="op">=&gt;</span> {
         <span class="macro">pyobject_native_type_named</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> $(,<span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_param</span>)<span class="kw-2">*</span>);
-        <span class="macro">pyobject_native_type_convert</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typeobject</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">checkfunction</span> $(,<span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_param</span>)<span class="kw-2">*</span>);
+        <span class="macro">pyobject_native_type_convert</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typeobject</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">module</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">checkfunction</span> $(,<span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_param</span>)<span class="kw-2">*</span>);
 
         <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_param</span>,)<span class="kw-2">*</span><span class="op">&gt;</span> ::<span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">types</span>::<span class="ident">PyAny</span> {
             <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">ob</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
@@ -265,16 +272,20 @@
             }
         }
     };
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>: <span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typeobject</span>: <span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">checkfunction</span>: <span class="ident">path</span> $(,<span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_param</span>: <span class="ident">ident</span>)<span class="kw-2">*</span>) <span class="op">=&gt;</span> {
+        <span class="macro">pyobject_native_type</span><span class="macro">!</span>{<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typeobject</span>, <span class="prelude-val">Some</span>(<span class="string">&quot;builtins&quot;</span>), <span class="macro-nonterminal">$</span><span class="macro-nonterminal">checkfunction</span> $(,<span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_param</span>)<span class="kw-2">*</span>}
+    };
 );
 
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">pyobject_native_type_convert</span>(
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>: <span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typeobject</span>: <span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">checkfunction</span>: <span class="ident">path</span> $(,<span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_param</span>: <span class="ident">ident</span>)<span class="kw-2">*</span>) <span class="op">=&gt;</span> {
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>: <span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typeobject</span>: <span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">module</span>: <span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">checkfunction</span>: <span class="ident">path</span> $(,<span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_param</span>: <span class="ident">ident</span>)<span class="kw-2">*</span>) <span class="op">=&gt;</span> {
         <span class="kw">impl</span><span class="op">&lt;</span>$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_param</span>,)<span class="kw-2">*</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">type_object</span>::<span class="ident">PyTypeInfo</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span> {
             <span class="kw">type</span> <span class="ident">Type</span> <span class="op">=</span> ();
             <span class="kw">type</span> <span class="ident">BaseType</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">types</span>::<span class="ident">PyAny</span>;
 
             <span class="kw">const</span> <span class="ident">NAME</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> <span class="op">=</span> <span class="macro">stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>);
+            <span class="kw">const</span> <span class="ident">MODULE</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span><span class="op">&gt;</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">module</span>;
             <span class="kw">const</span> <span class="ident">SIZE</span>: <span class="ident">usize</span> <span class="op">=</span> ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">size_of</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">ffi</span>::<span class="ident">PyObject</span><span class="op">&gt;</span>();
             <span class="kw">const</span> <span class="ident">OFFSET</span>: <span class="ident">isize</span> <span class="op">=</span> <span class="number">0</span>;
 
@@ -329,6 +340,9 @@
                 <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="kw-2">&amp;</span><span class="ident">s</span>.<span class="ident">to_string_lossy</span>())
             }
         }
+    };
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>: <span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typeobject</span>: <span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">checkfunction</span>: <span class="ident">path</span> $(,<span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_param</span>: <span class="ident">ident</span>)<span class="kw-2">*</span>) <span class="op">=&gt;</span> {
+        <span class="macro">pyobject_native_type_convert</span><span class="macro">!</span>{<span class="macro-nonterminal">$</span><span class="macro-nonterminal">name</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">typeobject</span>, <span class="prelude-val">Some</span>(<span class="string">&quot;builtins&quot;</span>), <span class="macro-nonterminal">$</span><span class="macro-nonterminal">checkfunction</span> $(,<span class="macro-nonterminal">$</span><span class="macro-nonterminal">type_param</span>)<span class="kw-2">*</span>}
     };
 );
 

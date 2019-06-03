@@ -348,6 +348,31 @@
 <span id="348">348</span>
 <span id="349">349</span>
 <span id="350">350</span>
+<span id="351">351</span>
+<span id="352">352</span>
+<span id="353">353</span>
+<span id="354">354</span>
+<span id="355">355</span>
+<span id="356">356</span>
+<span id="357">357</span>
+<span id="358">358</span>
+<span id="359">359</span>
+<span id="360">360</span>
+<span id="361">361</span>
+<span id="362">362</span>
+<span id="363">363</span>
+<span id="364">364</span>
+<span id="365">365</span>
+<span id="366">366</span>
+<span id="367">367</span>
+<span id="368">368</span>
+<span id="369">369</span>
+<span id="370">370</span>
+<span id="371">371</span>
+<span id="372">372</span>
+<span id="373">373</span>
+<span id="374">374</span>
+<span id="375">375</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Safe Rust wrappers for types defined in the Python `datetime` library</span>
 <span class="doccomment">//!</span>
@@ -417,7 +442,12 @@
 
 <span class="doccomment">/// Bindings around `datetime.date`</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PyDate</span>(<span class="ident">PyObject</span>);
-<span class="macro">pyobject_native_type</span><span class="macro">!</span>(<span class="ident">PyDate</span>, <span class="kw-2">*</span><span class="ident">PyDateTimeAPI</span>.<span class="ident">DateType</span>, <span class="ident">PyDate_Check</span>);
+<span class="macro">pyobject_native_type</span><span class="macro">!</span>(
+    <span class="ident">PyDate</span>,
+    <span class="kw-2">*</span><span class="ident">PyDateTimeAPI</span>.<span class="ident">DateType</span>,
+    <span class="prelude-val">Some</span>(<span class="string">&quot;datetime&quot;</span>),
+    <span class="ident">PyDate_Check</span>
+);
 
 <span class="kw">impl</span> <span class="ident">PyDate</span> {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>(<span class="ident">py</span>: <span class="ident">Python</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>, <span class="ident">year</span>: <span class="ident">i32</span>, <span class="ident">month</span>: <span class="ident">u8</span>, <span class="ident">day</span>: <span class="ident">u8</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">PyDate</span><span class="op">&gt;</span> {
@@ -467,7 +497,12 @@
 
 <span class="doccomment">/// Bindings for `datetime.datetime`</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PyDateTime</span>(<span class="ident">PyObject</span>);
-<span class="macro">pyobject_native_type</span><span class="macro">!</span>(<span class="ident">PyDateTime</span>, <span class="kw-2">*</span><span class="ident">PyDateTimeAPI</span>.<span class="ident">DateTimeType</span>, <span class="ident">PyDateTime_Check</span>);
+<span class="macro">pyobject_native_type</span><span class="macro">!</span>(
+    <span class="ident">PyDateTime</span>,
+    <span class="kw-2">*</span><span class="ident">PyDateTimeAPI</span>.<span class="ident">DateTimeType</span>,
+    <span class="prelude-val">Some</span>(<span class="string">&quot;datetime&quot;</span>),
+    <span class="ident">PyDateTime_Check</span>
+);
 
 <span class="kw">impl</span> <span class="ident">PyDateTime</span> {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>(
@@ -571,7 +606,12 @@
 
 <span class="doccomment">/// Bindings for `datetime.time`</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PyTime</span>(<span class="ident">PyObject</span>);
-<span class="macro">pyobject_native_type</span><span class="macro">!</span>(<span class="ident">PyTime</span>, <span class="kw-2">*</span><span class="ident">PyDateTimeAPI</span>.<span class="ident">TimeType</span>, <span class="ident">PyTime_Check</span>);
+<span class="macro">pyobject_native_type</span><span class="macro">!</span>(
+    <span class="ident">PyTime</span>,
+    <span class="kw-2">*</span><span class="ident">PyDateTimeAPI</span>.<span class="ident">TimeType</span>,
+    <span class="prelude-val">Some</span>(<span class="string">&quot;datetime&quot;</span>),
+    <span class="ident">PyTime_Check</span>
+);
 
 <span class="kw">impl</span> <span class="ident">PyTime</span> {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>(
@@ -650,11 +690,21 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// This is an abstract base class and should not be constructed directly.</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PyTzInfo</span>(<span class="ident">PyObject</span>);
-<span class="macro">pyobject_native_type</span><span class="macro">!</span>(<span class="ident">PyTzInfo</span>, <span class="kw-2">*</span><span class="ident">PyDateTimeAPI</span>.<span class="ident">TZInfoType</span>, <span class="ident">PyTZInfo_Check</span>);
+<span class="macro">pyobject_native_type</span><span class="macro">!</span>(
+    <span class="ident">PyTzInfo</span>,
+    <span class="kw-2">*</span><span class="ident">PyDateTimeAPI</span>.<span class="ident">TZInfoType</span>,
+    <span class="prelude-val">Some</span>(<span class="string">&quot;datetime&quot;</span>),
+    <span class="ident">PyTZInfo_Check</span>
+);
 
 <span class="doccomment">/// Bindings for `datetime.timedelta`</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">PyDelta</span>(<span class="ident">PyObject</span>);
-<span class="macro">pyobject_native_type</span><span class="macro">!</span>(<span class="ident">PyDelta</span>, <span class="kw-2">*</span><span class="ident">PyDateTimeAPI</span>.<span class="ident">DeltaType</span>, <span class="ident">PyDelta_Check</span>);
+<span class="macro">pyobject_native_type</span><span class="macro">!</span>(
+    <span class="ident">PyDelta</span>,
+    <span class="kw-2">*</span><span class="ident">PyDateTimeAPI</span>.<span class="ident">DeltaType</span>,
+    <span class="prelude-val">Some</span>(<span class="string">&quot;datetime&quot;</span>),
+    <span class="ident">PyDelta_Check</span>
+);
 
 <span class="kw">impl</span> <span class="ident">PyDelta</span> {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>(
