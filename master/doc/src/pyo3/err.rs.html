@@ -545,8 +545,8 @@
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">PyErrValue</span> {
     <span class="prelude-val">None</span>,
     <span class="ident">Value</span>(<span class="ident">PyObject</span>),
-    <span class="ident">ToArgs</span>(<span class="ident">Box</span><span class="op">&lt;</span><span class="ident">PyErrArguments</span><span class="op">&gt;</span>),
-    <span class="ident">ToObject</span>(<span class="ident">Box</span><span class="op">&lt;</span><span class="ident">ToPyObject</span><span class="op">&gt;</span>),
+    <span class="ident">ToArgs</span>(<span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">PyErrArguments</span><span class="op">&gt;</span>),
+    <span class="ident">ToObject</span>(<span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">ToPyObject</span><span class="op">&gt;</span>),
 }
 
 <span class="doccomment">/// Represents a Python exception that was raised.</span>
