@@ -243,6 +243,95 @@
 <span id="243">243</span>
 <span id="244">244</span>
 <span id="245">245</span>
+<span id="246">246</span>
+<span id="247">247</span>
+<span id="248">248</span>
+<span id="249">249</span>
+<span id="250">250</span>
+<span id="251">251</span>
+<span id="252">252</span>
+<span id="253">253</span>
+<span id="254">254</span>
+<span id="255">255</span>
+<span id="256">256</span>
+<span id="257">257</span>
+<span id="258">258</span>
+<span id="259">259</span>
+<span id="260">260</span>
+<span id="261">261</span>
+<span id="262">262</span>
+<span id="263">263</span>
+<span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
+<span id="309">309</span>
+<span id="310">310</span>
+<span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
+<span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
+<span id="321">321</span>
+<span id="322">322</span>
+<span id="323">323</span>
+<span id="324">324</span>
+<span id="325">325</span>
+<span id="326">326</span>
+<span id="327">327</span>
+<span id="328">328</span>
+<span id="329">329</span>
+<span id="330">330</span>
+<span id="331">331</span>
+<span id="332">332</span>
+<span id="333">333</span>
+<span id="334">334</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="attribute">#![<span class="ident">feature</span>(<span class="ident">specialization</span>)]</span>
 
@@ -379,12 +468,18 @@
 <span class="comment">// Re-exported for wrap_function</span>
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">mashup</span>;
+<span class="comment">// Re-exported for py_run</span>
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">indoc</span>;
 <span class="comment">// Re-exported for pymethods</span>
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">inventory</span>;
 <span class="comment">// Re-exported for the `__wrap` functions</span>
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">libc</span>;
+<span class="comment">// Re-exported for py_run</span>
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">unindent</span>;
 
 <span class="doccomment">/// Raw ffi declarations for the c interface of python</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">ffi</span>;
@@ -453,6 +548,89 @@
         <span class="macro">m</span><span class="macro">!</span> {
             <span class="kw-2">&amp;</span><span class="op">|</span><span class="ident">py</span><span class="op">|</span> <span class="kw">unsafe</span> { <span class="ident">pyo3</span>::<span class="ident">PyObject</span>::<span class="ident">from_owned_ptr</span>(<span class="ident">py</span>, <span class="string">&quot;method&quot;</span>()) }
         }
+    }};
+}
+
+<span class="doccomment">/// A convenient macro to execute a Python code snippet, with some local variables set.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Example</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">/// use pyo3::{prelude::*, py_run, types::PyList};</span>
+<span class="doccomment">/// let gil = Python::acquire_gil();</span>
+<span class="doccomment">/// let py = gil.python();</span>
+<span class="doccomment">/// let list = PyList::new(py, &amp;[1, 2, 3]);</span>
+<span class="doccomment">/// py_run!(py, list, &quot;assert list == [1, 2, 3]&quot;);</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// You can use this macro to test pyfunctions or pyclasses quickly.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// # Example</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">/// use pyo3::{prelude::*, py_run};</span>
+<span class="doccomment">/// #[pyclass]</span>
+<span class="doccomment">/// #[derive(Debug)]</span>
+<span class="doccomment">/// struct Time {</span>
+<span class="doccomment">///     hour: u32,</span>
+<span class="doccomment">///     minute: u32,</span>
+<span class="doccomment">///     second: u32,</span>
+<span class="doccomment">/// }</span>
+<span class="doccomment">/// #[pymethods]</span>
+<span class="doccomment">/// impl Time {</span>
+<span class="doccomment">///     fn repl_japanese(&amp;self) -&gt; String {</span>
+<span class="doccomment">///         format!(&quot;{}時{}分{}秒&quot;, self.hour, self.minute, self.second)</span>
+<span class="doccomment">///     }</span>
+<span class="doccomment">///     #[getter]</span>
+<span class="doccomment">///     fn hour(&amp;self) -&gt; u32 {</span>
+<span class="doccomment">///         self.hour</span>
+<span class="doccomment">///     }</span>
+<span class="doccomment">///     fn as_tuple(&amp;self) -&gt; (u32, u32, u32) {</span>
+<span class="doccomment">///         (self.hour, self.minute, self.second)</span>
+<span class="doccomment">///     }</span>
+<span class="doccomment">/// }</span>
+<span class="doccomment">/// let gil = Python::acquire_gil();</span>
+<span class="doccomment">/// let py = gil.python();</span>
+<span class="doccomment">/// let time = PyRef::new(py, Time {hour: 8, minute: 43, second: 16}).unwrap();</span>
+<span class="doccomment">/// let time_as_tuple = (8, 43, 16);</span>
+<span class="doccomment">/// py_run!(py, time time_as_tuple, r#&quot;</span>
+<span class="doccomment">/// assert time.hour == 8</span>
+<span class="doccomment">/// assert time.repl_japanese() == &quot;8時43分16秒&quot;</span>
+<span class="doccomment">/// assert time.as_tuple() == time_as_tuple</span>
+<span class="doccomment">/// &quot;#);</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// **Note**</span>
+<span class="doccomment">/// Since this macro is intended to use for testing, it **causes panic** when</span>
+<span class="doccomment">/// [Python::run] returns `Err` internally.</span>
+<span class="doccomment">/// If you need to handle failures, please use [Python::run] directly.</span>
+<span class="doccomment">///</span>
+<span class="attribute">#[<span class="ident">macro_export</span>]</span>
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_run</span> {
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>:<span class="ident">expr</span>, $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">val</span>:<span class="ident">ident</span>)<span class="op">+</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">code</span>:<span class="ident">literal</span>) <span class="op">=&gt;</span> {{
+        <span class="ident">pyo3</span>::<span class="macro">py_run_impl</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>, $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">val</span>)<span class="op">+</span>, <span class="ident">pyo3</span>::<span class="ident">indoc</span>::<span class="macro">indoc</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">code</span>))
+    }};
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>:<span class="ident">expr</span>, $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">val</span>:<span class="ident">ident</span>)<span class="op">+</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">code</span>:<span class="ident">expr</span>) <span class="op">=&gt;</span> {{
+        <span class="ident">pyo3</span>::<span class="macro">py_run_impl</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>, $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">val</span>)<span class="op">+</span>, <span class="kw-2">&amp;</span><span class="ident">pyo3</span>::<span class="ident">unindent</span>::<span class="ident">unindent</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">code</span>))
+    }};
+}
+
+<span class="attribute">#[<span class="ident">macro_export</span>]</span>
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">py_run_impl</span> {
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>:<span class="ident">expr</span>, $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">val</span>:<span class="ident">ident</span>)<span class="op">+</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">code</span>:<span class="ident">expr</span>) <span class="op">=&gt;</span> {{
+        <span class="kw">use</span> <span class="ident">pyo3</span>::<span class="ident">types</span>::<span class="ident">IntoPyDict</span>;
+        <span class="kw">use</span> <span class="ident">pyo3</span>::<span class="ident">ToPyObject</span>;
+        <span class="kw">let</span> <span class="ident">d</span> <span class="op">=</span> [$((<span class="macro">stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">val</span>), <span class="macro-nonterminal">$</span><span class="macro-nonterminal">val</span>.<span class="ident">to_object</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>)),)<span class="op">+</span>].<span class="ident">into_py_dict</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>);
+
+        <span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>.<span class="ident">run</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">code</span>, <span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(<span class="ident">d</span>))
+            .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> {
+                <span class="ident">e</span>.<span class="ident">print</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>);
+                <span class="comment">// So when this c api function the last line called printed the error to stderr,</span>
+                <span class="comment">// the output is only written into a buffer which is never flushed because we</span>
+                <span class="comment">// panic before flushing. This is where this hack comes into place</span>
+                <span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>.<span class="ident">run</span>(<span class="string">&quot;import sys; sys.stderr.flush()&quot;</span>, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>)
+                    .<span class="ident">unwrap</span>();
+            })
+            .<span class="ident">expect</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">code</span>)
     }};
 }
 
