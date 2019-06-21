@@ -1067,8 +1067,8 @@ use pyo3::types::{PyDict, PyTuple};
 #
 #[pymethods]
 impl MyClass {
-    #[args(arg1=true, args=&quot;*&quot;, arg2=10, kwargs=&quot;**&quot;)]
-    fn method(&amp;self, arg1: bool, args: &amp;PyTuple, arg2: i32, kwargs: Option&lt;&amp;PyDict&gt;) -&gt; PyResult&lt;i32&gt; {
+    #[args(arg1=true, args=&quot;*&quot;, arg2=10, args3=&quot;\&quot;Hello\&quot;&quot;, kwargs=&quot;**&quot;)]
+    fn method(&amp;self, arg1: bool, args: &amp;PyTuple, arg2: i32, arg3: &amp;str, kwargs: Option&lt;&amp;PyDict&gt;) -&gt; PyResult&lt;i32&gt; {
         Ok(1)
     }
 }
