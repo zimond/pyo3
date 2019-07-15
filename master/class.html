@@ -679,9 +679,14 @@ impl PyGCProtocol for ClassWithGCSupport {
 }
 #}</code></pre></pre>
 <p>Special protocol trait implementations have to be annotated with the <code>#[pyproto]</code> attribute.</p>
-<p>It is also possible to enable GC for custom class using the <code>gc</code> parameter of the <code>pyclass</code> attribute.
+<p>It is also possible to enable GC for custom classes using the <code>gc</code> parameter of the <code>pyclass</code> attribute.
 i.e. <code>#[pyclass(gc)]</code>. In that case instances of custom class participate in Python garbage
-collection, and it is possible to track them with <code>gc</code> module methods.</p>
+collection, and it is possible to track them with <code>gc</code> module methods. When using the <code>gc</code> parameter,
+it is <em>required</em> to implement the <code>PyGCProtocol</code> trait, failure to do so will result in an error
+at compile time:</p>
+<pre><code class="language-compile_fail">#[pyclass(gc)]
+struct GCTracked {} // Fails because it does not implement PyGCProtocol
+</code></pre>
 <a class="header" href="#iterator-types" id="iterator-types"><h3>Iterator Types</h3></a>
 <p>Iterators can be defined using the
 <a href="https://docs.rs/pyo3/0.7.0/pyo3/class/iter/trait.PyIterProtocol.html"><code>PyIterProtocol</code></a> trait.
