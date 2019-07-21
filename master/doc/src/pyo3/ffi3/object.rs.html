@@ -1290,7 +1290,7 @@
     <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">PyNumberMethods</span> {
         <span class="attribute">#[<span class="ident">inline</span>]</span>
         <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-&gt;</span> <span class="self">Self</span> {
-            <span class="kw">unsafe</span> { <span class="ident">mem</span>::<span class="ident">zeroed</span>() }
+            <span class="ident">PyNumberMethods_INIT</span>
         }
     }
     <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">as_expr</span> {
