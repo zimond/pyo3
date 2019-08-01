@@ -520,8 +520,6 @@
 <span id="520">520</span>
 <span id="521">521</span>
 <span id="522">522</span>
-<span id="523">523</span>
-<span id="524">524</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 
@@ -536,7 +534,6 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">Python</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">IntoPyObject</span>, <span class="ident">ToBorrowedObject</span>, <span class="ident">ToPyObject</span>};
 <span class="kw">use</span> <span class="ident">libc</span>::<span class="ident">c_int</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ffi</span>::<span class="ident">CString</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">io</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">raw</span>::<span class="ident">c_char</span>;
@@ -937,7 +934,7 @@
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">err</span>: <span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">pyexc</span>: <span class="ident">ty</span>) <span class="op">=&gt;</span> {
         <span class="kw">impl</span> <span class="ident">PyErrArguments</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">err</span> {
             <span class="kw">fn</span> <span class="ident">arguments</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyObject</span> {
-                <span class="self">self</span>.<span class="ident">description</span>().<span class="ident">to_object</span>(<span class="ident">py</span>)
+                <span class="self">self</span>.<span class="ident">to_string</span>().<span class="ident">to_object</span>(<span class="ident">py</span>)
             }
         }
 
@@ -984,10 +981,9 @@
     }
 }
 
-<span class="doccomment">/// Extract `errno` and `errdesc` from from `io::Error`</span>
 <span class="kw">impl</span> <span class="ident">PyErrArguments</span> <span class="kw">for</span> <span class="ident">io</span>::<span class="ident">Error</span> {
     <span class="kw">fn</span> <span class="ident">arguments</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyObject</span> {
-        (<span class="self">self</span>.<span class="ident">raw_os_error</span>().<span class="ident">unwrap_or</span>(<span class="number">0</span>), <span class="self">self</span>.<span class="ident">description</span>()).<span class="ident">to_object</span>(<span class="ident">py</span>)
+        <span class="self">self</span>.<span class="ident">to_string</span>().<span class="ident">to_object</span>(<span class="ident">py</span>)
     }
 }
 
@@ -999,7 +995,7 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">W</span>: <span class="ident">Send</span> <span class="op">+</span> <span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Debug</span><span class="op">&gt;</span> <span class="ident">PyErrArguments</span> <span class="kw">for</span> <span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">IntoInnerError</span><span class="op">&lt;</span><span class="ident">W</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">arguments</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyObject</span> {
-        <span class="self">self</span>.<span class="ident">description</span>().<span class="ident">to_object</span>(<span class="ident">py</span>)
+        <span class="self">self</span>.<span class="ident">to_string</span>().<span class="ident">to_object</span>(<span class="ident">py</span>)
     }
 }
 
