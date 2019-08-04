@@ -242,21 +242,40 @@ more complex arguments are required, the
 <a href="https://docs.rs/pyo3/0.7.0/pyo3/trait.PyErrArguments.html"><code>PyErrArguments</code></a>
 trait can be implemented. In that case, actual exception argument creation is delayed
 until a <code>Python</code> object is available.</p>
-<pre><code class="language-rust ignore">use std::net::TcpListener;
-use pyo3::{PyErr, PyResult, exc};
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+# use pyo3::{exceptions, PyErr, PyResult};
+# use std::error::Error;
+# use std::fmt;
+#
+# #[derive(Debug)]
+# struct CustomIOError;
+#
+# impl Error for CustomIOError {}
+#
+# impl fmt::Display for CustomIOError {
+#     fn fmt(&amp;self, f: &amp;mut fmt::Formatter) -&gt; fmt::Result {
+#         write!(f, &quot;Oh no!&quot;)
+#     }
+# }
+#
+# fn bind(_addr: &amp;str) -&gt; Result&lt;(), CustomIOError&gt; {
+#     Err(CustomIOError)
+# }
 
-impl std::convert::From&lt;std::io::Error&gt; for PyErr {
-    fn from(err: std::io::Error) -&gt; PyErr {
-        exceptions::OSError.into()
+impl std::convert::From&lt;CustomIOError&gt; for PyErr {
+    fn from(err: CustomIOError) -&gt; PyErr {
+        exceptions::OSError::py_err(err.to_string())
     }
 }
 
 fn connect(s: String) -&gt; PyResult&lt;bool&gt; {
-    TcpListener::bind(&quot;127.0.0.1:80&quot;)?;
+    bind(&quot;127.0.0.1:80&quot;)?;
     Ok(true)
 }
-</code></pre>
-<p>The code snippet above will raise an <code>OSError</code> in Python if <code>TcpListener::bind()</code> returns an error.</p>
+#}</code></pre></pre>
+<p>The code snippet above will raise an <code>OSError</code> in Python if <code>bind()</code> returns a <code>CustomIOError</code>.</p>
 <p>The <code>std::convert::From&lt;T&gt;</code> trait is implemented for most of the Rust standard library's error
 types so the <code>try!</code> macro or the <code>?</code> operator can be used.</p>
 <pre><pre class="playpen"><code class="language-rust">
