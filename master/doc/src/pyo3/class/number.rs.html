@@ -1553,6 +1553,20 @@
 <span id="1553">1553</span>
 <span id="1554">1554</span>
 <span id="1555">1555</span>
+<span id="1556">1556</span>
+<span id="1557">1557</span>
+<span id="1558">1558</span>
+<span id="1559">1559</span>
+<span id="1560">1560</span>
+<span id="1561">1561</span>
+<span id="1562">1562</span>
+<span id="1563">1563</span>
+<span id="1564">1564</span>
+<span id="1565">1565</span>
+<span id="1566">1566</span>
+<span id="1567">1567</span>
+<span id="1568">1568</span>
+<span id="1569">1569</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 
@@ -2827,7 +2841,8 @@
     }
 }
 
-<span class="kw">trait</span> <span class="ident">PyNumberRAddProtocolImpl</span> {
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyNumberRAddProtocolImpl</span> {
     <span class="kw">fn</span> <span class="ident">__radd__</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PyMethodDef</span><span class="op">&gt;</span> {
         <span class="prelude-val">None</span>
     }
@@ -2835,7 +2850,8 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">PyNumberRAddProtocolImpl</span> <span class="kw">for</span> <span class="ident">T</span> <span class="kw">where</span> <span class="ident">T</span>: <span class="ident">PyNumberProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {}
 
-<span class="kw">trait</span> <span class="ident">PyNumberRSubProtocolImpl</span> {
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyNumberRSubProtocolImpl</span> {
     <span class="kw">fn</span> <span class="ident">__rsub__</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PyMethodDef</span><span class="op">&gt;</span> {
         <span class="prelude-val">None</span>
     }
@@ -2843,7 +2859,8 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">PyNumberRSubProtocolImpl</span> <span class="kw">for</span> <span class="ident">T</span> <span class="kw">where</span> <span class="ident">T</span>: <span class="ident">PyNumberProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {}
 
-<span class="kw">trait</span> <span class="ident">PyNumberRMulProtocolImpl</span> {
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyNumberRMulProtocolImpl</span> {
     <span class="kw">fn</span> <span class="ident">__rmul__</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PyMethodDef</span><span class="op">&gt;</span> {
         <span class="prelude-val">None</span>
     }
@@ -2851,7 +2868,8 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">PyNumberRMulProtocolImpl</span> <span class="kw">for</span> <span class="ident">T</span> <span class="kw">where</span> <span class="ident">T</span>: <span class="ident">PyNumberProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {}
 
-<span class="kw">trait</span> <span class="ident">PyNumberRMatmulProtocolImpl</span> {
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyNumberRMatmulProtocolImpl</span> {
     <span class="kw">fn</span> <span class="ident">__rmatmul__</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PyMethodDef</span><span class="op">&gt;</span> {
         <span class="prelude-val">None</span>
     }
@@ -2859,7 +2877,8 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">PyNumberRMatmulProtocolImpl</span> <span class="kw">for</span> <span class="ident">T</span> <span class="kw">where</span> <span class="ident">T</span>: <span class="ident">PyNumberProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {}
 
-<span class="kw">trait</span> <span class="ident">PyNumberRTruedivProtocolImpl</span> {
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyNumberRTruedivProtocolImpl</span> {
     <span class="kw">fn</span> <span class="ident">__rtruediv__</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PyMethodDef</span><span class="op">&gt;</span> {
         <span class="prelude-val">None</span>
     }
@@ -2867,7 +2886,8 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">PyNumberRTruedivProtocolImpl</span> <span class="kw">for</span> <span class="ident">T</span> <span class="kw">where</span> <span class="ident">T</span>: <span class="ident">PyNumberProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {}
 
-<span class="kw">trait</span> <span class="ident">PyNumberRFloordivProtocolImpl</span> {
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyNumberRFloordivProtocolImpl</span> {
     <span class="kw">fn</span> <span class="ident">__rfloordiv__</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PyMethodDef</span><span class="op">&gt;</span> {
         <span class="prelude-val">None</span>
     }
@@ -2875,7 +2895,8 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">PyNumberRFloordivProtocolImpl</span> <span class="kw">for</span> <span class="ident">T</span> <span class="kw">where</span> <span class="ident">T</span>: <span class="ident">PyNumberProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {}
 
-<span class="kw">trait</span> <span class="ident">PyNumberRModProtocolImpl</span> {
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyNumberRModProtocolImpl</span> {
     <span class="kw">fn</span> <span class="ident">__rmod__</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PyMethodDef</span><span class="op">&gt;</span> {
         <span class="prelude-val">None</span>
     }
@@ -2883,7 +2904,8 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">PyNumberRModProtocolImpl</span> <span class="kw">for</span> <span class="ident">T</span> <span class="kw">where</span> <span class="ident">T</span>: <span class="ident">PyNumberProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {}
 
-<span class="kw">trait</span> <span class="ident">PyNumberRDivmodProtocolImpl</span> {
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyNumberRDivmodProtocolImpl</span> {
     <span class="kw">fn</span> <span class="ident">__rdivmod__</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PyMethodDef</span><span class="op">&gt;</span> {
         <span class="prelude-val">None</span>
     }
@@ -2891,7 +2913,8 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">PyNumberRDivmodProtocolImpl</span> <span class="kw">for</span> <span class="ident">T</span> <span class="kw">where</span> <span class="ident">T</span>: <span class="ident">PyNumberProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {}
 
-<span class="kw">trait</span> <span class="ident">PyNumberRPowProtocolImpl</span> {
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyNumberRPowProtocolImpl</span> {
     <span class="kw">fn</span> <span class="ident">__rpow__</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PyMethodDef</span><span class="op">&gt;</span> {
         <span class="prelude-val">None</span>
     }
@@ -2899,7 +2922,8 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">PyNumberRPowProtocolImpl</span> <span class="kw">for</span> <span class="ident">T</span> <span class="kw">where</span> <span class="ident">T</span>: <span class="ident">PyNumberProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {}
 
-<span class="kw">trait</span> <span class="ident">PyNumberRLShiftProtocolImpl</span> {
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyNumberRLShiftProtocolImpl</span> {
     <span class="kw">fn</span> <span class="ident">__rlshift__</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PyMethodDef</span><span class="op">&gt;</span> {
         <span class="prelude-val">None</span>
     }
@@ -2907,7 +2931,8 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">PyNumberRLShiftProtocolImpl</span> <span class="kw">for</span> <span class="ident">T</span> <span class="kw">where</span> <span class="ident">T</span>: <span class="ident">PyNumberProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {}
 
-<span class="kw">trait</span> <span class="ident">PyNumberRRShiftProtocolImpl</span> {
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyNumberRRShiftProtocolImpl</span> {
     <span class="kw">fn</span> <span class="ident">__rrshift__</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PyMethodDef</span><span class="op">&gt;</span> {
         <span class="prelude-val">None</span>
     }
@@ -2915,7 +2940,8 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">PyNumberRRShiftProtocolImpl</span> <span class="kw">for</span> <span class="ident">T</span> <span class="kw">where</span> <span class="ident">T</span>: <span class="ident">PyNumberProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {}
 
-<span class="kw">trait</span> <span class="ident">PyNumberRAndProtocolImpl</span> {
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyNumberRAndProtocolImpl</span> {
     <span class="kw">fn</span> <span class="ident">__rand__</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PyMethodDef</span><span class="op">&gt;</span> {
         <span class="prelude-val">None</span>
     }
@@ -2923,7 +2949,8 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">PyNumberRAndProtocolImpl</span> <span class="kw">for</span> <span class="ident">T</span> <span class="kw">where</span> <span class="ident">T</span>: <span class="ident">PyNumberProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {}
 
-<span class="kw">trait</span> <span class="ident">PyNumberRXorProtocolImpl</span> {
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyNumberRXorProtocolImpl</span> {
     <span class="kw">fn</span> <span class="ident">__rxor__</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PyMethodDef</span><span class="op">&gt;</span> {
         <span class="prelude-val">None</span>
     }
@@ -2931,7 +2958,8 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">PyNumberRXorProtocolImpl</span> <span class="kw">for</span> <span class="ident">T</span> <span class="kw">where</span> <span class="ident">T</span>: <span class="ident">PyNumberProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {}
 
-<span class="kw">trait</span> <span class="ident">PyNumberROrProtocolImpl</span> {
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyNumberROrProtocolImpl</span> {
     <span class="kw">fn</span> <span class="ident">__ror__</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PyMethodDef</span><span class="op">&gt;</span> {
         <span class="prelude-val">None</span>
     }
