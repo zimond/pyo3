@@ -237,9 +237,9 @@ fn main() -&gt; PyResult&lt;()&gt; {
 <p>PyO3 provides some handy traits to convert between Python types and Rust types.</p>
 <a class="header" href="#extract" id="extract"><h2><code>.extract()</code></h2></a>
 <p>The easiest way to convert a Python object to a Rust value is using <code>.extract()?</code>.</p>
-<a class="header" href="#topyobject-and-intopyobject-trait" id="topyobject-and-intopyobject-trait"><h2><code>ToPyObject</code> and <code>IntoPyObject</code> trait</h2></a>
+<a class="header" href="#topyobject-trait" id="topyobject-trait"><h2><code>ToPyObject</code> trait</h2></a>
 <p><a href="https://docs.rs/pyo3/0.7.0/pyo3/trait.ToPyObject.html"><code>ToPyObject</code></a> trait is a conversion trait that allows various objects to be
-converted into <a href="https://docs.rs/pyo3/0.7.0/pyo3/struct.PyObject.html"><code>PyObject</code></a>. <a href="https://docs.rs/pyo3/0.7.0/pyo3/trait.IntoPyObject.html"><code>IntoPyObject</code></a> serves the
+converted into <a href="https://docs.rs/pyo3/0.7.0/pyo3/struct.PyObject.html"><code>PyObject</code></a>. <code>IntoPy&lt;PyObject&gt;</code> serves the
 same purpose, except that it consumes <code>self</code>.</p>
 <a class="header" href="#frompyobject-and-reffrompyobject-trait" id="frompyobject-and-reffrompyobject-trait"><h2><code>FromPyObject</code> and <code>RefFromPyObject</code> trait</h2></a>
 <a class="header" href="#args-and-kwargs-for-python-object-call" id="args-and-kwargs-for-python-object-call"><h2><code>*args</code> and <code>**kwargs</code> for python object call</h2></a>
@@ -323,7 +323,7 @@ fn main() {
 </code></pre></pre>
 <a class="header" href="#intopyt" id="intopyt"><h2><code>IntoPy&lt;T&gt;</code></h2></a>
 <p>Many conversions in PyO3 can't use <code>std::convert::Into</code> because they need a GIL token. That's why the <code>IntoPy&lt;T&gt;</code> trait offers an <code>into_py</code> method that works just like <code>into</code>, except for taking a <code>Python&lt;'_&gt;</code> argument.</p>
-<p>Eventually, traits such as <code>IntoPyObject</code> will be replaced by this trait and a <code>FromPy</code> trait will be added that will implement <code>IntoPy</code>, just like with <code>From</code> and <code>Into</code>.</p>
+<p>Eventually, traits such as <code>ToPyObject</code> will be replaced by this trait and a <code>FromPy</code> trait will be added that will implement <code>IntoPy</code>, just like with <code>From</code> and <code>Into</code>.</p>
 <a class="header" href="#python-exceptions" id="python-exceptions"><h1>Python Exceptions</h1></a>
 <a class="header" href="#define-a-new-exception" id="define-a-new-exception"><h2>Define a new exception</h2></a>
 <p>You can use the <code>create_exception!</code> macro to define a new exception type:</p>
@@ -952,7 +952,7 @@ impl MyClass {
 }
 #}</code></pre></pre>
 <p>Calls to these methods are protected by the GIL, so both <code>&amp;self</code> and <code>&amp;mut self</code> can be used.
-The return type must be <code>PyResult&lt;T&gt;</code> or <code>T</code> for some <code>T</code> that implements <code>IntoPyObject</code>;
+The return type must be <code>PyResult&lt;T&gt;</code> or <code>T</code> for some <code>T</code> that implements <code>IntoPy&lt;PyObject&gt;</code>;
 the latter is allowed if the method cannot raise Python exceptions.</p>
 <p>A <code>Python</code> parameter can be specified as part of method signature, in this case the <code>py</code> argument
 gets injected by the method wrapper, e.g.</p>
@@ -1002,12 +1002,12 @@ impl MyClass {
 This may be the type object of a derived class.</li>
 <li>The first parameter implicitly has type <code>&amp;PyType</code>.</li>
 <li>For details on <code>parameter-list</code>, see the documentation of <code>Method arguments</code> section.</li>
-<li>The return type must be <code>PyResult&lt;T&gt;</code> or <code>T</code> for some <code>T</code> that implements <code>IntoPyObject</code>.</li>
+<li>The return type must be <code>PyResult&lt;T&gt;</code> or <code>T</code> for some <code>T</code> that implements <code>IntoPy&lt;PyObject&gt;</code>.</li>
 </ul>
 <a class="header" href="#static-methods" id="static-methods"><h2>Static methods</h2></a>
 <p>To create a static method for a custom class, the method needs to be annotated with the
 <code>#[staticmethod]</code> attribute. The return type must be <code>T</code> or <code>PyResult&lt;T&gt;</code> for some <code>T</code> that implements
-<code>IntoPyObject</code>.</p>
+<code>IntoPy&lt;PyObject&gt;</code>.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -1100,7 +1100,7 @@ each protocol implementation block has to be annotated with the <code>#[pyproto]
 <a class="header" href="#attribute-access" id="attribute-access"><h4>Attribute access</h4></a>
 <p>To customize object attribute access, define the following methods:</p>
 <ul>
-<li><code>fn __getattr__(&amp;self, name: FromPyObject) -&gt; PyResult&lt;impl IntoPyObject&gt;</code></li>
+<li><code>fn __getattr__(&amp;self, name: FromPyObject) -&gt; PyResult&lt;impl IntoPy&lt;PyObject&gt;&gt;</code></li>
 <li><code>fn __setattr__(&amp;mut self, name: FromPyObject, value: FromPyObject) -&gt; PyResult&lt;()&gt;</code></li>
 <li><code>fn __delattr__(&amp;mut self, name: FromPyObject) -&gt; PyResult&lt;()&gt;</code></li>
 </ul>
@@ -1206,8 +1206,8 @@ struct GCTracked {} // Fails because it does not implement PyGCProtocol
 <a href="https://docs.rs/pyo3/0.7.0/pyo3/class/iter/trait.PyIterProtocol.html"><code>PyIterProtocol</code></a> trait.
 It includes two methods <code>__iter__</code> and <code>__next__</code>:</p>
 <ul>
-<li><code>fn __iter__(slf: PyRefMut&lt;Self&gt;) -&gt; PyResult&lt;impl IntoPyObject&gt;</code></li>
-<li><code>fn __next__(slf: PyRefMut&lt;Self&gt;) -&gt; PyResult&lt;Option&lt;impl IntoPyObject&gt;&gt;</code></li>
+<li><code>fn __iter__(slf: PyRefMut&lt;Self&gt;) -&gt; PyResult&lt;impl IntoPy&lt;PyObject&gt;&gt;</code></li>
+<li><code>fn __next__(slf: PyRefMut&lt;Self&gt;) -&gt; PyResult&lt;Option&lt;impl IntoPy&lt;PyObject&gt;&gt;&gt;</code></li>
 </ul>
 <p>Returning <code>Ok(None)</code> from <code>__next__</code> indicates that that there are no further items.</p>
 <p>Example:</p>

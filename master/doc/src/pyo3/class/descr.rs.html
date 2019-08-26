@@ -158,37 +158,37 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">callback</span>::{<span class="ident">PyObjectCallbackConverter</span>, <span class="ident">UnitCallbackConverter</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">class</span>::<span class="ident">methods</span>::<span class="ident">PyMethodDef</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">err</span>::<span class="ident">PyResult</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">type_object</span>::<span class="ident">PyTypeInfo</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::{<span class="ident">PyAny</span>, <span class="ident">PyType</span>};
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">FromPyObject</span>, <span class="ident">IntoPyObject</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">FromPyObject</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">ffi</span>, <span class="ident">IntoPy</span>, <span class="ident">PyObject</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">raw</span>::<span class="ident">c_int</span>;
 
 <span class="doccomment">/// Descriptor interface</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused_variables</span>)]</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyDescrProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>: <span class="ident">PyTypeInfo</span> {
-    <span class="kw">fn</span> <span class="ident">__get__</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="self">self</span>, <span class="ident">instance</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">PyAny</span>, <span class="ident">owner</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">PyType</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="self">Self</span>::<span class="prelude-ty">Result</span>
+    <span class="kw">fn</span> <span class="ident">__get__</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="self">self</span>, <span class="ident">instance</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">PyAny</span>, <span class="ident">owner</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">PyType</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="prelude-ty">Result</span>
     <span class="kw">where</span>
         <span class="self">Self</span>: <span class="ident">PyDescrGetProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>,
     {
         <span class="macro">unimplemented</span><span class="macro">!</span>()
     }
 
-    <span class="kw">fn</span> <span class="ident">__set__</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="self">self</span>, <span class="ident">instance</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">PyAny</span>, <span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">PyAny</span>) <span class="op">-&gt;</span> <span class="self">Self</span>::<span class="prelude-ty">Result</span>
+    <span class="kw">fn</span> <span class="ident">__set__</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="self">self</span>, <span class="ident">instance</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">PyAny</span>, <span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">PyAny</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="prelude-ty">Result</span>
     <span class="kw">where</span>
         <span class="self">Self</span>: <span class="ident">PyDescrSetProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>,
     {
         <span class="macro">unimplemented</span><span class="macro">!</span>()
     }
 
-    <span class="kw">fn</span> <span class="ident">__delete__</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="self">self</span>, <span class="ident">instance</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">PyAny</span>) <span class="op">-&gt;</span> <span class="self">Self</span>::<span class="prelude-ty">Result</span>
+    <span class="kw">fn</span> <span class="ident">__delete__</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="self">self</span>, <span class="ident">instance</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">PyAny</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="prelude-ty">Result</span>
     <span class="kw">where</span>
         <span class="self">Self</span>: <span class="ident">PyDescrDeleteProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>,
     {
         <span class="macro">unimplemented</span><span class="macro">!</span>()
     }
 
-    <span class="kw">fn</span> <span class="ident">__set_name__</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="self">self</span>, <span class="ident">instance</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">PyAny</span>) <span class="op">-&gt;</span> <span class="self">Self</span>::<span class="prelude-ty">Result</span>
+    <span class="kw">fn</span> <span class="ident">__set_name__</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="self">self</span>, <span class="ident">instance</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">PyAny</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="prelude-ty">Result</span>
     <span class="kw">where</span>
         <span class="self">Self</span>: <span class="ident">PyDescrSetNameProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>,
     {
@@ -199,28 +199,28 @@
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyDescrGetProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>: <span class="ident">PyDescrProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {
     <span class="kw">type</span> <span class="ident">Inst</span>: <span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>;
     <span class="kw">type</span> <span class="ident">Owner</span>: <span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>;
-    <span class="kw">type</span> <span class="ident">Success</span>: <span class="ident">IntoPyObject</span>;
-    <span class="kw">type</span> <span class="prelude-ty">Result</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PyResult</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Success</span><span class="op">&gt;&gt;</span>;
+    <span class="kw">type</span> <span class="ident">Success</span>: <span class="ident">IntoPy</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span>;
+    <span class="kw">type</span> <span class="prelude-ty">Result</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PyResult</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Success</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 }
 
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyDescrSetProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>: <span class="ident">PyDescrProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {
     <span class="kw">type</span> <span class="ident">Inst</span>: <span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>;
     <span class="kw">type</span> <span class="ident">Value</span>: <span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>;
-    <span class="kw">type</span> <span class="prelude-ty">Result</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;&gt;</span>;
+    <span class="kw">type</span> <span class="prelude-ty">Result</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span><span class="op">&gt;</span>;
 }
 
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyDescrDeleteProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>: <span class="ident">PyDescrProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {
     <span class="kw">type</span> <span class="ident">Inst</span>: <span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>;
-    <span class="kw">type</span> <span class="prelude-ty">Result</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;&gt;</span>;
+    <span class="kw">type</span> <span class="prelude-ty">Result</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span><span class="op">&gt;</span>;
 }
 
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyDescrSetNameProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>: <span class="ident">PyDescrProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {
     <span class="kw">type</span> <span class="ident">Inst</span>: <span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>;
-    <span class="kw">type</span> <span class="prelude-ty">Result</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;&gt;</span>;
+    <span class="kw">type</span> <span class="prelude-ty">Result</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span><span class="op">&gt;</span>;
 }
 
 <span class="kw">trait</span> <span class="ident">PyDescrGetProtocolImpl</span> {
-    <span class="kw">fn</span> <span class="ident">tp_descr_get</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">descrgetfunc</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">tp_descr_get</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">descrgetfunc</span><span class="op">&gt;</span> {
         <span class="prelude-val">None</span>
     }
 }
@@ -230,7 +230,7 @@
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> <span class="ident">PyDescrGetProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>,
 {
-    <span class="kw">fn</span> <span class="ident">tp_descr_get</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">descrgetfunc</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">tp_descr_get</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">descrgetfunc</span><span class="op">&gt;</span> {
         <span class="macro">py_ternary_func</span><span class="macro">!</span>(
             <span class="ident">PyDescrGetProtocol</span>,
             <span class="ident">T</span>::<span class="ident">__get__</span>,
@@ -241,7 +241,7 @@
 }
 
 <span class="kw">trait</span> <span class="ident">PyDescrSetProtocolImpl</span> {
-    <span class="kw">fn</span> <span class="ident">tp_descr_set</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">descrsetfunc</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">tp_descr_set</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">descrsetfunc</span><span class="op">&gt;</span> {
         <span class="prelude-val">None</span>
     }
 }
@@ -250,7 +250,7 @@
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> <span class="ident">PyDescrSetProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>,
 {
-    <span class="kw">fn</span> <span class="ident">tp_descr_set</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">descrsetfunc</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">tp_descr_set</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">descrsetfunc</span><span class="op">&gt;</span> {
         <span class="macro">py_ternary_func</span><span class="macro">!</span>(
             <span class="ident">PyDescrSetProtocol</span>,
             <span class="ident">T</span>::<span class="ident">__set__</span>,
@@ -262,14 +262,14 @@
 }
 
 <span class="kw">trait</span> <span class="ident">PyDescrDelProtocolImpl</span> {
-    <span class="kw">fn</span> <span class="ident">__del__</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PyMethodDef</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">__del__</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PyMethodDef</span><span class="op">&gt;</span> {
         <span class="prelude-val">None</span>
     }
 }
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">PyDescrDelProtocolImpl</span> <span class="kw">for</span> <span class="ident">T</span> <span class="kw">where</span> <span class="ident">T</span>: <span class="ident">PyDescrProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {}
 
 <span class="kw">trait</span> <span class="ident">PyDescrSetNameProtocolImpl</span> {
-    <span class="kw">fn</span> <span class="ident">__set_name__</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PyMethodDef</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">__set_name__</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PyMethodDef</span><span class="op">&gt;</span> {
         <span class="prelude-val">None</span>
     }
 }
@@ -277,7 +277,7 @@
 
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyDescrProtocolImpl</span> {
-    <span class="kw">fn</span> <span class="ident">methods</span>() <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">PyMethodDef</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">methods</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">PyMethodDef</span><span class="op">&gt;</span> {
         <span class="ident">Vec</span>::<span class="ident">new</span>()
     }
     <span class="kw">fn</span> <span class="ident">tp_as_descr</span>(<span class="ident">_type_object</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyTypeObject</span>) {}
@@ -289,7 +289,7 @@
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">PyDescrProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>,
 {
-    <span class="kw">fn</span> <span class="ident">methods</span>() <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">PyMethodDef</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">methods</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">PyMethodDef</span><span class="op">&gt;</span> {
         <span class="ident">Vec</span>::<span class="ident">new</span>()
     }
     <span class="kw">fn</span> <span class="ident">tp_as_descr</span>(<span class="ident">type_object</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyTypeObject</span>) {

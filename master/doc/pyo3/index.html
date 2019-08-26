@@ -42,13 +42,13 @@ features = [&quot;extension-module&quot;]
 
 <span class="attribute">#[<span class="ident">pyfunction</span>]</span>
 <span class="doccomment">/// Formats the sum of two numbers as string</span>
-<span class="kw">fn</span> <span class="ident">sum_as_string</span>(<span class="ident">a</span>: <span class="ident">usize</span>, <span class="ident">b</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">sum_as_string</span>(<span class="ident">a</span>: <span class="ident">usize</span>, <span class="ident">b</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> {
     <span class="prelude-val">Ok</span>((<span class="ident">a</span> <span class="op">+</span> <span class="ident">b</span>).<span class="ident">to_string</span>())
 }
 
 <span class="doccomment">/// This module is a python module implemented in Rust.</span>
 <span class="attribute">#[<span class="ident">pymodule</span>]</span>
-<span class="kw">fn</span> <span class="ident">string_sum</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">m</span>: <span class="kw-2">&amp;</span><span class="ident">PyModule</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">string_sum</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">m</span>: <span class="kw-2">&amp;</span><span class="ident">PyModule</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="ident">m</span>.<span class="ident">add_wrapped</span>(<span class="macro">wrap_pyfunction</span><span class="macro">!</span>(<span class="ident">sum_as_string</span>))<span class="question-mark">?</span>;
 
     <span class="prelude-val">Ok</span>(())
@@ -73,7 +73,7 @@ pyo3 = &quot;0.7.0&quot;
 <span class="kw">use</span> <span class="ident">pyo3</span>::<span class="ident">prelude</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">pyo3</span>::<span class="ident">types</span>::<span class="ident">IntoPyDict</span>;
 
-<span class="kw">fn</span> <span class="ident">main</span>() <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">main</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
     <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
     <span class="kw">let</span> <span class="ident">sys</span> <span class="op">=</span> <span class="ident">py</span>.<span class="ident">import</span>(<span class="string">&quot;sys&quot;</span>)<span class="question-mark">?</span>;
@@ -131,8 +131,6 @@ heap as a part of a Python object.</p>
 a Python object reference.</p>
 </td></tr><tr class='module-item'><td><a class="trait" href="trait.FromPyPointer.html" title='pyo3::FromPyPointer trait'>FromPyPointer</a></td><td class='docblock-short'><p>Raw level conversion between <code>*mut ffi::PyObject</code> and PyO3 types.</p>
 </td></tr><tr class='module-item'><td><a class="trait" href="trait.IntoPy.html" title='pyo3::IntoPy trait'>IntoPy</a></td><td class='docblock-short'><p>Similar to <a href="https://doc.rust-lang.org/nightly/core/convert/trait.Into.html" title="std::convert::Into">std::convert::Into</a>, just that it requires a gil token.</p>
-</td></tr><tr class='module-item'><td><a class="trait" href="trait.IntoPyObject.html" title='pyo3::IntoPyObject trait'>IntoPyObject</a></td><td class='docblock-short'><p>Conversion trait that allows various objects to be converted into <code>PyObject</code>
-by consuming original object.</p>
 </td></tr><tr class='module-item'><td><a class="trait" href="trait.IntoPyPointer.html" title='pyo3::IntoPyPointer trait'>IntoPyPointer</a></td><td class='docblock-short'><p>This trait allows retrieving the underlying FFI pointer from Python objects.</p>
 </td></tr><tr class='module-item'><td><a class="trait" href="trait.ObjectProtocol.html" title='pyo3::ObjectProtocol trait'>ObjectProtocol</a></td><td class='docblock-short'><p>Python object model helper methods</p>
 </td></tr><tr class='module-item'><td><a class="trait" href="trait.PyErrArguments.html" title='pyo3::PyErrArguments trait'>PyErrArguments</a></td><td class='docblock-short'><p>Helper conversion trait that allows to use custom arguments for exception constructor.</p>

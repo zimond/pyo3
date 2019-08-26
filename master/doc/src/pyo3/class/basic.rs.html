@@ -501,14 +501,14 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">callback</span>::{<span class="ident">BoolCallbackConverter</span>, <span class="ident">HashConverter</span>, <span class="ident">PyObjectCallbackConverter</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">class</span>::<span class="ident">methods</span>::<span class="ident">PyMethodDef</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">err</span>::{<span class="ident">PyErr</span>, <span class="ident">PyResult</span>};
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">exceptions</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">objectprotocol</span>::<span class="ident">ObjectProtocol</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">type_object</span>::<span class="ident">PyTypeInfo</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">PyAny</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">FromPyObject</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">IntoPyPointer</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">Python</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">FromPyObject</span>, <span class="ident">IntoPyObject</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">exceptions</span>, <span class="ident">IntoPy</span>, <span class="ident">PyObject</span>};
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">os</span>::<span class="ident">raw</span>::<span class="ident">c_int</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ptr</span>;
 
@@ -526,70 +526,70 @@
 <span class="doccomment">/// Basic python class customization</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused_variables</span>)]</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyObjectProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>: <span class="ident">PyTypeInfo</span> {
-    <span class="kw">fn</span> <span class="ident">__getattr__</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="self">self</span>, <span class="ident">name</span>: <span class="self">Self</span>::<span class="ident">Name</span>) <span class="op">-&gt;</span> <span class="self">Self</span>::<span class="prelude-ty">Result</span>
+    <span class="kw">fn</span> <span class="ident">__getattr__</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="self">self</span>, <span class="ident">name</span>: <span class="self">Self</span>::<span class="ident">Name</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="prelude-ty">Result</span>
     <span class="kw">where</span>
         <span class="self">Self</span>: <span class="ident">PyObjectGetAttrProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>,
     {
         <span class="macro">unimplemented</span><span class="macro">!</span>()
     }
 
-    <span class="kw">fn</span> <span class="ident">__setattr__</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">name</span>: <span class="self">Self</span>::<span class="ident">Name</span>, <span class="ident">value</span>: <span class="self">Self</span>::<span class="ident">Value</span>) <span class="op">-&gt;</span> <span class="self">Self</span>::<span class="prelude-ty">Result</span>
+    <span class="kw">fn</span> <span class="ident">__setattr__</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">name</span>: <span class="self">Self</span>::<span class="ident">Name</span>, <span class="ident">value</span>: <span class="self">Self</span>::<span class="ident">Value</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="prelude-ty">Result</span>
     <span class="kw">where</span>
         <span class="self">Self</span>: <span class="ident">PyObjectSetAttrProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>,
     {
         <span class="macro">unimplemented</span><span class="macro">!</span>()
     }
 
-    <span class="kw">fn</span> <span class="ident">__delattr__</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">name</span>: <span class="self">Self</span>::<span class="ident">Name</span>) <span class="op">-&gt;</span> <span class="self">Self</span>::<span class="prelude-ty">Result</span>
+    <span class="kw">fn</span> <span class="ident">__delattr__</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">name</span>: <span class="self">Self</span>::<span class="ident">Name</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="prelude-ty">Result</span>
     <span class="kw">where</span>
         <span class="self">Self</span>: <span class="ident">PyObjectDelAttrProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>,
     {
         <span class="macro">unimplemented</span><span class="macro">!</span>()
     }
 
-    <span class="kw">fn</span> <span class="ident">__str__</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="self">Self</span>::<span class="prelude-ty">Result</span>
+    <span class="kw">fn</span> <span class="ident">__str__</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="prelude-ty">Result</span>
     <span class="kw">where</span>
         <span class="self">Self</span>: <span class="ident">PyObjectStrProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>,
     {
         <span class="macro">unimplemented</span><span class="macro">!</span>()
     }
 
-    <span class="kw">fn</span> <span class="ident">__repr__</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="self">Self</span>::<span class="prelude-ty">Result</span>
+    <span class="kw">fn</span> <span class="ident">__repr__</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="prelude-ty">Result</span>
     <span class="kw">where</span>
         <span class="self">Self</span>: <span class="ident">PyObjectReprProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>,
     {
         <span class="macro">unimplemented</span><span class="macro">!</span>()
     }
 
-    <span class="kw">fn</span> <span class="ident">__format__</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="self">self</span>, <span class="ident">format_spec</span>: <span class="self">Self</span>::<span class="ident">Format</span>) <span class="op">-&gt;</span> <span class="self">Self</span>::<span class="prelude-ty">Result</span>
+    <span class="kw">fn</span> <span class="ident">__format__</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="self">self</span>, <span class="ident">format_spec</span>: <span class="self">Self</span>::<span class="ident">Format</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="prelude-ty">Result</span>
     <span class="kw">where</span>
         <span class="self">Self</span>: <span class="ident">PyObjectFormatProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>,
     {
         <span class="macro">unimplemented</span><span class="macro">!</span>()
     }
 
-    <span class="kw">fn</span> <span class="ident">__hash__</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="self">Self</span>::<span class="prelude-ty">Result</span>
+    <span class="kw">fn</span> <span class="ident">__hash__</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="prelude-ty">Result</span>
     <span class="kw">where</span>
         <span class="self">Self</span>: <span class="ident">PyObjectHashProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>,
     {
         <span class="macro">unimplemented</span><span class="macro">!</span>()
     }
 
-    <span class="kw">fn</span> <span class="ident">__bool__</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="self">Self</span>::<span class="prelude-ty">Result</span>
+    <span class="kw">fn</span> <span class="ident">__bool__</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="prelude-ty">Result</span>
     <span class="kw">where</span>
         <span class="self">Self</span>: <span class="ident">PyObjectBoolProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>,
     {
         <span class="macro">unimplemented</span><span class="macro">!</span>()
     }
 
-    <span class="kw">fn</span> <span class="ident">__bytes__</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="self">Self</span>::<span class="prelude-ty">Result</span>
+    <span class="kw">fn</span> <span class="ident">__bytes__</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="prelude-ty">Result</span>
     <span class="kw">where</span>
         <span class="self">Self</span>: <span class="ident">PyObjectBytesProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>,
     {
         <span class="macro">unimplemented</span><span class="macro">!</span>()
     }
 
-    <span class="kw">fn</span> <span class="ident">__richcmp__</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="self">Self</span>::<span class="ident">Other</span>, <span class="ident">op</span>: <span class="ident">CompareOp</span>) <span class="op">-&gt;</span> <span class="self">Self</span>::<span class="prelude-ty">Result</span>
+    <span class="kw">fn</span> <span class="ident">__richcmp__</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="self">self</span>, <span class="ident">other</span>: <span class="self">Self</span>::<span class="ident">Other</span>, <span class="ident">op</span>: <span class="ident">CompareOp</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="prelude-ty">Result</span>
     <span class="kw">where</span>
         <span class="self">Self</span>: <span class="ident">PyObjectRichcmpProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>,
     {
@@ -599,54 +599,54 @@
 
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyObjectGetAttrProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>: <span class="ident">PyObjectProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {
     <span class="kw">type</span> <span class="ident">Name</span>: <span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>;
-    <span class="kw">type</span> <span class="ident">Success</span>: <span class="ident">IntoPyObject</span>;
-    <span class="kw">type</span> <span class="prelude-ty">Result</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PyResult</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Success</span><span class="op">&gt;&gt;</span>;
+    <span class="kw">type</span> <span class="ident">Success</span>: <span class="ident">IntoPy</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span>;
+    <span class="kw">type</span> <span class="prelude-ty">Result</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PyResult</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Success</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 }
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyObjectSetAttrProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>: <span class="ident">PyObjectProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {
     <span class="kw">type</span> <span class="ident">Name</span>: <span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>;
     <span class="kw">type</span> <span class="ident">Value</span>: <span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>;
-    <span class="kw">type</span> <span class="prelude-ty">Result</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;&gt;</span>;
+    <span class="kw">type</span> <span class="prelude-ty">Result</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span><span class="op">&gt;</span>;
 }
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyObjectDelAttrProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>: <span class="ident">PyObjectProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {
     <span class="kw">type</span> <span class="ident">Name</span>: <span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>;
-    <span class="kw">type</span> <span class="prelude-ty">Result</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;&gt;</span>;
+    <span class="kw">type</span> <span class="prelude-ty">Result</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PyResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span><span class="op">&gt;</span>;
 }
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyObjectStrProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>: <span class="ident">PyObjectProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {
-    <span class="kw">type</span> <span class="ident">Success</span>: <span class="ident">IntoPyObject</span>;
-    <span class="kw">type</span> <span class="prelude-ty">Result</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PyResult</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Success</span><span class="op">&gt;&gt;</span>;
+    <span class="kw">type</span> <span class="ident">Success</span>: <span class="ident">IntoPy</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span>;
+    <span class="kw">type</span> <span class="prelude-ty">Result</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PyResult</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Success</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 }
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyObjectReprProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>: <span class="ident">PyObjectProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {
-    <span class="kw">type</span> <span class="ident">Success</span>: <span class="ident">IntoPyObject</span>;
-    <span class="kw">type</span> <span class="prelude-ty">Result</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PyResult</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Success</span><span class="op">&gt;&gt;</span>;
+    <span class="kw">type</span> <span class="ident">Success</span>: <span class="ident">IntoPy</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span>;
+    <span class="kw">type</span> <span class="prelude-ty">Result</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PyResult</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Success</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 }
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyObjectFormatProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>: <span class="ident">PyObjectProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {
     <span class="kw">type</span> <span class="ident">Format</span>: <span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>;
-    <span class="kw">type</span> <span class="ident">Success</span>: <span class="ident">IntoPyObject</span>;
-    <span class="kw">type</span> <span class="prelude-ty">Result</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PyResult</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Success</span><span class="op">&gt;&gt;</span>;
+    <span class="kw">type</span> <span class="ident">Success</span>: <span class="ident">IntoPy</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span>;
+    <span class="kw">type</span> <span class="prelude-ty">Result</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PyResult</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Success</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 }
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyObjectHashProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>: <span class="ident">PyObjectProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {
-    <span class="kw">type</span> <span class="prelude-ty">Result</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">isize</span><span class="op">&gt;&gt;</span>;
+    <span class="kw">type</span> <span class="prelude-ty">Result</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">isize</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 }
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyObjectBoolProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>: <span class="ident">PyObjectProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {
-    <span class="kw">type</span> <span class="prelude-ty">Result</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;&gt;</span>;
+    <span class="kw">type</span> <span class="prelude-ty">Result</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 }
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyObjectBytesProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>: <span class="ident">PyObjectProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {
-    <span class="kw">type</span> <span class="ident">Success</span>: <span class="ident">IntoPyObject</span>;
-    <span class="kw">type</span> <span class="prelude-ty">Result</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PyResult</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Success</span><span class="op">&gt;&gt;</span>;
+    <span class="kw">type</span> <span class="ident">Success</span>: <span class="ident">IntoPy</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span>;
+    <span class="kw">type</span> <span class="prelude-ty">Result</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PyResult</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Success</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 }
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyObjectRichcmpProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>: <span class="ident">PyObjectProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {
     <span class="kw">type</span> <span class="ident">Other</span>: <span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>;
-    <span class="kw">type</span> <span class="ident">Success</span>: <span class="ident">IntoPyObject</span>;
-    <span class="kw">type</span> <span class="prelude-ty">Result</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PyResult</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Success</span><span class="op">&gt;&gt;</span>;
+    <span class="kw">type</span> <span class="ident">Success</span>: <span class="ident">IntoPy</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span>;
+    <span class="kw">type</span> <span class="prelude-ty">Result</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">PyResult</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Success</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 }
 
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">PyObjectProtocolImpl</span> {
-    <span class="kw">fn</span> <span class="ident">methods</span>() <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">PyMethodDef</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">methods</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">PyMethodDef</span><span class="op">&gt;</span> {
         <span class="ident">Vec</span>::<span class="ident">new</span>()
     }
     <span class="kw">fn</span> <span class="ident">tp_as_object</span>(<span class="ident">_type_object</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyTypeObject</span>) {}
-    <span class="kw">fn</span> <span class="ident">nb_bool_fn</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">inquiry</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">nb_bool_fn</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">inquiry</span><span class="op">&gt;</span> {
         <span class="prelude-val">None</span>
     }
 }
@@ -657,7 +657,7 @@
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">PyObjectProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>,
 {
-    <span class="kw">fn</span> <span class="ident">methods</span>() <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">PyMethodDef</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">methods</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">PyMethodDef</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">methods</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
 
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">def</span>) <span class="op">=</span> <span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">FormatProtocolImpl</span><span class="op">&gt;</span>::<span class="ident">__format__</span>() {
@@ -679,13 +679,13 @@
         <span class="ident">type_object</span>.<span class="ident">tp_richcompare</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">tp_richcompare</span>();
         <span class="ident">type_object</span>.<span class="ident">tp_setattro</span> <span class="op">=</span> <span class="ident">tp_setattro_impl</span>::<span class="ident">tp_setattro</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>();
     }
-    <span class="kw">fn</span> <span class="ident">nb_bool_fn</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">inquiry</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">nb_bool_fn</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">inquiry</span><span class="op">&gt;</span> {
         <span class="self">Self</span>::<span class="ident">nb_bool</span>()
     }
 }
 
 <span class="kw">trait</span> <span class="ident">GetAttrProtocolImpl</span> {
-    <span class="kw">fn</span> <span class="ident">tp_getattro</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">binaryfunc</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">tp_getattro</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">binaryfunc</span><span class="op">&gt;</span> {
         <span class="prelude-val">None</span>
     }
 }
@@ -696,12 +696,12 @@
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> <span class="ident">PyObjectGetAttrProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>,
 {
-    <span class="kw">fn</span> <span class="ident">tp_getattro</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">binaryfunc</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">tp_getattro</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">binaryfunc</span><span class="op">&gt;</span> {
         <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused_mut</span>)]</span>
         <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">wrap</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(
             <span class="ident">slf</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>,
             <span class="ident">arg</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>,
-        ) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>
+        ) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>
         <span class="kw">where</span>
             <span class="ident">T</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> <span class="ident">PyObjectGetAttrProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>,
         {
@@ -722,8 +722,8 @@
             <span class="kw">let</span> <span class="ident">arg</span> <span class="op">=</span> <span class="ident">py</span>.<span class="ident">from_borrowed_ptr</span>::<span class="op">&lt;</span><span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">PyAny</span><span class="op">&gt;</span>(<span class="ident">arg</span>);
 
             <span class="kw">let</span> <span class="ident">result</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">arg</span>.<span class="ident">extract</span>() {
-                <span class="prelude-val">Ok</span>(<span class="ident">arg</span>) <span class="op">=&gt;</span> <span class="ident">slf</span>.<span class="ident">__getattr__</span>(<span class="ident">arg</span>).<span class="ident">into</span>(),
-                <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>),
+                <span class="prelude-val">Ok</span>(<span class="ident">arg</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">slf</span>.<span class="ident">__getattr__</span>(<span class="ident">arg</span>).<span class="ident">into</span>(),
+                <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>),
             };
             <span class="kw">crate</span>::<span class="ident">callback</span>::<span class="ident">cb_convert</span>(<span class="ident">PyObjectCallbackConverter</span>, <span class="ident">py</span>, <span class="ident">result</span>)
         }
@@ -745,7 +745,7 @@
     <span class="doccomment">/// The signature is the same as for PyObject_SetAttr(), but setting v to NULL to delete an</span>
     <span class="doccomment">/// attribute must be supported. It is usually convenient to set this field to</span>
     <span class="doccomment">/// PyObject_GenericSetAttr(), which implements the normal way of setting object attributes.</span>
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">tp_setattro</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span>, <span class="ident">T</span>: <span class="ident">PyObjectProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;&gt;</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">setattrofunc</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">tp_setattro</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span>, <span class="ident">T</span>: <span class="ident">PyObjectProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span><span class="op">&gt;</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">setattrofunc</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">set_del</span>) <span class="op">=</span> <span class="ident">T</span>::<span class="ident">set_del_attr</span>() {
             <span class="prelude-val">Some</span>(<span class="ident">set_del</span>)
         } <span class="kw">else</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">set</span>) <span class="op">=</span> <span class="ident">T</span>::<span class="ident">set_attr</span>() {
@@ -758,24 +758,24 @@
     }
 
     <span class="kw">trait</span> <span class="ident">SetAttr</span> {
-        <span class="kw">fn</span> <span class="ident">set_attr</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">setattrofunc</span><span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">set_attr</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">setattrofunc</span><span class="op">&gt;</span> {
             <span class="prelude-val">None</span>
         }
     }
 
-    <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span>, <span class="ident">T</span>: <span class="ident">PyObjectProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;&gt;</span> <span class="ident">SetAttr</span> <span class="kw">for</span> <span class="ident">T</span> {}
+    <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span>, <span class="ident">T</span>: <span class="ident">PyObjectProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">SetAttr</span> <span class="kw">for</span> <span class="ident">T</span> {}
 
     <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">SetAttr</span> <span class="kw">for</span> <span class="ident">T</span>
     <span class="kw">where</span>
         <span class="ident">T</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> <span class="ident">PyObjectSetAttrProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>,
     {
-        <span class="kw">fn</span> <span class="ident">set_attr</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">setattrofunc</span><span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">set_attr</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">setattrofunc</span><span class="op">&gt;</span> {
             <span class="macro">py_func_set</span><span class="macro">!</span>(<span class="ident">PyObjectSetAttrProtocol</span>, <span class="ident">T</span>, <span class="ident">__setattr__</span>)
         }
     }
 
     <span class="kw">trait</span> <span class="ident">DelAttr</span> {
-        <span class="kw">fn</span> <span class="ident">del_attr</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">setattrofunc</span><span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">del_attr</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">setattrofunc</span><span class="op">&gt;</span> {
             <span class="prelude-val">None</span>
         }
     }
@@ -786,13 +786,13 @@
     <span class="kw">where</span>
         <span class="ident">T</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> <span class="ident">PyObjectDelAttrProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>,
     {
-        <span class="kw">fn</span> <span class="ident">del_attr</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">setattrofunc</span><span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">del_attr</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">setattrofunc</span><span class="op">&gt;</span> {
             <span class="macro">py_func_del</span><span class="macro">!</span>(<span class="ident">PyObjectDelAttrProtocol</span>, <span class="ident">T</span>, <span class="ident">__delattr__</span>)
         }
     }
 
     <span class="kw">trait</span> <span class="ident">SetDelAttr</span> {
-        <span class="kw">fn</span> <span class="ident">set_del_attr</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">setattrofunc</span><span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">set_del_attr</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">setattrofunc</span><span class="op">&gt;</span> {
             <span class="prelude-val">None</span>
         }
     }
@@ -803,7 +803,7 @@
     <span class="kw">where</span>
         <span class="ident">T</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> <span class="ident">PyObjectSetAttrProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> <span class="op">+</span> <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> <span class="ident">PyObjectDelAttrProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>,
     {
-        <span class="kw">fn</span> <span class="ident">set_del_attr</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">setattrofunc</span><span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">set_del_attr</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">setattrofunc</span><span class="op">&gt;</span> {
             <span class="macro">py_func_set_del</span><span class="macro">!</span>(
                 <span class="ident">PyObjectSetAttrProtocol</span>,
                 <span class="ident">PyObjectDelAttrProtocol</span>,
@@ -816,7 +816,7 @@
 }
 
 <span class="kw">trait</span> <span class="ident">StrProtocolImpl</span> {
-    <span class="kw">fn</span> <span class="ident">tp_str</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">unaryfunc</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">tp_str</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">unaryfunc</span><span class="op">&gt;</span> {
         <span class="prelude-val">None</span>
     }
 }
@@ -825,7 +825,7 @@
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> <span class="ident">PyObjectStrProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>,
 {
-    <span class="kw">fn</span> <span class="ident">tp_str</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">unaryfunc</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">tp_str</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">unaryfunc</span><span class="op">&gt;</span> {
         <span class="macro">py_unary_func</span><span class="macro">!</span>(
             <span class="ident">PyObjectStrProtocol</span>,
             <span class="ident">T</span>::<span class="ident">__str__</span>,
@@ -836,7 +836,7 @@
 }
 
 <span class="kw">trait</span> <span class="ident">ReprProtocolImpl</span> {
-    <span class="kw">fn</span> <span class="ident">tp_repr</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">unaryfunc</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">tp_repr</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">unaryfunc</span><span class="op">&gt;</span> {
         <span class="prelude-val">None</span>
     }
 }
@@ -845,7 +845,7 @@
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> <span class="ident">PyObjectReprProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>,
 {
-    <span class="kw">fn</span> <span class="ident">tp_repr</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">unaryfunc</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">tp_repr</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">unaryfunc</span><span class="op">&gt;</span> {
         <span class="macro">py_unary_func</span><span class="macro">!</span>(
             <span class="ident">PyObjectReprProtocol</span>,
             <span class="ident">T</span>::<span class="ident">__repr__</span>,
@@ -857,7 +857,7 @@
 
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">FormatProtocolImpl</span> {
-    <span class="kw">fn</span> <span class="ident">__format__</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PyMethodDef</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">__format__</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PyMethodDef</span><span class="op">&gt;</span> {
         <span class="prelude-val">None</span>
     }
 }
@@ -865,7 +865,7 @@
 
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">BytesProtocolImpl</span> {
-    <span class="kw">fn</span> <span class="ident">__bytes__</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PyMethodDef</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">__bytes__</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PyMethodDef</span><span class="op">&gt;</span> {
         <span class="prelude-val">None</span>
     }
 }
@@ -873,14 +873,14 @@
 
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">UnicodeProtocolImpl</span> {
-    <span class="kw">fn</span> <span class="ident">__unicode__</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PyMethodDef</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">__unicode__</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">PyMethodDef</span><span class="op">&gt;</span> {
         <span class="prelude-val">None</span>
     }
 }
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span>, <span class="ident">T</span><span class="op">&gt;</span> <span class="ident">UnicodeProtocolImpl</span> <span class="kw">for</span> <span class="ident">T</span> <span class="kw">where</span> <span class="ident">T</span>: <span class="ident">PyObjectProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {}
 
 <span class="kw">trait</span> <span class="ident">HashProtocolImpl</span> {
-    <span class="kw">fn</span> <span class="ident">tp_hash</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">hashfunc</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">tp_hash</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">hashfunc</span><span class="op">&gt;</span> {
         <span class="prelude-val">None</span>
     }
 }
@@ -889,7 +889,7 @@
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> <span class="ident">PyObjectHashProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>,
 {
-    <span class="kw">fn</span> <span class="ident">tp_hash</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">hashfunc</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">tp_hash</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">hashfunc</span><span class="op">&gt;</span> {
         <span class="macro">py_unary_func</span><span class="macro">!</span>(
             <span class="ident">PyObjectHashProtocol</span>,
             <span class="ident">T</span>::<span class="ident">__hash__</span>,
@@ -901,7 +901,7 @@
 }
 
 <span class="kw">trait</span> <span class="ident">BoolProtocolImpl</span> {
-    <span class="kw">fn</span> <span class="ident">nb_bool</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">inquiry</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">nb_bool</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">inquiry</span><span class="op">&gt;</span> {
         <span class="prelude-val">None</span>
     }
 }
@@ -910,7 +910,7 @@
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> <span class="ident">PyObjectBoolProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>,
 {
-    <span class="kw">fn</span> <span class="ident">nb_bool</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">inquiry</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">nb_bool</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">inquiry</span><span class="op">&gt;</span> {
         <span class="macro">py_unary_func</span><span class="macro">!</span>(
             <span class="ident">PyObjectBoolProtocol</span>,
             <span class="ident">T</span>::<span class="ident">__bool__</span>,
@@ -922,7 +922,7 @@
 }
 
 <span class="kw">trait</span> <span class="ident">RichcmpProtocolImpl</span> {
-    <span class="kw">fn</span> <span class="ident">tp_richcompare</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">richcmpfunc</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">tp_richcompare</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">richcmpfunc</span><span class="op">&gt;</span> {
         <span class="prelude-val">None</span>
     }
 }
@@ -931,12 +931,12 @@
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> <span class="ident">PyObjectRichcmpProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>,
 {
-    <span class="kw">fn</span> <span class="ident">tp_richcompare</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">richcmpfunc</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">tp_richcompare</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ffi</span>::<span class="ident">richcmpfunc</span><span class="op">&gt;</span> {
         <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span> <span class="ident">wrap</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(
             <span class="ident">slf</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>,
             <span class="ident">arg</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>,
             <span class="ident">op</span>: <span class="ident">c_int</span>,
-        ) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>
+        ) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span>
         <span class="kw">where</span>
             <span class="ident">T</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> <span class="ident">PyObjectRichcmpProtocol</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>,
         {
@@ -946,15 +946,15 @@
             <span class="kw">let</span> <span class="ident">arg</span> <span class="op">=</span> <span class="ident">py</span>.<span class="ident">from_borrowed_ptr</span>::<span class="op">&lt;</span><span class="ident">PyAny</span><span class="op">&gt;</span>(<span class="ident">arg</span>);
 
             <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">extract_op</span>(<span class="ident">op</span>) {
-                <span class="prelude-val">Ok</span>(<span class="ident">op</span>) <span class="op">=&gt;</span> <span class="kw">match</span> <span class="ident">arg</span>.<span class="ident">extract</span>() {
-                    <span class="prelude-val">Ok</span>(<span class="ident">arg</span>) <span class="op">=&gt;</span> <span class="ident">slf</span>.<span class="ident">__richcmp__</span>(<span class="ident">arg</span>, <span class="ident">op</span>).<span class="ident">into</span>(),
-                    <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>),
+                <span class="prelude-val">Ok</span>(<span class="ident">op</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">arg</span>.<span class="ident">extract</span>() {
+                    <span class="prelude-val">Ok</span>(<span class="ident">arg</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">slf</span>.<span class="ident">__richcmp__</span>(<span class="ident">arg</span>, <span class="ident">op</span>).<span class="ident">into</span>(),
+                    <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>),
                 },
-                <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>),
+                <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">e</span>),
             };
             <span class="kw">match</span> <span class="ident">res</span> {
-                <span class="prelude-val">Ok</span>(<span class="ident">val</span>) <span class="op">=&gt;</span> <span class="ident">val</span>.<span class="ident">into_object</span>(<span class="ident">py</span>).<span class="ident">into_ptr</span>(),
-                <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> {
+                <span class="prelude-val">Ok</span>(<span class="ident">val</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">val</span>.<span class="ident">into_py</span>(<span class="ident">py</span>).<span class="ident">into_ptr</span>(),
+                <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="ident">e</span>.<span class="ident">restore</span>(<span class="ident">py</span>);
                     <span class="ident">ptr</span>::<span class="ident">null_mut</span>()
                 }
@@ -964,15 +964,15 @@
     }
 }
 
-<span class="kw">fn</span> <span class="ident">extract_op</span>(<span class="ident">op</span>: <span class="ident">c_int</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">CompareOp</span><span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">extract_op</span>(<span class="ident">op</span>: <span class="ident">c_int</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">CompareOp</span><span class="op">&gt;</span> {
     <span class="kw">match</span> <span class="ident">op</span> {
-        <span class="ident">ffi</span>::<span class="ident">Py_LT</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">CompareOp</span>::<span class="ident">Lt</span>),
-        <span class="ident">ffi</span>::<span class="ident">Py_LE</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">CompareOp</span>::<span class="ident">Le</span>),
-        <span class="ident">ffi</span>::<span class="ident">Py_EQ</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">CompareOp</span>::<span class="ident">Eq</span>),
-        <span class="ident">ffi</span>::<span class="ident">Py_NE</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">CompareOp</span>::<span class="ident">Ne</span>),
-        <span class="ident">ffi</span>::<span class="ident">Py_GT</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">CompareOp</span>::<span class="ident">Gt</span>),
-        <span class="ident">ffi</span>::<span class="ident">Py_GE</span> <span class="op">=&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">CompareOp</span>::<span class="ident">Ge</span>),
-        <span class="kw">_</span> <span class="op">=&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">PyErr</span>::<span class="ident">new</span>::<span class="op">&lt;</span><span class="ident">exceptions</span>::<span class="ident">ValueError</span>, <span class="kw">_</span><span class="op">&gt;</span>(
+        <span class="ident">ffi</span>::<span class="ident">Py_LT</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">CompareOp</span>::<span class="ident">Lt</span>),
+        <span class="ident">ffi</span>::<span class="ident">Py_LE</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">CompareOp</span>::<span class="ident">Le</span>),
+        <span class="ident">ffi</span>::<span class="ident">Py_EQ</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">CompareOp</span>::<span class="ident">Eq</span>),
+        <span class="ident">ffi</span>::<span class="ident">Py_NE</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">CompareOp</span>::<span class="ident">Ne</span>),
+        <span class="ident">ffi</span>::<span class="ident">Py_GT</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">CompareOp</span>::<span class="ident">Gt</span>),
+        <span class="ident">ffi</span>::<span class="ident">Py_GE</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Ok</span>(<span class="ident">CompareOp</span>::<span class="ident">Ge</span>),
+        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Err</span>(<span class="ident">PyErr</span>::<span class="ident">new</span>::<span class="op">&lt;</span><span class="ident">exceptions</span>::<span class="ident">ValueError</span>, <span class="kw">_</span><span class="op">&gt;</span>(
             <span class="string">&quot;tp_richcompare called with invalid comparison operator&quot;</span>,
         )),
     }

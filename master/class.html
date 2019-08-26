@@ -438,7 +438,7 @@ impl MyClass {
 }
 #}</code></pre></pre>
 <p>Calls to these methods are protected by the GIL, so both <code>&amp;self</code> and <code>&amp;mut self</code> can be used.
-The return type must be <code>PyResult&lt;T&gt;</code> or <code>T</code> for some <code>T</code> that implements <code>IntoPyObject</code>;
+The return type must be <code>PyResult&lt;T&gt;</code> or <code>T</code> for some <code>T</code> that implements <code>IntoPy&lt;PyObject&gt;</code>;
 the latter is allowed if the method cannot raise Python exceptions.</p>
 <p>A <code>Python</code> parameter can be specified as part of method signature, in this case the <code>py</code> argument
 gets injected by the method wrapper, e.g.</p>
@@ -488,12 +488,12 @@ impl MyClass {
 This may be the type object of a derived class.</li>
 <li>The first parameter implicitly has type <code>&amp;PyType</code>.</li>
 <li>For details on <code>parameter-list</code>, see the documentation of <code>Method arguments</code> section.</li>
-<li>The return type must be <code>PyResult&lt;T&gt;</code> or <code>T</code> for some <code>T</code> that implements <code>IntoPyObject</code>.</li>
+<li>The return type must be <code>PyResult&lt;T&gt;</code> or <code>T</code> for some <code>T</code> that implements <code>IntoPy&lt;PyObject&gt;</code>.</li>
 </ul>
 <a class="header" href="#static-methods" id="static-methods"><h2>Static methods</h2></a>
 <p>To create a static method for a custom class, the method needs to be annotated with the
 <code>#[staticmethod]</code> attribute. The return type must be <code>T</code> or <code>PyResult&lt;T&gt;</code> for some <code>T</code> that implements
-<code>IntoPyObject</code>.</p>
+<code>IntoPy&lt;PyObject&gt;</code>.</p>
 <pre><pre class="playpen"><code class="language-rust">
 # #![allow(unused_variables)]
 #fn main() {
@@ -586,7 +586,7 @@ each protocol implementation block has to be annotated with the <code>#[pyproto]
 <a class="header" href="#attribute-access" id="attribute-access"><h4>Attribute access</h4></a>
 <p>To customize object attribute access, define the following methods:</p>
 <ul>
-<li><code>fn __getattr__(&amp;self, name: FromPyObject) -&gt; PyResult&lt;impl IntoPyObject&gt;</code></li>
+<li><code>fn __getattr__(&amp;self, name: FromPyObject) -&gt; PyResult&lt;impl IntoPy&lt;PyObject&gt;&gt;</code></li>
 <li><code>fn __setattr__(&amp;mut self, name: FromPyObject, value: FromPyObject) -&gt; PyResult&lt;()&gt;</code></li>
 <li><code>fn __delattr__(&amp;mut self, name: FromPyObject) -&gt; PyResult&lt;()&gt;</code></li>
 </ul>
@@ -692,8 +692,8 @@ struct GCTracked {} // Fails because it does not implement PyGCProtocol
 <a href="https://docs.rs/pyo3/0.7.0/pyo3/class/iter/trait.PyIterProtocol.html"><code>PyIterProtocol</code></a> trait.
 It includes two methods <code>__iter__</code> and <code>__next__</code>:</p>
 <ul>
-<li><code>fn __iter__(slf: PyRefMut&lt;Self&gt;) -&gt; PyResult&lt;impl IntoPyObject&gt;</code></li>
-<li><code>fn __next__(slf: PyRefMut&lt;Self&gt;) -&gt; PyResult&lt;Option&lt;impl IntoPyObject&gt;&gt;</code></li>
+<li><code>fn __iter__(slf: PyRefMut&lt;Self&gt;) -&gt; PyResult&lt;impl IntoPy&lt;PyObject&gt;&gt;</code></li>
+<li><code>fn __next__(slf: PyRefMut&lt;Self&gt;) -&gt; PyResult&lt;Option&lt;impl IntoPy&lt;PyObject&gt;&gt;&gt;</code></li>
 </ul>
 <p>Returning <code>Ok(None)</code> from <code>__next__</code> indicates that that there are no further items.</p>
 <p>Example:</p>

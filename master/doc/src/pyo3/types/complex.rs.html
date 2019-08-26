@@ -324,8 +324,8 @@
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">ffi</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">PyPy</span>))]</span>
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">instance</span>::<span class="ident">PyNativeType</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">object</span>::<span class="ident">PyObject</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">AsPyPointer</span>;
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">PyObject</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">Python</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">PyPy</span>))]</span>
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ops</span>::<span class="kw-2">*</span>;
@@ -339,24 +339,24 @@
 
 <span class="kw">impl</span> <span class="ident">PyComplex</span> {
     <span class="doccomment">/// Creates a new Python `PyComplex` object, from its real and imaginary values.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_doubles</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">real</span>: <span class="ident">c_double</span>, <span class="ident">imag</span>: <span class="ident">c_double</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">PyComplex</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_doubles</span>(<span class="ident">py</span>: <span class="ident">Python</span>, <span class="ident">real</span>: <span class="ident">c_double</span>, <span class="ident">imag</span>: <span class="ident">c_double</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">PyComplex</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">PyComplex_FromDoubles</span>(<span class="ident">real</span>, <span class="ident">imag</span>);
             <span class="ident">py</span>.<span class="ident">from_owned_ptr</span>(<span class="ident">ptr</span>)
         }
     }
     <span class="doccomment">/// Returns the real value of `PyComplex`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">real</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">c_double</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">real</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">c_double</span> {
         <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">PyComplex_RealAsDouble</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>()) }
     }
     <span class="doccomment">/// Returns the imaginary value of `PyComplex`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">imag</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">c_double</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">imag</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">c_double</span> {
         <span class="kw">unsafe</span> { <span class="ident">ffi</span>::<span class="ident">PyComplex_ImagAsDouble</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>()) }
     }
     <span class="doccomment">/// Returns `|self|`.</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>))]</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">PyPy</span>))]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">abs</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">c_double</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">abs</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">c_double</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">val</span> <span class="op">=</span> (<span class="kw-2">*</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyComplexObject</span>)).<span class="ident">cval</span>;
             <span class="ident">ffi</span>::<span class="ident">_Py_c_abs</span>(<span class="ident">val</span>)
@@ -365,7 +365,7 @@
     <span class="doccomment">/// Returns `self ** other`</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>))]</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">PyPy</span>))]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">pow</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="ident">PyComplex</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">PyComplex</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">pow</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="ident">PyComplex</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">PyComplex</span> {
         <span class="kw">unsafe</span> {
             <span class="self">self</span>.<span class="ident">py</span>()
                 .<span class="ident">from_owned_ptr</span>(<span class="ident">complex_operation</span>(<span class="self">self</span>, <span class="ident">other</span>, <span class="ident">ffi</span>::<span class="ident">_Py_c_pow</span>))
@@ -379,8 +379,8 @@
 <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">complex_operation</span>(
     <span class="ident">l</span>: <span class="kw-2">&amp;</span><span class="ident">PyComplex</span>,
     <span class="ident">r</span>: <span class="kw-2">&amp;</span><span class="ident">PyComplex</span>,
-    <span class="ident">operation</span>: <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">ffi</span>::<span class="ident">Py_complex</span>, <span class="ident">ffi</span>::<span class="ident">Py_complex</span>) <span class="op">-&gt;</span> <span class="ident">ffi</span>::<span class="ident">Py_complex</span>,
-) <span class="op">-&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span> {
+    <span class="ident">operation</span>: <span class="kw">unsafe</span> <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> <span class="kw">fn</span>(<span class="ident">ffi</span>::<span class="ident">Py_complex</span>, <span class="ident">ffi</span>::<span class="ident">Py_complex</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ffi</span>::<span class="ident">Py_complex</span>,
+) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyObject</span> {
     <span class="kw">let</span> <span class="ident">l_val</span> <span class="op">=</span> (<span class="kw-2">*</span>(<span class="ident">l</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyComplexObject</span>)).<span class="ident">cval</span>;
     <span class="kw">let</span> <span class="ident">r_val</span> <span class="op">=</span> (<span class="kw-2">*</span>(<span class="ident">r</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyComplexObject</span>)).<span class="ident">cval</span>;
     <span class="ident">ffi</span>::<span class="ident">PyComplex_FromCComplex</span>(<span class="ident">operation</span>(<span class="ident">l_val</span>, <span class="ident">r_val</span>))
@@ -390,7 +390,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">PyPy</span>))]</span>
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;py</span><span class="op">&gt;</span> <span class="ident">Add</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span> {
     <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span>;
-    <span class="kw">fn</span> <span class="ident">add</span>(<span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span> {
+    <span class="kw">fn</span> <span class="ident">add</span>(<span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span> {
         <span class="kw">unsafe</span> {
             <span class="self">self</span>.<span class="ident">py</span>()
                 .<span class="ident">from_owned_ptr</span>(<span class="ident">complex_operation</span>(<span class="self">self</span>, <span class="ident">other</span>, <span class="ident">ffi</span>::<span class="ident">_Py_c_sum</span>))
@@ -402,7 +402,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">PyPy</span>))]</span>
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;py</span><span class="op">&gt;</span> <span class="ident">Sub</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span> {
     <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span>;
-    <span class="kw">fn</span> <span class="ident">sub</span>(<span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span> {
+    <span class="kw">fn</span> <span class="ident">sub</span>(<span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span> {
         <span class="kw">unsafe</span> {
             <span class="self">self</span>.<span class="ident">py</span>()
                 .<span class="ident">from_owned_ptr</span>(<span class="ident">complex_operation</span>(<span class="self">self</span>, <span class="ident">other</span>, <span class="ident">ffi</span>::<span class="ident">_Py_c_diff</span>))
@@ -414,7 +414,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">PyPy</span>))]</span>
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;py</span><span class="op">&gt;</span> <span class="ident">Mul</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span> {
     <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span>;
-    <span class="kw">fn</span> <span class="ident">mul</span>(<span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span> {
+    <span class="kw">fn</span> <span class="ident">mul</span>(<span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span> {
         <span class="kw">unsafe</span> {
             <span class="self">self</span>.<span class="ident">py</span>()
                 .<span class="ident">from_owned_ptr</span>(<span class="ident">complex_operation</span>(<span class="self">self</span>, <span class="ident">other</span>, <span class="ident">ffi</span>::<span class="ident">_Py_c_prod</span>))
@@ -426,7 +426,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">PyPy</span>))]</span>
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;py</span><span class="op">&gt;</span> <span class="ident">Div</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span> {
     <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span>;
-    <span class="kw">fn</span> <span class="ident">div</span>(<span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span> {
+    <span class="kw">fn</span> <span class="ident">div</span>(<span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span> {
         <span class="kw">unsafe</span> {
             <span class="self">self</span>.<span class="ident">py</span>()
                 .<span class="ident">from_owned_ptr</span>(<span class="ident">complex_operation</span>(<span class="self">self</span>, <span class="ident">other</span>, <span class="ident">ffi</span>::<span class="ident">_Py_c_quot</span>))
@@ -438,7 +438,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">PyPy</span>))]</span>
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;py</span><span class="op">&gt;</span> <span class="ident">Neg</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span> {
     <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span>;
-    <span class="kw">fn</span> <span class="ident">neg</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span> {
+    <span class="kw">fn</span> <span class="ident">neg</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span> {
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">val</span> <span class="op">=</span> (<span class="kw-2">*</span>(<span class="self">self</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ffi</span>::<span class="ident">PyComplexObject</span>)).<span class="ident">cval</span>;
             <span class="self">self</span>.<span class="ident">py</span>()
@@ -453,15 +453,15 @@
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">err</span>::<span class="ident">PyErr</span>;
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">types</span>::<span class="ident">PyAny</span>;
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">PyResult</span>;
-    <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">FromPyObject</span>, <span class="ident">IntoPyObject</span>, <span class="ident">ToPyObject</span>};
+    <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">FromPyObject</span>, <span class="ident">ToPyObject</span>};
     <span class="kw">use</span> <span class="ident">num_complex</span>::<span class="ident">Complex</span>;
 
     <span class="kw">impl</span> <span class="ident">PyComplex</span> {
         <span class="doccomment">/// Creates a new Python `PyComplex` object from num_complex::Complex.</span>
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_complex</span><span class="op">&lt;</span><span class="lifetime">&#39;py</span>, <span class="ident">F</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">c_double</span><span class="op">&gt;&gt;</span>(
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_complex</span><span class="op">&lt;</span><span class="lifetime">&#39;py</span>, <span class="ident">F</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">c_double</span><span class="op">&gt;</span><span class="op">&gt;</span>(
             <span class="ident">py</span>: <span class="ident">Python</span><span class="op">&lt;</span><span class="lifetime">&#39;py</span><span class="op">&gt;</span>,
             <span class="ident">complex</span>: <span class="ident">Complex</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>,
-        ) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span> {
+        ) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;py</span> <span class="ident">PyComplex</span> {
             <span class="kw">unsafe</span> {
                 <span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">PyComplex_FromDoubles</span>(<span class="ident">complex</span>.<span class="ident">re</span>.<span class="ident">into</span>(), <span class="ident">complex</span>.<span class="ident">im</span>.<span class="ident">into</span>());
                 <span class="ident">py</span>.<span class="ident">from_owned_ptr</span>(<span class="ident">ptr</span>)
@@ -469,15 +469,15 @@
         }
     }
     <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">complex_conversion</span> {
-        (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">float</span>: <span class="ident">ty</span>) <span class="op">=&gt;</span> {
+        (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">float</span>: <span class="ident">ty</span>) <span class="op">=</span><span class="op">&gt;</span> {
             <span class="kw">impl</span> <span class="ident">ToPyObject</span> <span class="kw">for</span> <span class="ident">Complex</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">float</span><span class="op">&gt;</span> {
                 <span class="attribute">#[<span class="ident">inline</span>]</span>
-                <span class="kw">fn</span> <span class="ident">to_object</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyObject</span> {
-                    <span class="ident">IntoPyObject</span>::<span class="ident">into_object</span>(<span class="self">self</span>.<span class="ident">to_owned</span>(), <span class="ident">py</span>)
+                <span class="kw">fn</span> <span class="ident">to_object</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PyObject</span> {
+                    <span class="kw">crate</span>::<span class="ident">IntoPy</span>::<span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span>::<span class="ident">into_py</span>(<span class="self">self</span>.<span class="ident">to_owned</span>(), <span class="ident">py</span>)
                 }
             }
-            <span class="kw">impl</span> <span class="ident">IntoPyObject</span> <span class="kw">for</span> <span class="ident">Complex</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">float</span><span class="op">&gt;</span> {
-                <span class="kw">fn</span> <span class="ident">into_object</span>(<span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-&gt;</span> <span class="ident">PyObject</span> {
+            <span class="kw">impl</span> <span class="kw">crate</span>::<span class="ident">IntoPy</span><span class="op">&lt;</span><span class="ident">PyObject</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Complex</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">float</span><span class="op">&gt;</span> {
+                <span class="kw">fn</span> <span class="ident">into_py</span>(<span class="self">self</span>, <span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PyObject</span> {
                     <span class="kw">unsafe</span> {
                         <span class="kw">let</span> <span class="ident">raw_obj</span> <span class="op">=</span>
                             <span class="ident">ffi</span>::<span class="ident">PyComplex_FromDoubles</span>(<span class="self">self</span>.<span class="ident">re</span> <span class="kw">as</span> <span class="ident">c_double</span>, <span class="self">self</span>.<span class="ident">im</span> <span class="kw">as</span> <span class="ident">c_double</span>);
@@ -488,10 +488,10 @@
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">Py_LIMITED_API</span>))]</span>
             <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">float_cmp</span>)]</span> <span class="comment">// The comparison is for an error value</span>
             <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;source</span><span class="op">&gt;</span> <span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;source</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Complex</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">float</span><span class="op">&gt;</span> {
-                <span class="kw">fn</span> <span class="ident">extract</span>(<span class="ident">obj</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;source</span> <span class="ident">PyAny</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">Complex</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">float</span><span class="op">&gt;&gt;</span> {
+                <span class="kw">fn</span> <span class="ident">extract</span>(<span class="ident">obj</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;source</span> <span class="ident">PyAny</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">Complex</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">float</span><span class="op">&gt;</span><span class="op">&gt;</span> {
                     <span class="kw">unsafe</span> {
                         <span class="kw">let</span> <span class="ident">val</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">PyComplex_AsCComplex</span>(<span class="ident">obj</span>.<span class="ident">as_ptr</span>());
-                        <span class="kw">if</span> <span class="ident">val</span>.<span class="ident">real</span> <span class="op">==</span> <span class="op">-</span><span class="number">1.0</span> <span class="op">&amp;&amp;</span> <span class="ident">PyErr</span>::<span class="ident">occurred</span>(<span class="ident">obj</span>.<span class="ident">py</span>()) {
+                        <span class="kw">if</span> <span class="ident">val</span>.<span class="ident">real</span> <span class="op">=</span><span class="op">=</span> <span class="op">-</span><span class="number">1.0</span> <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">PyErr</span>::<span class="ident">occurred</span>(<span class="ident">obj</span>.<span class="ident">py</span>()) {
                             <span class="prelude-val">Err</span>(<span class="ident">PyErr</span>::<span class="ident">fetch</span>(<span class="ident">obj</span>.<span class="ident">py</span>()))
                         } <span class="kw">else</span> {
                             <span class="prelude-val">Ok</span>(<span class="ident">Complex</span>::<span class="ident">new</span>(<span class="ident">val</span>.<span class="ident">real</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">float</span>, <span class="ident">val</span>.<span class="ident">imag</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">float</span>))
@@ -502,11 +502,11 @@
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">Py_LIMITED_API</span>)]</span>
             <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">float_cmp</span>)]</span> <span class="comment">// The comparison is for an error value</span>
             <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;source</span><span class="op">&gt;</span> <span class="ident">FromPyObject</span><span class="op">&lt;</span><span class="lifetime">&#39;source</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Complex</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">float</span><span class="op">&gt;</span> {
-                <span class="kw">fn</span> <span class="ident">extract</span>(<span class="ident">obj</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;source</span> <span class="ident">PyAny</span>) <span class="op">-&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">Complex</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">float</span><span class="op">&gt;&gt;</span> {
+                <span class="kw">fn</span> <span class="ident">extract</span>(<span class="ident">obj</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;source</span> <span class="ident">PyAny</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="ident">Complex</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">float</span><span class="op">&gt;</span><span class="op">&gt;</span> {
                     <span class="kw">unsafe</span> {
                         <span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> <span class="ident">obj</span>.<span class="ident">as_ptr</span>();
                         <span class="kw">let</span> <span class="ident">real</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">PyComplex_RealAsDouble</span>(<span class="ident">ptr</span>);
-                        <span class="kw">if</span> <span class="ident">real</span> <span class="op">==</span> <span class="op">-</span><span class="number">1.0</span> <span class="op">&amp;&amp;</span> <span class="ident">PyErr</span>::<span class="ident">occurred</span>(<span class="ident">obj</span>.<span class="ident">py</span>()) {
+                        <span class="kw">if</span> <span class="ident">real</span> <span class="op">=</span><span class="op">=</span> <span class="op">-</span><span class="number">1.0</span> <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">PyErr</span>::<span class="ident">occurred</span>(<span class="ident">obj</span>.<span class="ident">py</span>()) {
                             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">PyErr</span>::<span class="ident">fetch</span>(<span class="ident">obj</span>.<span class="ident">py</span>()));
                         }
                         <span class="kw">let</span> <span class="ident">imag</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">PyComplex_ImagAsDouble</span>(<span class="ident">ptr</span>);
@@ -535,14 +535,14 @@
         <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
         <span class="kw">let</span> <span class="ident">val</span> <span class="op">=</span> <span class="ident">Complex</span>::<span class="ident">new</span>(<span class="number">3.0</span>, <span class="number">1.2</span>);
         <span class="kw">let</span> <span class="ident">obj</span> <span class="op">=</span> <span class="ident">val</span>.<span class="ident">to_object</span>(<span class="ident">py</span>);
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">obj</span>.<span class="ident">extract</span>::<span class="op">&lt;</span><span class="ident">Complex</span><span class="op">&lt;</span><span class="ident">f64</span><span class="op">&gt;&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>(), <span class="ident">val</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">obj</span>.<span class="ident">extract</span>::<span class="op">&lt;</span><span class="ident">Complex</span><span class="op">&lt;</span><span class="ident">f64</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>(), <span class="ident">val</span>);
     }
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">from_complex_err</span>() {
         <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
         <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
         <span class="kw">let</span> <span class="ident">obj</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="number">1</span>].<span class="ident">to_object</span>(<span class="ident">py</span>);
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">obj</span>.<span class="ident">extract</span>::<span class="op">&lt;</span><span class="ident">Complex</span><span class="op">&lt;</span><span class="ident">f64</span><span class="op">&gt;&gt;</span>(<span class="ident">py</span>).<span class="ident">is_err</span>());
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">obj</span>.<span class="ident">extract</span>::<span class="op">&lt;</span><span class="ident">Complex</span><span class="op">&lt;</span><span class="ident">f64</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">is_err</span>());
     }
 }
 
