@@ -503,10 +503,6 @@
 <span id="503">503</span>
 <span id="504">504</span>
 <span id="505">505</span>
-<span id="506">506</span>
-<span id="507">507</span>
-<span id="508">508</span>
-<span id="509">509</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 
@@ -621,7 +617,7 @@
     <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">pool</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="kw-2">mut</span> <span class="ident">ReleasePool</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span><span class="ident">POOL</span>;
-            <span class="ident">pool</span>.<span class="ident">drain</span>(<span class="self">self</span>.<span class="ident">owned</span>, <span class="self">self</span>.<span class="ident">borrowed</span>, <span class="bool-val">true</span>);
+            <span class="ident">pool</span>.<span class="ident">drain</span>(<span class="self">self</span>.<span class="ident">python</span>(), <span class="self">self</span>.<span class="ident">owned</span>, <span class="self">self</span>.<span class="ident">borrowed</span>, <span class="bool-val">true</span>);
 
             <span class="ident">ffi</span>::<span class="ident">PyGILState_Release</span>(<span class="self">self</span>.<span class="ident">gstate</span>);
         }
@@ -666,7 +662,7 @@
         <span class="ident">vec</span>.<span class="ident">set_len</span>(<span class="number">0</span>);
     }
 
-    <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">drain</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">owned</span>: <span class="ident">usize</span>, <span class="ident">borrowed</span>: <span class="ident">usize</span>, <span class="ident">pointers</span>: <span class="ident">bool</span>) {
+    <span class="kw">pub</span> <span class="kw">unsafe</span> <span class="kw">fn</span> <span class="ident">drain</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">_py</span>: <span class="ident">Python</span>, <span class="ident">owned</span>: <span class="ident">usize</span>, <span class="ident">borrowed</span>: <span class="ident">usize</span>, <span class="ident">pointers</span>: <span class="ident">bool</span>) {
         <span class="comment">// Release owned objects(call decref)</span>
         <span class="kw">while</span> <span class="ident">owned</span> <span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">owned</span>.<span class="ident">len</span>() {
             <span class="kw">let</span> <span class="ident">last</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">owned</span>.<span class="ident">pop_back</span>().<span class="ident">unwrap</span>();
@@ -686,35 +682,31 @@
 <span class="kw">static</span> <span class="kw-2">mut</span> <span class="ident">POOL</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">ReleasePool</span> <span class="op">=</span> ::<span class="ident">std</span>::<span class="ident">ptr</span>::<span class="ident">null_mut</span>();
 
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">GILPool</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">GILPool</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {
+    <span class="ident">py</span>: <span class="ident">Python</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span>,
     <span class="ident">owned</span>: <span class="ident">usize</span>,
     <span class="ident">borrowed</span>: <span class="ident">usize</span>,
     <span class="ident">pointers</span>: <span class="ident">bool</span>,
     <span class="ident">no_send</span>: <span class="ident">marker</span>::<span class="ident">PhantomData</span><span class="op">&lt;</span><span class="ident">rc</span>::<span class="ident">Rc</span><span class="op">&lt;</span>()<span class="op">&gt;</span><span class="op">&gt;</span>,
 }
 
-<span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">GILPool</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> <span class="ident">GILPool</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">GILPool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">GILPool</span> {
         <span class="kw">let</span> <span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="kw-2">mut</span> <span class="ident">ReleasePool</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span><span class="ident">POOL</span> };
         <span class="ident">GILPool</span> {
+            <span class="ident">py</span>,
             <span class="ident">owned</span>: <span class="ident">p</span>.<span class="ident">owned</span>.<span class="ident">len</span>(),
             <span class="ident">borrowed</span>: <span class="ident">p</span>.<span class="ident">borrowed</span>.<span class="ident">len</span>(),
             <span class="ident">pointers</span>: <span class="bool-val">true</span>,
             <span class="ident">no_send</span>: <span class="ident">marker</span>::<span class="ident">PhantomData</span>,
         }
     }
-}
-
-<span class="kw">impl</span> <span class="ident">GILPool</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">GILPool</span> {
-        <span class="ident">GILPool</span>::<span class="ident">default</span>()
-    }
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_no_pointers</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">GILPool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_no_pointers</span>(<span class="ident">py</span>: <span class="ident">Python</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">GILPool</span> {
         <span class="kw">let</span> <span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="kw-2">mut</span> <span class="ident">ReleasePool</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span><span class="ident">POOL</span> };
         <span class="ident">GILPool</span> {
+            <span class="ident">py</span>,
             <span class="ident">owned</span>: <span class="ident">p</span>.<span class="ident">owned</span>.<span class="ident">len</span>(),
             <span class="ident">borrowed</span>: <span class="ident">p</span>.<span class="ident">borrowed</span>.<span class="ident">len</span>(),
             <span class="ident">pointers</span>: <span class="bool-val">false</span>,
@@ -723,11 +715,11 @@
     }
 }
 
-<span class="kw">impl</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">GILPool</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">GILPool</span><span class="op">&lt;</span><span class="lifetime">&#39;p</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">pool</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="kw-2">mut</span> <span class="ident">ReleasePool</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span><span class="ident">POOL</span>;
-            <span class="ident">pool</span>.<span class="ident">drain</span>(<span class="self">self</span>.<span class="ident">owned</span>, <span class="self">self</span>.<span class="ident">borrowed</span>, <span class="self">self</span>.<span class="ident">pointers</span>);
+            <span class="ident">pool</span>.<span class="ident">drain</span>(<span class="self">self</span>.<span class="ident">py</span>, <span class="self">self</span>.<span class="ident">owned</span>, <span class="self">self</span>.<span class="ident">borrowed</span>, <span class="self">self</span>.<span class="ident">pointers</span>);
         }
     }
 }
@@ -904,7 +896,7 @@
             <span class="kw">let</span> <span class="ident">p</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="kw-2">mut</span> <span class="ident">ReleasePool</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span><span class="ident">POOL</span>;
 
             {
-                <span class="kw">let</span> <span class="ident">_pool</span> <span class="op">=</span> <span class="ident">GILPool</span>::<span class="ident">new</span>();
+                <span class="kw">let</span> <span class="ident">_pool</span> <span class="op">=</span> <span class="ident">GILPool</span>::<span class="ident">new</span>(<span class="ident">py</span>);
                 <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">p</span>.<span class="ident">owned</span>.<span class="ident">len</span>(), <span class="number">0</span>);
 
                 <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">gil</span>::<span class="ident">register_owned</span>(<span class="ident">py</span>, <span class="ident">obj</span>.<span class="ident">into_nonnull</span>());
@@ -912,7 +904,7 @@
                 <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">p</span>.<span class="ident">owned</span>.<span class="ident">len</span>(), <span class="number">1</span>);
                 <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">ffi</span>::<span class="ident">Py_REFCNT</span>(<span class="ident">obj_ptr</span>), <span class="number">2</span>);
                 {
-                    <span class="kw">let</span> <span class="ident">_pool</span> <span class="op">=</span> <span class="ident">GILPool</span>::<span class="ident">new</span>();
+                    <span class="kw">let</span> <span class="ident">_pool</span> <span class="op">=</span> <span class="ident">GILPool</span>::<span class="ident">new</span>(<span class="ident">py</span>);
                     <span class="kw">let</span> <span class="ident">obj</span> <span class="op">=</span> <span class="ident">get_object</span>();
                     <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="ident">gil</span>::<span class="ident">register_owned</span>(<span class="ident">py</span>, <span class="ident">obj</span>.<span class="ident">into_nonnull</span>());
                     <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">p</span>.<span class="ident">owned</span>.<span class="ident">len</span>(), <span class="number">2</span>);
@@ -973,7 +965,7 @@
                 <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">ffi</span>::<span class="ident">Py_REFCNT</span>(<span class="ident">obj_ptr</span>), <span class="number">1</span>);
 
                 {
-                    <span class="kw">let</span> <span class="ident">_pool</span> <span class="op">=</span> <span class="ident">GILPool</span>::<span class="ident">new</span>();
+                    <span class="kw">let</span> <span class="ident">_pool</span> <span class="op">=</span> <span class="ident">GILPool</span>::<span class="ident">new</span>(<span class="ident">py</span>);
                     <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">p</span>.<span class="ident">borrowed</span>.<span class="ident">len</span>(), <span class="number">1</span>);
                     <span class="ident">gil</span>::<span class="ident">register_borrowed</span>(<span class="ident">py</span>, <span class="ident">NonNull</span>::<span class="ident">new</span>(<span class="ident">obj_ptr</span>).<span class="ident">unwrap</span>());
                     <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">p</span>.<span class="ident">borrowed</span>.<span class="ident">len</span>(), <span class="number">2</span>);

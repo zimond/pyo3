@@ -617,6 +617,30 @@ fn module_with_functions(py: Python, m: &amp;PyModule) -&gt; PyResult&lt;()&gt; 
 
 # fn main() {}
 </code></pre></pre>
+<a class="header" href="#argument-parsing" id="argument-parsing"><h2>Argument parsing</h2></a>
+<p>Both the <code>#[pyfunction]</code> and <code>#[pyfn]</code> attributes support specifying details of
+argument parsing.  The details are given in the section &quot;Method arguments&quot; in
+the <a href="class.html">Classes</a> chapter.  Here is an example for a function that accepts
+arbitrary keyword arguments (<code>**kwargs</code> in Python syntax) and returns the number
+that was passed:</p>
+<pre><pre class="playpen"><code class="language-rust"># extern crate pyo3;
+use pyo3::prelude::*;
+use pyo3::wrap_pyfunction;
+use pyo3::types::PyDict;
+
+#[pyfunction(kwds=&quot;**&quot;)]
+fn num_kwds(kwds: Option&lt;&amp;PyDict&gt;) -&gt; usize {
+    kwds.map_or(0, |dict| dict.len())
+}
+
+#[pymodule]
+fn module_with_functions(py: Python, m: &amp;PyModule) -&gt; PyResult&lt;()&gt; {
+    m.add_wrapped(wrap_pyfunction!(num_kwds)).unwrap();
+    Ok(())
+}
+
+# fn main() {}
+</code></pre></pre>
 <a class="header" href="#making-the-function-signature-available-to-python" id="making-the-function-signature-available-to-python"><h3>Making the function signature available to Python</h3></a>
 <p>In order to make the function signature available to Python to be retrieved via
 <code>inspect.signature</code>, simply make sure the first line of your docstring is
