@@ -168,7 +168,7 @@ name = &quot;string_sum&quot;
 crate-type = [&quot;cdylib&quot;]
 
 [dependencies.pyo3]
-version = &quot;0.7.0&quot;
+version = &quot;0.8.0&quot;
 features = [&quot;extension-module&quot;]
 </code></pre>
 <p><strong><code>src/lib.rs</code></strong></p>
@@ -204,7 +204,7 @@ rustflags = [
 <a class="header" href="#using-python-from-rust" id="using-python-from-rust"><h2>Using Python from Rust</h2></a>
 <p>Add <code>pyo3</code> to your <code>Cargo.toml</code> like this:</p>
 <pre><code class="language-toml">[dependencies]
-pyo3 = &quot;0.7.0&quot;
+pyo3 = &quot;0.8.0&quot;
 </code></pre>
 <p>Example program displaying the value of <code>sys.version</code> and the current user name:</p>
 <pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
@@ -238,13 +238,13 @@ fn main() -&gt; PyResult&lt;()&gt; {
 <a class="header" href="#extract" id="extract"><h2><code>.extract()</code></h2></a>
 <p>The easiest way to convert a Python object to a Rust value is using <code>.extract()?</code>.</p>
 <a class="header" href="#topyobject-trait" id="topyobject-trait"><h2><code>ToPyObject</code> trait</h2></a>
-<p><a href="https://docs.rs/pyo3/0.7.0/pyo3/trait.ToPyObject.html"><code>ToPyObject</code></a> trait is a conversion trait that allows various objects to be
-converted into <a href="https://docs.rs/pyo3/0.7.0/pyo3/struct.PyObject.html"><code>PyObject</code></a>. <code>IntoPy&lt;PyObject&gt;</code> serves the
+<p><a href="https://docs.rs/pyo3/0.8.0/pyo3/trait.ToPyObject.html"><code>ToPyObject</code></a> trait is a conversion trait that allows various objects to be
+converted into <a href="https://docs.rs/pyo3/0.8.0/pyo3/struct.PyObject.html"><code>PyObject</code></a>. <code>IntoPy&lt;PyObject&gt;</code> serves the
 same purpose, except that it consumes <code>self</code>.</p>
 <a class="header" href="#frompyobject-and-reffrompyobject-trait" id="frompyobject-and-reffrompyobject-trait"><h2><code>FromPyObject</code> and <code>RefFromPyObject</code> trait</h2></a>
 <a class="header" href="#args-and-kwargs-for-python-object-call" id="args-and-kwargs-for-python-object-call"><h2><code>*args</code> and <code>**kwargs</code> for python object call</h2></a>
 <p>There are several ways how to pass positional and keyword arguments to a Python object call.
-The <a href="https://docs.rs/pyo3/0.7.0/pyo3/trait.ObjectProtocol.html"><code>ObjectProtocol</code></a> trait provides two methods:</p>
+The <a href="https://docs.rs/pyo3/0.8.0/pyo3/trait.ObjectProtocol.html"><code>ObjectProtocol</code></a> trait provides two methods:</p>
 <ul>
 <li><code>call</code> - call any callable Python object.</li>
 <li><code>call_method</code> - call a specific method on the object, shorthand for <code>get_attr</code> then <code>call</code>.</li>
@@ -283,7 +283,7 @@ fn main() {
 }
 </code></pre></pre>
 <p><code>kwargs</code> can be <code>None</code> or <code>Some(&amp;PyDict)</code>. You can use the
-<a href="https://docs.rs/pyo3/0.7.0/pyo3/types/trait.IntoPyDict.html"><code>IntoPyDict</code></a> trait to convert other dict-like containers, e.g. <code>HashMap</code>, <code>BTreeMap</code> as well as tuples with up to 10 elements and <code>Vec</code>s where each element is a two-element tuple.</p>
+<a href="https://docs.rs/pyo3/0.8.0/pyo3/types/trait.IntoPyDict.html"><code>IntoPyDict</code></a> trait to convert other dict-like containers, e.g. <code>HashMap</code>, <code>BTreeMap</code> as well as tuples with up to 10 elements and <code>Vec</code>s where each element is a two-element tuple.</p>
 <pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
 use pyo3::types::{IntoPyDict, PyDict};
 use std::collections::HashMap;
@@ -356,7 +356,7 @@ fn main() {
 }
 </code></pre></pre>
 <a class="header" href="#raise-an-exception" id="raise-an-exception"><h2>Raise an exception</h2></a>
-<p>To raise an exception, first you need to obtain an exception type and construct a new <a href="https://docs.rs/pyo3/0.7.0/pyo3/struct.PyErr.html"><code>PyErr</code></a>, then call the <a href="https://docs.rs/pyo3/0.7.0/pyo3/struct.PyErr.html#method.restore"><code>PyErr::restore()</code></a> method to write the exception back to the Python interpreter's global state.</p>
+<p>To raise an exception, first you need to obtain an exception type and construct a new <a href="https://docs.rs/pyo3/0.8.0/pyo3/struct.PyErr.html"><code>PyErr</code></a>, then call the <a href="https://docs.rs/pyo3/0.8.0/pyo3/struct.PyErr.html#method.restore"><code>PyErr::restore()</code></a> method to write the exception back to the Python interpreter's global state.</p>
 <pre><pre class="playpen"><code class="language-rust">use pyo3::{Python, PyErr};
 use pyo3::exceptions;
 
@@ -368,7 +368,7 @@ fn main() {
     drop(PyErr::fetch(py));
 }
 </code></pre></pre>
-<p>If you already have a Python exception instance, you can simply call <a href="https://docs.rs/pyo3/0.7.0/pyo3/struct.PyErr.html#method.from_instance"><code>PyErr::from_instance()</code></a>.</p>
+<p>If you already have a Python exception instance, you can simply call <a href="https://docs.rs/pyo3/0.8.0/pyo3/struct.PyErr.html#method.from_instance"><code>PyErr::from_instance()</code></a>.</p>
 <pre><code class="language-rust ignore">PyErr::from_instance(py, err).restore(py);
 </code></pre>
 <p>If a Rust type exists for the exception, then it is possible to use the <code>new</code> method.
@@ -391,7 +391,7 @@ fn my_func(arg: PyObject) -&gt; PyResult&lt;()&gt; {
 #}</code></pre></pre>
 <a class="header" href="#check-exception-type" id="check-exception-type"><h2>Check exception type</h2></a>
 <p>Python has an <a href="https://docs.python.org/3/library/functions.html#isinstance"><code>isinstance</code></a> method to check an object's type,
-in PyO3 there is a <a href="https://docs.rs/pyo3/0.7.0/pyo3/struct.Python.html#method.is_instance"><code>Python::is_instance()</code></a> method which does the same thing.</p>
+in PyO3 there is a <a href="https://docs.rs/pyo3/0.8.0/pyo3/struct.Python.html#method.is_instance"><code>Python::is_instance()</code></a> method which does the same thing.</p>
 <pre><pre class="playpen"><code class="language-rust">use pyo3::Python;
 use pyo3::types::{PyBool, PyList};
 
@@ -404,7 +404,7 @@ fn main() {
     assert!(py.is_instance::&lt;PyList, _&gt;(list.as_ref()).unwrap());
 }
 </code></pre></pre>
-<p><a href="https://docs.rs/pyo3/0.7.0/pyo3/struct.Python.html#method.is_instance"><code>Python::is_instance()</code></a> calls the underlying <a href="https://docs.rs/pyo3/0.7.0/pyo3/types/struct.PyType.html#method.is_instance"><code>PyType::is_instance</code></a> method to do the actual work.</p>
+<p><a href="https://docs.rs/pyo3/0.8.0/pyo3/struct.Python.html#method.is_instance"><code>Python::is_instance()</code></a> calls the underlying <a href="https://docs.rs/pyo3/0.8.0/pyo3/types/struct.PyType.html#method.is_instance"><code>PyType::is_instance</code></a> method to do the actual work.</p>
 <p>To check the type of an exception, you can simply do:</p>
 <pre><pre class="playpen"><code class="language-rust"># use pyo3::exceptions;
 # use pyo3::prelude::*;
@@ -416,9 +416,9 @@ err.is_instance::&lt;exceptions::TypeError&gt;(py);
 # }
 </code></pre></pre>
 <a class="header" href="#handle-rust-errors" id="handle-rust-errors"><h2>Handle Rust Errors</h2></a>
-<p>The vast majority of operations in this library will return <a href="https://docs.rs/pyo3/0.7.0/pyo3/prelude/type.PyResult.html"><code>PyResult&lt;T&gt;</code></a>.
+<p>The vast majority of operations in this library will return <a href="https://docs.rs/pyo3/0.8.0/pyo3/prelude/type.PyResult.html"><code>PyResult&lt;T&gt;</code></a>.
 This is an alias for the type <code>Result&lt;T, PyErr&gt;</code>.</p>
-<p>A <a href="https://docs.rs/pyo3/0.7.0/pyo3/struct.PyErr.html"><code>PyErr</code></a> represents a Python exception.
+<p>A <a href="https://docs.rs/pyo3/0.8.0/pyo3/struct.PyErr.html"><code>PyErr</code></a> represents a Python exception.
 Errors within the PyO3 library are also exposed as Python exceptions.</p>
 <p>The PyO3 library handles Python exceptions in two stages. During the first stage, a <code>PyErr</code> instance is
 created. At this stage, holding Python's GIL is not required. During the second stage, an actual Python
@@ -427,7 +427,7 @@ exception instance is created and set active in the Python interpreter.</p>
 for this custom error is enough. <code>PyErr::new</code> accepts an argument in the form
 of <code>ToPyObject + 'static</code>. If the <code>'static</code> constraint can not be satisfied or
 more complex arguments are required, the
-<a href="https://docs.rs/pyo3/0.7.0/pyo3/trait.PyErrArguments.html"><code>PyErrArguments</code></a>
+<a href="https://docs.rs/pyo3/0.8.0/pyo3/trait.PyErrArguments.html"><code>PyErrArguments</code></a>
 trait can be implemented. In that case, actual exception argument creation is delayed
 until a <code>Python</code> object is available.</p>
 <pre><pre class="playpen"><code class="language-rust">
@@ -501,7 +501,7 @@ fn tell(file: PyObject) -&gt; PyResult&lt;u64&gt; {
 }
 
 #}</code></pre></pre>
-<p><a href="https://docs.rs/pyo3/0.7.0/pyo3/exceptions/index.html"><code>pyo3::exceptions</code></a>
+<p><a href="https://docs.rs/pyo3/0.8.0/pyo3/exceptions/index.html"><code>pyo3::exceptions</code></a>
 defines exceptions for several standard library modules.</p>
 <a class="header" href="#python-modules" id="python-modules"><h1>Python Modules</h1></a>
 <p>As shown in the Getting Started chapter, you can create a module as follows:</p>
@@ -1120,7 +1120,7 @@ mapping or number protocols. PyO3 defines separate traits for each of them. To p
 Python object behavior, you need to implement the specific trait for your struct. Important note,
 each protocol implementation block has to be annotated with the <code>#[pyproto]</code> attribute.</p>
 <a class="header" href="#basic-object-customization" id="basic-object-customization"><h3>Basic object customization</h3></a>
-<p>The <a href="https://docs.rs/pyo3/0.7.0/pyo3/class/basic/trait.PyObjectProtocol.html"><code>PyObjectProtocol</code></a> trait provides several basic customizations.</p>
+<p>The <a href="https://docs.rs/pyo3/0.8.0/pyo3/class/basic/trait.PyObjectProtocol.html"><code>PyObjectProtocol</code></a> trait provides several basic customizations.</p>
 <a class="header" href="#attribute-access" id="attribute-access"><h4>Attribute access</h4></a>
 <p>To customize object attribute access, define the following methods:</p>
 <ul>
@@ -1175,7 +1175,7 @@ The return type must be <code>PyResult&lt;T&gt;</code> where <code>T</code> is o
 <p>If your type owns references to other Python objects, you will need to
 integrate with Python's garbage collector so that the GC is aware of
 those references.
-To do this, implement the <a href="https://docs.rs/pyo3/0.7.0/pyo3/class/gc/trait.PyGCProtocol.html"><code>PyGCProtocol</code></a> trait for your struct.
+To do this, implement the <a href="https://docs.rs/pyo3/0.8.0/pyo3/class/gc/trait.PyGCProtocol.html"><code>PyGCProtocol</code></a> trait for your struct.
 It includes two methods <code>__traverse__</code> and <code>__clear__</code>.
 These correspond to the slots <code>tp_traverse</code> and <code>tp_clear</code> in the Python C API.
 <code>__traverse__</code> must call <code>visit.call()</code> for each reference to another Python object.
@@ -1227,7 +1227,7 @@ struct GCTracked {} // Fails because it does not implement PyGCProtocol
 </code></pre>
 <a class="header" href="#iterator-types" id="iterator-types"><h3>Iterator Types</h3></a>
 <p>Iterators can be defined using the
-<a href="https://docs.rs/pyo3/0.7.0/pyo3/class/iter/trait.PyIterProtocol.html"><code>PyIterProtocol</code></a> trait.
+<a href="https://docs.rs/pyo3/0.8.0/pyo3/class/iter/trait.PyIterProtocol.html"><code>PyIterProtocol</code></a> trait.
 It includes two methods <code>__iter__</code> and <code>__next__</code>:</p>
 <ul>
 <li><code>fn __iter__(slf: PyRefMut&lt;Self&gt;) -&gt; PyResult&lt;impl IntoPy&lt;PyObject&gt;&gt;</code></li>
@@ -1271,7 +1271,7 @@ only possible with the specialization feature, which can't be used on stable.</p
 <p>CPython has the infamous GIL (Global Interpreter Lock), which prevents developers
 from getting true parallelism when running pure Python code. With PyO3, you can
 release the GIL when executing Rust code to achieve true parallelism.</p>
-<p>The <a href="https://docs.rs/pyo3/0.7.0/pyo3/struct.Python.html#method.allow_threads"><code>Python::allow_threads</code></a>
+<p>The <a href="https://docs.rs/pyo3/0.8.0/pyo3/struct.Python.html#method.allow_threads"><code>Python::allow_threads</code></a>
 method temporarily releases the GIL, thus allowing other Python threads to run.</p>
 <pre><code class="language-rust ignore">impl Python {
     pub fn allow_threads&lt;T, F&gt;(self, f: F) -&gt; T where F: Send + FnOnce() -&gt; T {}
@@ -1345,7 +1345,7 @@ then we can run <code>pytest tests</code> to benchmark them.</p>
 <a class="header" href="#testing" id="testing"><h2>Testing</h2></a>
 <p>Currently, <a href="https://github.com/PyO3/pyo3/issues/341">#341</a> causes <code>cargo test</code> to fail with weird linking errors when the <code>extension-module</code> feature is activated. For now you can work around this by making the <code>extension-module</code> feature optional and running the tests with <code>cargo test --no-default-features</code>:</p>
 <pre><code class="language-toml">[dependencies.pyo3]
-version = &quot;0.7.0&quot;
+version = &quot;0.8.0&quot;
 
 [features]
 extension-module = [&quot;pyo3/extension-module&quot;]
