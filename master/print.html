@@ -200,7 +200,7 @@ rustflags = [
 ]
 </code></pre>
 <p>For developing, you can copy and rename the shared library from the target folder: On MacOS, rename <code>libstring_sum.dylib</code> to <code>string_sum.so</code>, on Windows <code>libstring_sum.dll</code> to <code>string_sum.pyd</code> and on Linux <code>libstring_sum.so</code> to <code>string_sum.so</code>. Then open a Python shell in the same folder and you'll be able to <code>import string_sum</code>.</p>
-<p>To build, test and publish your crate as a Python module, you can use <a href="https://github.com/PyO3/pyo3-pack">pyo3-pack</a> or <a href="https://github.com/PyO3/setuptools-rust">setuptools-rust</a>. You can find an example for setuptools-rust in <a href="examples/word-count">examples/word-count</a>, while pyo3-pack should work on your crate without any configuration.</p>
+<p>To build, test and publish your crate as a Python module, you can use <a href="https://github.com/PyO3/maturin">maturin</a> or <a href="https://github.com/PyO3/setuptools-rust">setuptools-rust</a>. You can find an example for setuptools-rust in <a href="examples/word-count">examples/word-count</a>, while maturin should work on your crate without any configuration.</p>
 <a class="header" href="#using-python-from-rust" id="using-python-from-rust"><h2>Using Python from Rust</h2></a>
 <p>Add <code>pyo3</code> to your <code>Cargo.toml</code> like this:</p>
 <pre><code class="language-toml">[dependencies]
@@ -533,7 +533,7 @@ fn sum_as_string(a:i64, b:i64) -&gt; String {
 # fn main() {}
 </code></pre></pre>
 <p>The <code>#[pymodule]</code> procedural macro attribute takes care of exporting the initialization function of your module to Python. It can take as an argument the name of your module, which must be the name of the <code>.so</code> or <code>.pyd</code> file; the default is the Rust function's name.</p>
-<p>To import the module, either copy the shared library as described in <a href="./overview.html">Get Started</a> or use a tool, e.g. <code>pyo3-pack develop</code> with <a href="https://github.com/PyO3/pyo3-pack">pyo3-pack</a> or <code>python setup.py develop</code> with <a href="https://github.com/PyO3/setuptools-rust">setuptools-rust</a>.</p>
+<p>To import the module, either copy the shared library as described in <a href="./overview.html">Get Started</a> or use a tool, e.g. <code>maturin develop</code> with <a href="https://github.com/PyO3/maturin">maturin</a> or <code>python setup.py develop</code> with <a href="https://github.com/PyO3/setuptools-rust">setuptools-rust</a>.</p>
 <a class="header" href="#documentation" id="documentation"><h2>Documentation</h2></a>
 <p>The <a href="https://doc.rust-lang.org/stable/book/first-edition/comments.html">Rust doc comments</a> of the module initialization function will be applied automatically as the Python doc string of your module.</p>
 <pre><code class="language-python">import rust2py
@@ -1375,7 +1375,7 @@ pyo3 = &quot;0.6&quot;
 </code></pre>
 <p>On Linux/macOS you might have to change <code>LD_LIBRARY_PATH</code> to include libpython, while on windows you might need to set <code>LIB</code> to include <code>pythonxy.lib</code> (where x and y are major and minor version), which is normally either in the <code>libs</code> or <code>Lib</code> folder of a Python installation.</p>
 <a class="header" href="#distribution" id="distribution"><h2>Distribution</h2></a>
-<p>There are two ways to distribute your module as a Python package: the old, <a href="https://github.com/PyO3/setuptools-rust">setuptools-rust</a>, and the new, <a href="https://github.com/pyo3/pyo3-pack">pyo3-pack</a>. setuptools-rust needs some configuration files (<code>setup.py</code>, <code>MANIFEST.in</code>, <code>build-wheels.sh</code>, etc.) and external tools (docker, twine). pyo3-pack doesn't need any configuration files. It can not yet build sdist though (<a href="https://github.com/PyO3/pyo3-pack/issues/2">pyo3/pyo3-pack#2</a>).</p>
+<p>There are two ways to distribute your module as a Python package: the old, <a href="https://github.com/PyO3/setuptools-rust">setuptools-rust</a>, and the new, <a href="https://github.com/pyo3/maturin">maturin</a>. setuptools-rust needs some configuration files (<code>setup.py</code>, <code>MANIFEST.in</code>, <code>build-wheels.sh</code>, etc.) and external tools (docker, twine). maturin doesn't need any configuration files. It can not yet build sdist though (<a href="https://github.com/PyO3/maturin/issues/2">pyo3/maturin#2</a>).</p>
 <a class="header" href="#cross-compiling" id="cross-compiling"><h2>Cross Compiling</h2></a>
 <p>Cross compiling PyO3 modules is relatively straightforward and requires a few pieces of software:</p>
 <ul>

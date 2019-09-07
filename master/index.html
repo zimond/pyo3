@@ -200,7 +200,7 @@ rustflags = [
 ]
 </code></pre>
 <p>For developing, you can copy and rename the shared library from the target folder: On MacOS, rename <code>libstring_sum.dylib</code> to <code>string_sum.so</code>, on Windows <code>libstring_sum.dll</code> to <code>string_sum.pyd</code> and on Linux <code>libstring_sum.so</code> to <code>string_sum.so</code>. Then open a Python shell in the same folder and you'll be able to <code>import string_sum</code>.</p>
-<p>To build, test and publish your crate as a Python module, you can use <a href="https://github.com/PyO3/pyo3-pack">pyo3-pack</a> or <a href="https://github.com/PyO3/setuptools-rust">setuptools-rust</a>. You can find an example for setuptools-rust in <a href="examples/word-count">examples/word-count</a>, while pyo3-pack should work on your crate without any configuration.</p>
+<p>To build, test and publish your crate as a Python module, you can use <a href="https://github.com/PyO3/maturin">maturin</a> or <a href="https://github.com/PyO3/setuptools-rust">setuptools-rust</a>. You can find an example for setuptools-rust in <a href="examples/word-count">examples/word-count</a>, while maturin should work on your crate without any configuration.</p>
 <a class="header" href="#using-python-from-rust" id="using-python-from-rust"><h2>Using Python from Rust</h2></a>
 <p>Add <code>pyo3</code> to your <code>Cargo.toml</code> like this:</p>
 <pre><code class="language-toml">[dependencies]
