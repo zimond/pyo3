@@ -6,5 +6,4 @@ implementors["pyo3"] = [];
             } else {
                 window.pending_implementors = implementors;
             }
-        
-})()
+        })()

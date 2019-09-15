@@ -6,5 +6,4 @@ implementors["pyo3"] = [{text:"impl&lt;'a, T:&nbsp;<a class=\"trait\" href=\"pyo
             } else {
                 window.pending_implementors = implementors;
             }
-        
-})()
+        })()

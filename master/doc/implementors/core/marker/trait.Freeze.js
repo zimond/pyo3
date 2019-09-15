@@ -6,5 +6,4 @@ implementors["pyo3"] = [{text:"impl Freeze for <a class=\"struct\" href=\"pyo3/s
             } else {
                 window.pending_implementors = implementors;
             }
-        
-})()
+        })()
