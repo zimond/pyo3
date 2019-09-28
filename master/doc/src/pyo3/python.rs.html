@@ -421,6 +421,35 @@
 <span id="421">421</span>
 <span id="422">422</span>
 <span id="423">423</span>
+<span id="424">424</span>
+<span id="425">425</span>
+<span id="426">426</span>
+<span id="427">427</span>
+<span id="428">428</span>
+<span id="429">429</span>
+<span id="430">430</span>
+<span id="431">431</span>
+<span id="432">432</span>
+<span id="433">433</span>
+<span id="434">434</span>
+<span id="435">435</span>
+<span id="436">436</span>
+<span id="437">437</span>
+<span id="438">438</span>
+<span id="439">439</span>
+<span id="440">440</span>
+<span id="441">441</span>
+<span id="442">442</span>
+<span id="443">443</span>
+<span id="444">444</span>
+<span id="445">445</span>
+<span id="446">446</span>
+<span id="447">447</span>
+<span id="448">448</span>
+<span id="449">449</span>
+<span id="450">450</span>
+<span id="451">451</span>
+<span id="452">452</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 <span class="comment">//</span>
@@ -514,6 +543,16 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// If `globals` is `None`, it defaults to Python module `__main__`.</span>
     <span class="doccomment">/// If `locals` is `None`, it defaults to the value of `globals`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Example:</span>
+    <span class="doccomment">/// ```</span>
+    <span class="doccomment">/// # use pyo3::{types::{PyBytes, PyDict}, prelude::*};</span>
+    <span class="doccomment">/// # let gil = pyo3::Python::acquire_gil();</span>
+    <span class="doccomment">/// # let py = gil.python();</span>
+    <span class="doccomment">/// let result = py.eval(&quot;[i * 10 for i in range(5)]&quot;, None, None).unwrap();</span>
+    <span class="doccomment">/// let res: Vec&lt;i64&gt; = result.extract().unwrap();</span>
+    <span class="doccomment">/// assert_eq!(res, vec![0, 10, 20, 30, 40])</span>
+    <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">eval</span>(
         <span class="self">self</span>,
         <span class="ident">code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
@@ -527,6 +566,26 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// If `globals` is `None`, it defaults to Python module `__main__`.</span>
     <span class="doccomment">/// If `locals` is `None`, it defaults to the value of `globals`.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Example:</span>
+    <span class="doccomment">/// ```</span>
+    <span class="doccomment">/// use pyo3::{types::{PyBytes, PyDict}, prelude::*};</span>
+    <span class="doccomment">/// let gil = pyo3::Python::acquire_gil();</span>
+    <span class="doccomment">/// let py = gil.python();</span>
+    <span class="doccomment">/// let locals = PyDict::new(py);</span>
+    <span class="doccomment">/// py.run(</span>
+    <span class="doccomment">///     r#&quot;</span>
+    <span class="doccomment">/// import base64</span>
+    <span class="doccomment">/// s = &#39;Hello Rust!&#39;</span>
+    <span class="doccomment">/// ret = base64.b64encode(s.encode(&#39;utf-8&#39;))</span>
+    <span class="doccomment">/// &quot;#,</span>
+    <span class="doccomment">///    None,</span>
+    <span class="doccomment">///    Some(locals),</span>
+    <span class="doccomment">/// ).unwrap();</span>
+    <span class="doccomment">/// let ret = locals.get_item(&quot;ret&quot;).unwrap();</span>
+    <span class="doccomment">/// let b64: &amp;PyBytes = ret.downcast_ref().unwrap();</span>
+    <span class="doccomment">/// assert_eq!(b64.as_bytes(), b&quot;SGVsbG8gUnVzdCE=&quot;);</span>
+    <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">run</span>(
         <span class="self">self</span>,
         <span class="ident">code</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
@@ -553,7 +612,6 @@
         <span class="ident">locals</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">PyDict</span><span class="op">&gt;</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">PyResult</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;p</span> <span class="ident">PyAny</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">code</span> <span class="op">=</span> <span class="ident">CString</span>::<span class="ident">new</span>(<span class="ident">code</span>)<span class="question-mark">?</span>;
-
         <span class="kw">unsafe</span> {
             <span class="kw">let</span> <span class="ident">mptr</span> <span class="op">=</span> <span class="ident">ffi</span>::<span class="ident">PyImport_AddModule</span>(<span class="string">&quot;__main__\0&quot;</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="kw">_</span>);
             <span class="kw">if</span> <span class="ident">mptr</span>.<span class="ident">is_null</span>() {

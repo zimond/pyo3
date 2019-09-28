@@ -72,7 +72,7 @@
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <ol class="chapter"><li><a href="get_started.html"><strong aria-hidden="true">1.</strong> Get Started</a></li><li><a href="conversions.html"><strong aria-hidden="true">2.</strong> Type Conversions</a></li><li><a href="exception.html"><strong aria-hidden="true">3.</strong> Python Exception</a></li><li><a href="module.html"><strong aria-hidden="true">4.</strong> Python Module</a></li><li><a href="function.html"><strong aria-hidden="true">5.</strong> Python Function</a></li><li><a href="class.html"><strong aria-hidden="true">6.</strong> Python Class</a></li><li><a href="parallelism.html"><strong aria-hidden="true">7.</strong> Parallelism</a></li><li><a href="debugging.html"><strong aria-hidden="true">8.</strong> Debugging</a></li><li><a href="advanced.html"><strong aria-hidden="true">9.</strong> Advanced Topics</a></li><li><a href="building_and_distribution.html"><strong aria-hidden="true">10.</strong> Building and Distribution</a></li><li><a href="pypy.html"><strong aria-hidden="true">11.</strong> PyPy support</a></li><li><a href="rust_cpython.html"><strong aria-hidden="true">12.</strong> Appendix: PyO3 and rust-cpython</a></li></ol>
+            <ol class="chapter"><li><a href="get_started.html"><strong aria-hidden="true">1.</strong> Get Started</a></li><li><a href="conversions.html"><strong aria-hidden="true">2.</strong> Type Conversions</a></li><li><a href="exception.html"><strong aria-hidden="true">3.</strong> Python Exception</a></li><li><a href="module.html"><strong aria-hidden="true">4.</strong> Python Module</a></li><li><a href="function.html"><strong aria-hidden="true">5.</strong> Python Function</a></li><li><a href="class.html"><strong aria-hidden="true">6.</strong> Python Class</a></li><li><a href="python_from_rust.html"><strong aria-hidden="true">7.</strong> Call Python from Rust</a></li><li><a href="parallelism.html"><strong aria-hidden="true">8.</strong> Parallelism</a></li><li><a href="debugging.html"><strong aria-hidden="true">9.</strong> Debugging</a></li><li><a href="advanced.html"><strong aria-hidden="true">10.</strong> Advanced Topics</a></li><li><a href="building_and_distribution.html"><strong aria-hidden="true">11.</strong> Building and Distribution</a></li><li><a href="pypy.html"><strong aria-hidden="true">12.</strong> PyPy support</a></li><li><a href="rust_cpython.html"><strong aria-hidden="true">13.</strong> Appendix: PyO3 and rust-cpython</a></li></ol>
         </nav>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -210,9 +210,17 @@ pyo3 = &quot;0.8.0&quot;
 <pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
 use pyo3::types::IntoPyDict;
 
-fn main() -&gt; PyResult&lt;()&gt; {
+fn main() -&gt; Result&lt;(), ()&gt; {
     let gil = Python::acquire_gil();
     let py = gil.python();
+    main_(py).map_err(|e| {
+        // We can't display python error type via ::std::fmt::Display,
+        // so print error here manually.
+        e.print_and_set_sys_last_vars(py);
+    })
+}
+
+fn main_(py: Python) -&gt; PyResult&lt;()&gt; {
     let sys = py.import(&quot;sys&quot;)?;
     let version: String = sys.get(&quot;version&quot;)?.extract()?;
     let locals = [(&quot;os&quot;, py.import(&quot;os&quot;)?)].into_py_dict(py);
@@ -222,6 +230,8 @@ fn main() -&gt; PyResult&lt;()&gt; {
     Ok(())
 }
 </code></pre></pre>
+<p>Our guide has <a href="https://pyo3.rs/master/python_from_rust.html">a section</a> with lots of examples
+about this topic.</p>
 <a class="header" href="#examples-and-tooling" id="examples-and-tooling"><h2>Examples and tooling</h2></a>
 <ul>
 <li><a href="examples/word-count">examples/word-count</a> <em>Counting the occurrences of a word in a text file</em></li>
@@ -1267,6 +1277,90 @@ pyclass dependent on whether there is an impl block, we'd need to implement the 
 <code>#[pyclass]</code> and override the implementation in <code>#[pymethods]</code>, which is to the best of my knowledge
 only possible with the specialization feature, which can't be used on stable.</p>
 <p>To escape this we use <a href="https://github.com/dtolnay/inventory">inventory</a>, which allows us to collect <code>impl</code>s from arbitrary source code by exploiting some binary trick. See <a href="https://github.com/dtolnay/inventory#how-it-works">inventory: how it works</a> and <code>pyo3_derive_backend::py_class::impl_inventory</code> for more details.</p>
+<a class="header" href="#call-python-functions-from-rust" id="call-python-functions-from-rust"><h1>Call Python functions from Rust</h1></a>
+<a class="header" href="#want-to-run-just-an-expression-then-use-eval" id="want-to-run-just-an-expression-then-use-eval"><h2>Want to run just an expression? Then use eval.</h2></a>
+<p><a href="https://pyo3.rs/master/doc/pyo3/struct.Python.html#method.eval"><code>Python::eval</code></a> is
+a method to execute a <a href="https://docs.python.org/3.7/reference/expressions.html">Python expression</a>
+and returns the evaluated value as <code>PyAny</code>.</p>
+<pre><pre class="playpen"><code class="language-rust">use pyo3::prelude::*;
+use pyo3::types::IntoPyDict;
+
+fn main() -&gt; Result&lt;(), ()&gt; {
+    let gil = Python::acquire_gil();
+    let py = gil.python();
+    let result = py.eval(&quot;[i * 10 for i in range(5)]&quot;, None, None).map_err(|e| {
+        e.print_and_set_sys_last_vars(py);
+    })?;
+    let res: Vec&lt;i64&gt; = result.extract().unwrap();
+    assert_eq!(res, vec![0, 10, 20, 30, 40]);
+    Ok(())
+}
+</code></pre></pre>
+<a class="header" href="#want-to-run-statements-then-use-run" id="want-to-run-statements-then-use-run"><h2>Want to run statements? Then use run.</h2></a>
+<p><a href="https://pyo3.rs/master/doc/pyo3/struct.Python.html#method.run"><code>Python::run</code></a>
+is a method to execute one or more
+<a href="https://docs.python.org/3.7/reference/simple_stmts.html">Python statements</a>.
+This method returns nothing, but you can get objects via <code>locals</code> dict.</p>
+<p>You can also use the <a href="https://pyo3.rs/master/doc/pyo3/macro.py_run.html"><code>py_run!</code></a>
+macro, which is a shorthand for <code>Python::run</code>.
+Since <code>py_run!</code> can cause panic, we recommend you to use this macro only for testing
+your Python extensions quickly.</p>
+<pre><pre class="playpen"><code class="language-rust">use pyo3::{PyObjectProtocol, prelude::*, py_run};
+#  fn main() {
+#[pyclass]
+struct UserData {
+    id: u32,
+    name: String,
+}
+#[pymethods]
+impl UserData {
+    fn as_tuple(&amp;self) -&gt; (u32, String) {
+        (self.id, self.name.clone())
+    }
+}
+#[pyproto]
+impl PyObjectProtocol for UserData {
+    fn __repr__(&amp;self) -&gt; PyResult&lt;String&gt; {
+        Ok(format!(&quot;User {}(id: {})&quot;, self.name, self.id))
+    }
+}
+let gil = Python::acquire_gil();
+let py = gil.python();
+let userdata = UserData {
+    id: 34,
+    name: &quot;Yu&quot;.to_string(),
+};
+let userdata = PyRef::new(py, userdata).unwrap();
+let userdata_as_tuple = (34, &quot;Yu&quot;);
+py_run!(py, userdata userdata_as_tuple, r#&quot;
+assert repr(userdata) == &quot;User Yu(id: 34)&quot;
+assert userdata.as_tuple() == userdata_as_tuple
+&quot;#);
+# }
+</code></pre></pre>
+<a class="header" href="#you-have-a-python-file-or-python-function-then-use-pymodule" id="you-have-a-python-file-or-python-function-then-use-pymodule"><h2>You have a python file or Python function? Then use PyModule.</h2></a>
+<p><a href="https://pyo3.rs/master/doc/pyo3/types/struct.PyModule.html">PyModule</a> also can
+execute Python codes by calling a function.</p>
+<pre><pre class="playpen"><code class="language-rust">use pyo3::{prelude::*, types::{IntoPyDict, PyModule}};
+#  fn main() -&gt; PyResult&lt;()&gt; {
+let gil = Python::acquire_gil();
+let py = gil.python();
+let activators = PyModule::from_code(py, &quot;
+def relu(x):
+    return max(0.0, x)
+
+def leaky_relu(x, slope=0.01):
+    return x if x &gt;= 0 else x * slope
+&quot;, &quot;activators.py&quot;, &quot;activators&quot;)?;
+let relu_result: f64 = activators.call1(&quot;relu&quot;, (-1.0,))?.extract()?;
+assert_eq!(relu_result, 0.0);
+let kwargs = [(&quot;slope&quot;, 0.2)].into_py_dict(py);
+let lrelu_result: f64 = activators
+    .call(&quot;leaky_relu&quot;, (-1.0,), Some(kwargs))?
+    .extract()?;
+assert_eq!(lrelu_result, -0.2);
+# Ok(()) }
+</code></pre></pre>
 <a class="header" href="#parallelism" id="parallelism"><h1>Parallelism</h1></a>
 <p>CPython has the infamous GIL (Global Interpreter Lock), which prevents developers
 from getting true parallelism when running pure Python code. With PyO3, you can
