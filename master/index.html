@@ -150,7 +150,7 @@
 <a class="header" href="#usage" id="usage"><h2>Usage</h2></a>
 <p>PyO3 supports Python 3.5 and up. The minimum required Rust version is 1.37.0-nightly 2019-07-19.</p>
 <p>PyPy is also supported (via cpyext) for Python 3.5 only, targeted PyPy version is 7.0.0.
-Please refer to the guide for installation instruction against PyPy.</p>
+Please refer to the <a href="https://pyo3.rs/master/pypy.html">pypy section</a>.</p>
 <p>You can either write a native Python module in Rust, or use Python from a Rust binary.</p>
 <p>However, on some OSs, you need some additional packages. E.g. if you are on <em>Ubuntu 18.04</em>, please run</p>
 <pre><code class="language-bash">sudo apt install python3-dev python-dev
@@ -200,7 +200,7 @@ rustflags = [
 ]
 </code></pre>
 <p>For developing, you can copy and rename the shared library from the target folder: On MacOS, rename <code>libstring_sum.dylib</code> to <code>string_sum.so</code>, on Windows <code>libstring_sum.dll</code> to <code>string_sum.pyd</code> and on Linux <code>libstring_sum.so</code> to <code>string_sum.so</code>. Then open a Python shell in the same folder and you'll be able to <code>import string_sum</code>.</p>
-<p>To build, test and publish your crate as a Python module, you can use <a href="https://github.com/PyO3/maturin">maturin</a> or <a href="https://github.com/PyO3/setuptools-rust">setuptools-rust</a>. You can find an example for setuptools-rust in <a href="examples/word-count">examples/word-count</a>, while maturin should work on your crate without any configuration.</p>
+<p>To build, test and publish your crate as a Python module, you can use <a href="https://github.com/PyO3/maturin">maturin</a> or <a href="https://github.com/PyO3/setuptools-rust">setuptools-rust</a>. You can find an example for setuptools-rust in <a href="https://github.com/PyO3/pyo3/tree/master/examples/word-count">examples/word-count</a>, while maturin should work on your crate without any configuration.</p>
 <a class="header" href="#using-python-from-rust" id="using-python-from-rust"><h2>Using Python from Rust</h2></a>
 <p>Add <code>pyo3</code> to your <code>Cargo.toml</code> like this:</p>
 <pre><code class="language-toml">[dependencies]
@@ -234,7 +234,7 @@ fn main_(py: Python) -&gt; PyResult&lt;()&gt; {
 about this topic.</p>
 <a class="header" href="#examples-and-tooling" id="examples-and-tooling"><h2>Examples and tooling</h2></a>
 <ul>
-<li><a href="examples/word-count">examples/word-count</a> <em>Counting the occurrences of a word in a text file</em></li>
+<li><a href="https://github.com/PyO3/pyo3/tree/master/examples/word-count">examples/word-count</a> <em>Counting the occurrences of a word in a text file</em></li>
 <li><a href="https://github.com/mre/hyperjson">hyperjson</a> <em>A hyper-fast Python module for reading/writing JSON data using Rust's serde-json</em></li>
 <li><a href="https://github.com/rust-numpy/rust-numpy">rust-numpy</a> <em>Rust binding of NumPy C-API</em></li>
 <li><a href="https://github.com/PyO3/setuptools-rust/tree/master/html-py-ever">html-py-ever</a> <em>Using <a href="https://github.com/servo/html5ever">html5ever</a> through <a href="https://github.com/kuchiki-rs/kuchiki">kuchiki</a> to speed up html parsing and css-selecting.</em></li>
