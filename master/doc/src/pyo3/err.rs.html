@@ -534,6 +534,8 @@
 <span id="534">534</span>
 <span id="535">535</span>
 <span id="536">536</span>
+<span id="537">537</span>
+<span id="538">538</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 
@@ -1027,8 +1029,10 @@
     }
 }
 
+<span class="macro">impl_to_pyerr</span><span class="macro">!</span>(<span class="ident">std</span>::<span class="ident">array</span>::<span class="ident">TryFromSliceError</span>, <span class="ident">exceptions</span>::<span class="ident">ValueError</span>);
 <span class="macro">impl_to_pyerr</span><span class="macro">!</span>(<span class="ident">std</span>::<span class="ident">num</span>::<span class="ident">ParseIntError</span>, <span class="ident">exceptions</span>::<span class="ident">ValueError</span>);
 <span class="macro">impl_to_pyerr</span><span class="macro">!</span>(<span class="ident">std</span>::<span class="ident">num</span>::<span class="ident">ParseFloatError</span>, <span class="ident">exceptions</span>::<span class="ident">ValueError</span>);
+<span class="macro">impl_to_pyerr</span><span class="macro">!</span>(<span class="ident">std</span>::<span class="ident">num</span>::<span class="ident">TryFromIntError</span>, <span class="ident">exceptions</span>::<span class="ident">ValueError</span>);
 <span class="macro">impl_to_pyerr</span><span class="macro">!</span>(<span class="ident">std</span>::<span class="ident">string</span>::<span class="ident">ParseError</span>, <span class="ident">exceptions</span>::<span class="ident">ValueError</span>);
 <span class="macro">impl_to_pyerr</span><span class="macro">!</span>(<span class="ident">std</span>::<span class="ident">str</span>::<span class="ident">ParseBoolError</span>, <span class="ident">exceptions</span>::<span class="ident">ValueError</span>);
 <span class="macro">impl_to_pyerr</span><span class="macro">!</span>(<span class="ident">std</span>::<span class="ident">ffi</span>::<span class="ident">IntoStringError</span>, <span class="ident">exceptions</span>::<span class="ident">UnicodeDecodeError</span>);
