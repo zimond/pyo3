@@ -584,6 +584,37 @@
 <span id="584">584</span>
 <span id="585">585</span>
 <span id="586">586</span>
+<span id="587">587</span>
+<span id="588">588</span>
+<span id="589">589</span>
+<span id="590">590</span>
+<span id="591">591</span>
+<span id="592">592</span>
+<span id="593">593</span>
+<span id="594">594</span>
+<span id="595">595</span>
+<span id="596">596</span>
+<span id="597">597</span>
+<span id="598">598</span>
+<span id="599">599</span>
+<span id="600">600</span>
+<span id="601">601</span>
+<span id="602">602</span>
+<span id="603">603</span>
+<span id="604">604</span>
+<span id="605">605</span>
+<span id="606">606</span>
+<span id="607">607</span>
+<span id="608">608</span>
+<span id="609">609</span>
+<span id="610">610</span>
+<span id="611">611</span>
+<span id="612">612</span>
+<span id="613">613</span>
+<span id="614">614</span>
+<span id="615">615</span>
+<span id="616">616</span>
+<span id="617">617</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 <span class="comment">//</span>
@@ -895,7 +926,7 @@
                         } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">n_bits</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
                             <span class="number">0</span>
                         } <span class="kw">else</span> {
-                            (<span class="ident">n_bits</span> <span class="kw">as</span> <span class="ident">usize</span> <span class="op">-</span> <span class="number">1</span>) <span class="op">/</span> <span class="number">8</span> <span class="op">+</span> <span class="number">1</span>
+                            (<span class="ident">n_bits</span> <span class="kw">as</span> <span class="ident">usize</span> <span class="op">-</span> <span class="number">1</span> <span class="op">+</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">is_signed</span>) <span class="op">/</span> <span class="number">8</span> <span class="op">+</span> <span class="number">1</span>
                         };
                         <span class="kw">if</span> <span class="ident">n_bytes</span> <span class="op">&lt;</span><span class="op">=</span> <span class="number">128</span> {
                             <span class="ident">extract_small</span>(<span class="ident">ob</span>, <span class="ident">n_bytes</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">is_signed</span>)
@@ -1006,6 +1037,37 @@
             <span class="kw">let</span> <span class="ident">fib</span> <span class="op">=</span> <span class="ident">python_fib</span>(<span class="ident">py</span>);
             <span class="kw">let</span> <span class="ident">zero</span>: <span class="ident">BigInt</span> <span class="op">=</span> <span class="ident">FromPyObject</span>::<span class="ident">extract</span>(<span class="ident">fib</span>.<span class="ident">call1</span>(<span class="string">&quot;fib&quot;</span>, (<span class="number">0</span>,)).<span class="ident">unwrap</span>()).<span class="ident">unwrap</span>();
             <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">zero</span>, <span class="ident">BigInt</span>::<span class="ident">from</span>(<span class="number">0</span>));
+        }
+
+        <span class="doccomment">/// `OverflowError` on converting python int to BigInt, see issue #629</span>
+        <span class="attribute">#[<span class="ident">test</span>]</span>
+        <span class="kw">fn</span> <span class="ident">check_overflow</span>() {
+            <span class="kw">let</span> <span class="ident">gil</span> <span class="op">=</span> <span class="ident">Python</span>::<span class="ident">acquire_gil</span>();
+            <span class="kw">let</span> <span class="ident">py</span> <span class="op">=</span> <span class="ident">gil</span>.<span class="ident">python</span>();
+            <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">test</span> {
+                (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">T</span>:<span class="ident">ty</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">value</span>:<span class="ident">expr</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">py</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="kw">let</span> <span class="ident">value</span> <span class="op">=</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">value</span>;
+                    <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;{}: {}&quot;</span>, <span class="macro">stringify</span><span class="macro">!</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">T</span>), <span class="ident">value</span>);
+                    <span class="kw">let</span> <span class="ident">python_value</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">clone</span>().<span class="ident">to_object</span>(<span class="ident">py</span>);
+                    <span class="kw">let</span> <span class="ident">roundtrip_value</span> <span class="op">=</span> <span class="ident">python_value</span>.<span class="ident">extract</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">T</span><span class="op">&gt;</span>(<span class="ident">py</span>).<span class="ident">unwrap</span>();
+                    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">value</span>, <span class="ident">roundtrip_value</span>);
+                };
+            }
+            <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="op">=</span><span class="number">256usize</span> {
+                <span class="comment">// test a lot of values to help catch other bugs too</span>
+                <span class="macro">test</span><span class="macro">!</span>(<span class="ident">BigInt</span>, <span class="ident">BigInt</span>::<span class="ident">from</span>(<span class="ident">i</span>), <span class="ident">py</span>);
+                <span class="macro">test</span><span class="macro">!</span>(<span class="ident">BigUint</span>, <span class="ident">BigUint</span>::<span class="ident">from</span>(<span class="ident">i</span>), <span class="ident">py</span>);
+                <span class="macro">test</span><span class="macro">!</span>(<span class="ident">BigInt</span>, <span class="op">-</span><span class="ident">BigInt</span>::<span class="ident">from</span>(<span class="ident">i</span>), <span class="ident">py</span>);
+                <span class="macro">test</span><span class="macro">!</span>(<span class="ident">BigInt</span>, <span class="ident">BigInt</span>::<span class="ident">one</span>() <span class="op">&lt;</span><span class="op">&lt;</span> <span class="ident">i</span>, <span class="ident">py</span>);
+                <span class="macro">test</span><span class="macro">!</span>(<span class="ident">BigUint</span>, <span class="ident">BigUint</span>::<span class="ident">one</span>() <span class="op">&lt;</span><span class="op">&lt;</span> <span class="ident">i</span>, <span class="ident">py</span>);
+                <span class="macro">test</span><span class="macro">!</span>(<span class="ident">BigInt</span>, <span class="op">-</span><span class="ident">BigInt</span>::<span class="ident">one</span>() <span class="op">&lt;</span><span class="op">&lt;</span> <span class="ident">i</span>, <span class="ident">py</span>);
+                <span class="macro">test</span><span class="macro">!</span>(<span class="ident">BigInt</span>, (<span class="ident">BigInt</span>::<span class="ident">one</span>() <span class="op">&lt;</span><span class="op">&lt;</span> <span class="ident">i</span>) <span class="op">+</span> <span class="number">1u32</span>, <span class="ident">py</span>);
+                <span class="macro">test</span><span class="macro">!</span>(<span class="ident">BigUint</span>, (<span class="ident">BigUint</span>::<span class="ident">one</span>() <span class="op">&lt;</span><span class="op">&lt;</span> <span class="ident">i</span>) <span class="op">+</span> <span class="number">1u32</span>, <span class="ident">py</span>);
+                <span class="macro">test</span><span class="macro">!</span>(<span class="ident">BigInt</span>, (<span class="op">-</span><span class="ident">BigInt</span>::<span class="ident">one</span>() <span class="op">&lt;</span><span class="op">&lt;</span> <span class="ident">i</span>) <span class="op">+</span> <span class="number">1u32</span>, <span class="ident">py</span>);
+                <span class="macro">test</span><span class="macro">!</span>(<span class="ident">BigInt</span>, (<span class="ident">BigInt</span>::<span class="ident">one</span>() <span class="op">&lt;</span><span class="op">&lt;</span> <span class="ident">i</span>) <span class="op">-</span> <span class="number">1u32</span>, <span class="ident">py</span>);
+                <span class="macro">test</span><span class="macro">!</span>(<span class="ident">BigUint</span>, (<span class="ident">BigUint</span>::<span class="ident">one</span>() <span class="op">&lt;</span><span class="op">&lt;</span> <span class="ident">i</span>) <span class="op">-</span> <span class="number">1u32</span>, <span class="ident">py</span>);
+                <span class="macro">test</span><span class="macro">!</span>(<span class="ident">BigInt</span>, (<span class="op">-</span><span class="ident">BigInt</span>::<span class="ident">one</span>() <span class="op">&lt;</span><span class="op">&lt;</span> <span class="ident">i</span>) <span class="op">-</span> <span class="number">1u32</span>, <span class="ident">py</span>);
+            }
         }
     }
 }
