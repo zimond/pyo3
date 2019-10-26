@@ -180,6 +180,8 @@
 <span id="180">180</span>
 <span id="181">181</span>
 <span id="182">182</span>
+<span id="183">183</span>
+<span id="184">184</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright (c) 2017-present PyO3 Project and Contributors</span>
 
@@ -188,6 +190,7 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">any</span>::<span class="ident">PyAny</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">boolobject</span>::<span class="ident">PyBool</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">bytearray</span>::<span class="ident">PyByteArray</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">bytes</span>::<span class="ident">PyBytes</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">complex</span>::<span class="ident">PyComplex</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">datetime</span>::<span class="ident">PyDeltaAccess</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">datetime</span>::{
@@ -203,7 +206,7 @@
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">sequence</span>::<span class="ident">PySequence</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">set</span>::{<span class="ident">PyFrozenSet</span>, <span class="ident">PySet</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">slice</span>::{<span class="ident">PySlice</span>, <span class="ident">PySliceIndices</span>};
-<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">string</span>::{<span class="ident">PyBytes</span>, <span class="ident">PyString</span>, <span class="ident">PyString</span> <span class="kw">as</span> <span class="ident">PyUnicode</span>};
+<span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">string</span>::{<span class="ident">PyString</span>, <span class="ident">PyString</span> <span class="kw">as</span> <span class="ident">PyUnicode</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">tuple</span>::<span class="ident">PyTuple</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">typeobject</span>::<span class="ident">PyType</span>;
 
@@ -349,6 +352,7 @@
 <span class="kw">mod</span> <span class="ident">any</span>;
 <span class="kw">mod</span> <span class="ident">boolobject</span>;
 <span class="kw">mod</span> <span class="ident">bytearray</span>;
+<span class="kw">mod</span> <span class="ident">bytes</span>;
 <span class="kw">mod</span> <span class="ident">complex</span>;
 <span class="kw">mod</span> <span class="ident">datetime</span>;
 <span class="kw">mod</span> <span class="ident">dict</span>;
