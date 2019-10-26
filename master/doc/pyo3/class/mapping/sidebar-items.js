@@ -1,1 +1,1 @@
-initSidebarItems({"trait":[["PyMappingContainsProtocol",""],["PyMappingDelItemProtocol",""],["PyMappingGetItemProtocol",""],["PyMappingIterProtocol",""],["PyMappingLenProtocol",""],["PyMappingProtocol","Mapping interface"],["PyMappingReversedProtocol",""],["PyMappingSetItemProtocol",""]]});
+initSidebarItems({"trait":[["PyMappingDelItemProtocol",""],["PyMappingGetItemProtocol",""],["PyMappingLenProtocol",""],["PyMappingProtocol","Mapping interface"],["PyMappingReversedProtocol",""],["PyMappingSetItemProtocol",""]]});
