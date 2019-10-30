@@ -645,11 +645,5 @@ fn main() -> Result<(), String> {
         // TODO: Find out how we can set -undefined dynamic_lookup here (if this is possible)
     }
 
-    let env_vars = ["LD_LIBRARY_PATH", "PATH", "PYTHON_SYS_EXECUTABLE", "LIB"];
-
-    for var in env_vars.iter() {
-        println!("cargo:rerun-if-env-changed={}", var);
-    }
-
     Ok(())
 }
