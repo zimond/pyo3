@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+## [0.8.3]
+
+### Fixed
+
+* Now all `&Py~` types have `!Send` bound. [#655](https://github.com/PyO3/pyo3/pull/655)
+* Fix a compile error raised by the stabilization of `!` type. [#672](https://github.com/PyO3/pyo3/issues/672).
+
+### Removed
+
+* `#[init]` is removed. [#658](https://github.com/PyO3/pyo3/pull/658)
+
 ## [0.8.2]
 
 ### Added
@@ -347,7 +360,8 @@ Yanked
 
 * Initial release
 
-[Unreleased]: https://github.com/pyo3/pyo3/compare/v0.8.2...HEAD
+[Unreleased]: https://github.com/pyo3/pyo3/compare/v0.8.3...HEAD
+[0.8.2]: https://github.com/pyo3/pyo3/compare/v0.8.2...v0.8.3
 [0.8.2]: https://github.com/pyo3/pyo3/compare/v0.8.1...v0.8.2
 [0.8.1]: https://github.com/pyo3/pyo3/compare/v0.8.0...v0.8.1
 [0.8.0]: https://github.com/pyo3/pyo3/compare/v0.7.0...v0.8.0
